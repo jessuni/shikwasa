@@ -1,0 +1,226 @@
+:root {
+      --primary-color: #F9AA53;
+}
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+/* above should be removed */
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.player {
+  position: inherit;
+  height: 120px;
+  box-sizing: border-box;
+  margin: 20px 40px;
+  display: flex;
+  flex-flow: row nowrap;
+  border: none;
+  box-shadow: 0px 0px 14px 6px #e2e2e280;
+  font: 400 18px/1.42 Pingfang SC, Hiragano, Helvetica Neue,/*  var(--en-sans), var(--cjk-sans), */ sans-serif;
+}
+.player.Fixed {
+  position: fixed;
+  bottom: 0;
+  margin: 0;
+  width: 100%;
+}
+.player-left {
+  position: relative;
+  width: 120px;
+  height: 100%;
+}
+.player-right {
+  position: relative;
+  box-sizing: border-box;
+  flex-grow: 1;
+  height: 100%;
+  padding: 14px 30px 10px;
+  border: none;
+  border-left: 5px solid var(--primary-color);
+}
+.player-cover img {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+.player-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+}
+.player-left .player-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.player-btn:hover .play-btn,
+.player-btn:hover .pause-btn {
+  opacity: 0.8;
+}
+.player-btn .pause-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+.player.Pause .player-btn .play-btn,
+.player.Play .player-btn .pause-btn {
+  display: inline-block;
+}
+.player.Pause .player-btn .pause-btn,
+.player.Play .player-btn .play-btn {
+  display: none;
+}
+.player-subtitle {
+  font-weight: 500;
+  color: var(--primary-color);
+}
+.player-title {
+  font-weight: 100;
+  margin: 2px 0;
+  font-size: 24px;
+}
+.player-controls {
+  position: absolute;
+  top: 8px;
+  right: 20px;
+}
+.player-controls .player-btn:hover {
+  opacity: 0.8;
+}
+.player-right .player-btn svg {
+  width: 16px;
+  height: 16px;
+  padding: 10px;
+  fill: var(--primary-color);
+  vertical-align: middle;
+}
+.player-controls svg.volume-btn,
+.player.Mute .player-controls svg.mute-btn {
+  display: inline-block;
+}
+.player-controls svg.mute-btn,
+.player.Mute .player-controls svg.volume-btn {
+  display: none;
+}
+
+.player-bar-wrap {
+  height: 18px;
+  padding: 1px 0;
+  position: relative;
+}
+.player-bar {
+  position: relative;
+  width: 100%;
+  height: 3px;
+  margin-top: 7px;
+  box-sizing: border-box;
+  background: #e7e7e7;
+  z-index: 0;
+}
+.player-bar .bar-loaded,
+.player-bar .bar-played {
+  /*
+  width: 0;
+  */
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+.player-bar .bar-loaded {
+  background: var(--primary-color);
+  filter: opacity(20%);
+  z-index: 1;
+}
+.player-bar .bar-played {
+  /* use setter for background color opacity */
+  background: #F9AA5370;
+  z-index: 2;
+
+}
+.player-bar .bar-handle {
+  background: var(--primary-color);
+  position: absolute;
+  top: 0;
+  right: 0px;
+  margin-top: -7px;
+  margin-right: -8px;
+  height: 18px;
+  width: 8px;
+  cursor: pointer;
+}
+.player-bottom {
+  position: absolute;
+  right: 0;
+  top: 18px;
+  font-size: 0px;
+  font-weight: 400;
+  color: #555555;
+}
+.player-bottom span {
+  vertical-align: middle;
+}
+.player-loader {
+  display: none;
+}
+.player.Loading .player-loader {
+  display: inline-block;
+}
+.player-loader svg {
+  width: 12px;
+  height: 12px;
+  animation: rotate 1.4s linear infinite;
+  -webkit-animation: rotate 1.4s linear infinite;
+  -moz-animation: rotate 1.4s linear infinite;
+  position: relative;
+}
+.player-loader stop {
+  stop-color: var(--primary-color);
+}
+.player-visuallyhidden:not(:focus):not(:active) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+.player-time {
+  margin-left: 4px;
+  display: inline-block;
+}
+.player-time span {
+  font-size: 12px;
+}
+.player-time .time-duration::before {
+  content: '/';
+  margin: 0 4px;
+}
