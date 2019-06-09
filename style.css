@@ -32,6 +32,7 @@ html, body {
   flex-flow: row nowrap;
   border: none;
   box-shadow: 0px 0px 14px 6px #e2e2e280;
+  cursor: auto;
   font: 400 18px/1.42 Pingfang SC, Hiragano, Helvetica Neue,/*  var(--en-sans), var(--cjk-sans), */ sans-serif;
 }
 .player.Fixed {
@@ -39,6 +40,11 @@ html, body {
   bottom: 0;
   margin: 0;
   width: 100%;
+}
+.player.Seeking {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 .player-left {
   position: relative;
@@ -76,6 +82,14 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
+}
+.player-right .player-btn {
+  display: inline-block;
+  vertical-align: middle;
+  width: 36px;
+  height: 36px;
+  color: var(--primary-color);
+  font-size: 12px;
 }
 .player-btn:hover .play-btn,
 .player-btn:hover .pause-btn {
@@ -131,6 +145,7 @@ html, body {
   height: 18px;
   padding: 1px 0;
   position: relative;
+  cursor: pointer;
 }
 .player-bar {
   position: relative;
@@ -171,7 +186,15 @@ html, body {
   margin-right: -8px;
   height: 18px;
   width: 8px;
-  cursor: pointer;
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.player-bar .bar-handle:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 .player-bottom {
   position: absolute;
