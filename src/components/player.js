@@ -64,13 +64,15 @@ class Player {
         this.audio.muted = this.muted
       }
     })
+    this.template.fwdBtn.addEventListener('click', () => {
+      this.seek(this.currentTime + 10)
+    })
     this.template.speedBtn.addEventListener('click', () => {
       const index = this.options.speedOptions.indexOf(this.currentSpeed)
       this.currentSpeed = (index + 1 >= this.options.speedOptions.length) ? this.options.speedOptions[0] : this.options.speedOptions[index + 1]
       this.template.speedBtn.innerHTML = numToString(this.currentSpeed) + 'x'
       if(this.audio) {
         this.audio.playbackRate = this.currentSpeed
-        console.log(this.audio.playbackRate)
       }
     })
   }
@@ -113,7 +115,8 @@ class Player {
       this.audio.autoplay = this.options.autoPlay
       this.audio.defaultMuted = this.options.muted
       this.audio.muted = this.muted
-      //this.audio.playbackRate = this.currentSpeed
+      this.audio.currentTime = this.currentTime
+      this.audio.playbackRate = this.currentSpeed
 
       this.addLoadingEvents()
       this.audio.addEventListener('play', () => {
@@ -129,7 +132,6 @@ class Player {
       this.audio.addEventListener('ended', () => {
         this.setUIPaused()
         this.seek(0)
-        // not finished
       })
 
       this.audio.addEventListener('durationchange', () => {
@@ -176,6 +178,7 @@ class Player {
     if (!this.audio.paused) return
     this.setUIPlaying()
     this.audio.play()
+
   }
 
   pause() {
@@ -194,9 +197,6 @@ class Player {
     if (this.audio) {
       this.audio.paused ? this.play() : this.pause()
     }
-  }
-
-  updateSpeed() {
   }
 
   addLoadingEvents() {
@@ -222,13 +222,14 @@ class Player {
   }
 
   seek(time) {
+    time = Math.min(time, this.duration)
+    time = Math.max(time, 0)
     this.template.currentTime.innerHTML = secondToTime(time)
     if (this.audio) {
       this.audio.currentTime = time
     } else {
       this.currentTime = time
     }
-    // 一开始放的时候如果 currentTime 不为 0, currentTime !== this.audio.currentTime, 应该去 seek(currentTime)
   }
 
   destroy() {

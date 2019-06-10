@@ -6,9 +6,10 @@ export default class Template {
       console.error('specify container for template')
     } else {
       this.playBtn = container.querySelector('.shk_left .shk_btn')
-      const btns = container.querySelectorAll('.shk_right .shk_btn')
-      this.speedBtn = btns[0]
-      this.muteBtn = btns[1]
+      this.fwdBtn = container.querySelector('.shk_btn_forward')
+      this.bwdBtn = container.querySelector('.shk_btn_backward')
+      this.speedBtn = container.querySelector('.shk_btn_speed')
+      this.muteBtn = container.querySelector('.shk_btn_volume')
       this.artist = container.querySelector('.shk_subtitle')
       this.title = container.querySelector('.shk_title')
       this.currentTime = container.querySelector('.shk_time_now')
@@ -18,11 +19,11 @@ export default class Template {
       this.audioPlayed = container.querySelector('.shk_bar_played')
       this.audioLoaded = container.querySelector('.shk_bar_loaded')
       this.handle = container.querySelector('.bar-handle')
-      this.cover = container.querySelector('.shk_cover img')
+      this.cover = container.querySelector('.shk_cover')
 
       this.audioPlayed.style.color = this.handle.style.color + '70'
 
-      this.cover.src = audio.cover
+      this.cover.style.backgroundImage = `url(${audio.cover})`
       this.title.innerHTML = audio.title
       this.artist.innerHTML = audio.artist
       this.currentTime.innerHTML = '0:00'
