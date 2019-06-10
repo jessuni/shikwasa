@@ -1,4 +1,5 @@
 import config from './config'
+import { isNumber } from 'util';
 
 export function secondToTime(time) {
   time = Math.round(time)
@@ -18,17 +19,32 @@ export function getCoords(el) {
   return el.getBoundingClientRect()
 }
 
+export function numToString(num) {
+  const float = parseFloat(num).toFixed(2)
+  return float.slice(-1) === '0' ? float.slice(0, -1) :float
+}
+
 export function handleOptions(options) {
   options.fixed = options.fixed || config.fixed
   options.autoPlay = options.autoPlay || config.autoPlay
   options.muted = options.muted || config.muted
   options.preload = options.preload || config.preload
-  options.speed = options.speed || config.speed
+  options.speedOptions = options.speedOptions || config.speedOptions
   // put a regex here to tranlate string into seconds
   //const hour = options.audio.duration.match(/([0-1]?\d|2[0-3])/)[0]
-  if (!Array.isArray(options.speed)) {
-    options.speed = [options.speed]
+  if (!Array.isArray(options.speedOptions)) {
+    options.speedOptions = [options.speedOptions]
   }
+  if (!options.speedOptions.includes(1)) {
+    options.speedOptions.push(1)
+  }
+  options.speedOptions = options.speedOptions
+  .map(sp => parseFloat(sp))
+  .filter(sp => !isNaN(sp))
+  if (options.speedOptions.length > 1) {
+    options.speedOptions.sort((a, b) => a - b)
+  }
+
   if (!Array.isArray(options.audio)) {
     options.audio = [options.audio]
   }

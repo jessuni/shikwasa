@@ -7,7 +7,7 @@ export default class Template {
     } else {
       this.playBtn = container.querySelector('.shk_left .shk_btn')
       const btns = container.querySelectorAll('.shk_right .shk_btn')
-      this.speed = btns[0]
+      this.speedBtn = btns[0]
       this.muteBtn = btns[1]
       this.artist = container.querySelector('.shk_subtitle')
       this.title = container.querySelector('.shk_title')
