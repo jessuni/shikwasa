@@ -20,6 +20,8 @@ export default class Template {
       this.handle = container.querySelector('.bar-handle')
       this.cover = container.querySelector('.shk_cover img')
 
+      this.audioPlayed.style.color = this.handle.style.color + '70'
+
       this.cover.src = audio.cover
       this.title.innerHTML = audio.title
       this.artist.innerHTML = audio.artist

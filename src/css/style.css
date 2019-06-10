@@ -158,6 +158,7 @@ html, body {
 }
 .shk_bar .shk_bar_loaded,
 .shk_bar .shk_bar_played {
+  width: 0;
   position: absolute;
   left: 0;
   top: 0;
@@ -165,7 +166,7 @@ html, body {
 }
 .shk_bar .shk_bar_loaded {
   background: var(--primary-color);
-  filter: opacity(20%);
+  filter: opacity(30%);
   z-index: 1;
 }
 .shk_bar .shk_bar_played {
