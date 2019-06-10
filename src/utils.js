@@ -1,4 +1,4 @@
-import config from '/config'
+import config from './config'
 
 export function secondToTime(time) {
   time = Math.round(time)

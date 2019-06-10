@@ -1,15 +1,15 @@
-<div class="player-left">
-  <div class="player-cover">
+<div class="shk_left">
+  <div class="shk_cover">
     <img src="#" alt="podcast cover art">
   </div>
-  <button class="player-btn" aria-label="toggle play and pause">
-    <svg class="play-btn" aria-hidden="true" width="82px" height="82px" viewbox="0 0 82 82" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <button class="shk_btn" aria-label="toggle play and pause">
+    <svg class="shk_btn_play" aria-hidden="true" width="82px" height="82px" viewbox="0 0 82 82" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <circle id="Oval" stroke="#FFFFFF" stroke-width="2" fill-opacity="0.3" fill="#FFFFFF" cx="41" cy="41" r="40"></circle>
         <path d="M27.7607105,56.949692 C26.7883519,56.949692 26,56.2390382 26,55.362513 L26,27.5871045 C26,26.7105793 26.7883519,26 27.7607105,26 L56.3720089,40.2843873 C56.3720089,40.2843873 57.6925418,41.4747715 56.3720089,42.6652302 C55.051476,43.85554 27.7607105,56.949692 27.7607105,56.949692 Z" id="Path" fill="#FBF9F9"></path>
       </g>
     </svg>
-    <svg class="pause-btn" aria-hidden="true" width="26px" height="26px" viewbox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg class="shk_btn_pause" aria-hidden="true" width="26px" height="26px" viewbox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g transform="translate(-85.000000, -85.000000)" fill="#FFFFFF">
           <g transform="translate(86.000000, 86.000000)">
@@ -22,15 +22,15 @@
     </svg>
   </button>
 </div>
-<div class="player-right">
-  <div class="player-text">
-    <span class="player-subtitle"></span>
-    <h2 class="player-title"></h2>
+<div class="shk_right">
+  <div class="shk_text">
+    <span class="shk_subtitle"></span>
+    <h2 class="shk_title"></h2>
   </div>
-  <div class="player-controls">
-    <button class="player-btn" aria-label="toggle playback rate" title="change playback rate" aria-live="polite">1.0x</button>
-    <button class="player-btn" aria-label="toggle volume" title="toggle volume">
-      <svg class="volume-btn" aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 508.514 508.514" style="enable-background:new 0 0 508.514 508.514;" xml:space="preserve">
+  <div class="shk_controls">
+    <button class="shk_btn" aria-label="toggle playback rate" title="change playback rate" aria-live="polite">1.0x</button>
+    <button class="shk_btn" aria-label="toggle volume" title="toggle volume">
+      <svg class="shk_btn_volume" aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 508.514 508.514" style="enable-background:new 0 0 508.514 508.514;" xml:space="preserve">
         <g>
           <g>
             <g>
@@ -49,7 +49,7 @@
           </g>
         </g>
       </svg>
-      <svg class="mute-btn" aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 508.528 508.528" style="enable-background:new 0 0 508.528 508.528;" xml:space="preserve">
+      <svg class="shk_btn_mute" aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 508.528 508.528" style="enable-background:new 0 0 508.528 508.528;" xml:space="preserve">
         <g>
           <g>
             <g>
@@ -68,16 +68,16 @@
       </svg>
     </button>
   </div>
-  <div class="player-bar-wrap">
-    <div class="player-bar" aria-label="progress bar">
-      <div class="bar-played" aria-label="played progress">
+  <div class="shk_bar-wrap">
+    <div class="shk_bar" aria-label="progress bar">
+      <div class="shk_bar_played" aria-label="played progress">
         <span class="bar-handle" aria-label="progress bar handle"></span>
       </div>
-      <div class="bar-loaded" aria-label="loaded progress"></div>
+      <div class="shk_bar_loaded" aria-label="loaded progress"></div>
     </div>
-    <div class="player-bottom">
-      <span class="player-loader" aria-live="polite">
-        <span class="player-visuallyhidden" tabindex="-1">loading</span>
+    <div class="shk_bottom">
+      <span class="shk_loader" aria-live="polite">
+        <span class="shk_visuallyhidden" tabindex="-1">loading</span>
         <svg aria-hidden="true" width="174px" height="174px" viewbox="0 0 66 66" xmlns="http://www.w3.org/2000/svg" aria-label="loading" aria-live="polite">
           <circle fill="transparent" stroke-width="6" stroke-dasharray="170" stroke-dashoffset="20" cx="33" cy="33" r="30" stroke="url(#gradient)"/>
           <lineargradient id="gradient">
@@ -88,9 +88,9 @@
         </circle>
         </svg>
       </span>
-      <span class="player-time">
-        <span class="time-now">--:--</span>
-        <span class="time-duration">--:--</span>
+      <span class="shk_time">
+        <span class="shk_time_now">--:--</span>
+        <span class="shk_time_duration">--:--</span>
       </span>
     </div>
   </div>
