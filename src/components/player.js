@@ -20,12 +20,6 @@ class Player {
     this.dragging = false
     this.currentSpeed = 1
     this.currentTime = 0
-    this.updateTime = () => {
-      const length = getCoords(this.template.bar).width
-      const position = getCoords(this.template.handle).left - getCoords(this.template.bar).left
-      const time = position / length * this.duration
-      this.seek(time)
-    }
   }
 
   get duration() {
@@ -88,19 +82,21 @@ class Player {
     const dragMoveHandler = (e) => {
       let percentage = ((e.clientX || e.changedTouches[0].clientX) - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
       this.bar.set('audioPlayed', percentage)
+      this.currentTime = percentage * this.duration
+      this.template.currentTime.innerHTML = secondToTime(this.currentTime)
     }
 
     const dragEndHandler = () => {
       this.dragging = false
       this.player.classList.remove('Seeking')
+      this.seek(this.currentTime)
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
-      this.updateTime()
     }
 
     const instantSeek = (e) => {
       dragMoveHandler(e)
-      this.updateTime()
+      this.seek(this.currentTime)
     }
     this.template.barWrap.addEventListener('click', instantSeek)
     this.template.handle.addEventListener(dragStart, dragStartHandler)
@@ -110,10 +106,8 @@ class Player {
     if (this.options.audio.length) {
       this.audio = new Audio()
       this.audio.src = this.options.audio[0].src
-      /* configurations to be completed */
       this.audio.preload = this.options.preload
       this.audio.autoplay = this.options.autoPlay
-      this.audio.defaultMuted = this.options.muted
       this.audio.muted = this.muted
       this.audio.currentTime = this.currentTime
       this.audio.playbackRate = this.currentSpeed
