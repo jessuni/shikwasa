@@ -17,7 +17,7 @@
           <g transform="translate(86.000000, 86.000000)">
             <ellipse stroke="#FFFFFF" stroke-width="2" fill-opacity="0.3" cx="12.0625862" cy="12.0594828" rx="11.655" ry="11.475"></ellipse>
             <rect x="7.64172414" y="5.33275862" width="2.26953347" height="12.662069"></rect>
-            <rect x="13.6938134" y="5.33275862" width="2.26953347" height="12.662069"></rect>
+            <rect x="13.6938134" y="5.33275862" width="2.26953347" height="12.662069"></rsect>
           </g>
         </g>
       </g>
@@ -26,8 +26,12 @@
 </div>
 <div class="shk_right">
   <div class="shk_text">
-    <span class="shk_subtitle"></span>
-    <h2 class="shk_title"></h2>
+    <div>
+      <span class="shk_subtitle"></span>
+    </div>
+    <div>
+      <span class="shk_title"></span>
+    </div>
   </div>
   <div class="shk_controls">
     <button class="shk_btn shk_btn_backward"" aria-label="rewind 10 seconds" title="rewind 10 seconds">
@@ -99,23 +103,23 @@
       </div>
       <div class="shk_bar_loaded" aria-label="loaded progress"></div>
     </div>
-    <div class="shk_bottom">
-      <span class="shk_loader" aria-live="polite">
-        <span class="shk_visuallyhidden" tabindex="-1">loading</span>
-        <svg aria-hidden="true" width="174px" height="174px" viewbox="0 0 66 66" xmlns="http://www.w3.org/2000/svg" aria-label="loading" aria-live="polite">
-          <circle fill="transparent" stroke-width="6" stroke-dasharray="170" stroke-dashoffset="20" cx="33" cy="33" r="30" stroke="url(#gradient)"/>
-          <lineargradient>
-            <stop offset="50%" stop-opacity="1"/>
-            <stop offset="65%" stop-opacity=".5"/>
-            <stop offset="100%" stop-opacity="0"/>
-          </lineargradient>
-        </circle>
-        </svg>
-      </span>
-      <span class="shk_time">
-        <span class="shk_time_now">--:--</span>
-        <span class="shk_time_duration">--:--</span>
-      </span>
-    </div>
+  </div>
+  <div class="shk_bottom">
+    <span class="shk_loader" aria-live="polite">
+      <span class="shk_visuallyhidden" tabindex="-1">loading</span>
+      <svg aria-hidden="true" width="174px" height="174px" viewbox="0 0 66 66" xmlns="http://www.w3.org/2000/svg" aria-label="loading" aria-live="polite">
+        <circle fill="transparent" stroke-width="6" stroke-dasharray="170" stroke-dashoffset="20" cx="33" cy="33" r="30" stroke="url(#shk_gradient)"/>
+        <lineargradient id="shk_gradient">
+          <stop offset="50%" stop-color="currentColor" stop-opacity="1"/>
+          <stop offset="65%" stop-color="currentColor" stop-opacity=".5"/>
+          <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+        </lineargradient>
+      </circle>
+      </svg>
+    </span>
+    <span class="shk_time">
+      <span class="shk_time_now">--:--</span>
+      <span class="shk_time_duration">--:--</span>
+    </span>
   </div>
 </div>

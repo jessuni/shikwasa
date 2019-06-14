@@ -1,7 +1,7 @@
 import { secondToTime } from '../utils'
 
 export default class Template {
-  constructor(container, audio) {
+  constructor(container, audio, themeColor) {
     if (!container) {
       console.error('specify container for template')
     } else {
@@ -11,7 +11,9 @@ export default class Template {
       this.speedBtn = container.querySelector('.shk_btn_speed')
       this.muteBtn = container.querySelector('.shk_btn_volume')
       this.artist = container.querySelector('.shk_subtitle')
+      this.texts = container.querySelector('.shk_text')
       this.title = container.querySelector('.shk_title')
+      this.subtitle = container.querySelector('.shk_subtitle')
       this.currentTime = container.querySelector('.shk_time_now')
       this.duration = container.querySelector('.shk_time_duration')
       this.bar = container.querySelector('.shk_bar')
@@ -21,7 +23,7 @@ export default class Template {
       this.handle = container.querySelector('.bar-handle')
       this.cover = container.querySelector('.shk_cover')
 
-      this.audioPlayed.style.color = this.handle.style.color + '70'
+      this.audioPlayed.style.color = themeColor + '70'
 
       this.cover.style.backgroundImage = `url(${audio.cover})`
       this.title.innerHTML = audio.title

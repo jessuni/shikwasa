@@ -1,8 +1,9 @@
 import playerElement from '../template/player.html'
 import Template from './template'
 import Bar from './bar'
-import { secondToTime, getCoords, numToString, handleOptions } from '../utils'
+import { secondToTime, carousel, numToString, handleOptions } from '../utils'
 
+let interval
 const isMobile = /mobile/i.test(window.navigator.userAgent)
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -32,9 +33,23 @@ class Player {
 
   initUI() {
     this.player.innerHTML = playerElement
-    this.template = new Template(this.player, this.options.audio[0])
+    const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color')
+    this.player.style.boxShadow = `0px 0px 14px 6px ${themeColor}20`
+    this.template = new Template(this.player, this.options.audio[0], themeColor)
     this.bar = new Bar(this.template)
 
+    const titleOverflow = this.template.title.offsetWidth - this.template.texts.offsetWidth
+    if (titleOverflow > 0) {
+      interval = carousel(this.template.title, -titleOverflow)
+    }
+    if (this.template.subtitle.offsetWidth > this.template.texts.offsetWidth) {}
+    this.initOptions()
+    this.initButtons()
+    this.initBar()
+    this.initKeyEvents()
+  }
+
+  initOptions() {
     if (this.options.fixed) {
       this.player.classList.add('Fixed')
     }
@@ -42,9 +57,15 @@ class Player {
       this.player.classList.add('Mute')
     }
     this.options.autoPlay ? this.player.classList.add('Play') : this.player.classList.add('Pause')
+  }
 
-    this.initButtons()
-    this.initBar()
+  initKeyEvents() {
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 32) {
+        console.log(e)
+        this.toggle()
+      }
+    })
   }
 
   initButtons() {
@@ -59,7 +80,12 @@ class Player {
       }
     })
     this.template.fwdBtn.addEventListener('click', () => {
-      this.seek(this.currentTime + 10)
+      const time = Math.min(this.duration, this.currentTime + 10)
+      this.seek(time)
+    })
+    this.template.bwdBtn.addEventListener('click', () => {
+      const time = Math.max(0, this.currentTime - 10)
+      this.seek(time)
     })
     this.template.speedBtn.addEventListener('click', () => {
       const index = this.options.speedOptions.indexOf(this.currentSpeed)
@@ -81,12 +107,14 @@ class Player {
 
     const dragMoveHandler = (e) => {
       let percentage = ((e.clientX || e.changedTouches[0].clientX) - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
+      percentage = Math.min(percentage, 1)
+      percentage = Math.max(0, percentage)
       this.bar.set('audioPlayed', percentage)
       this.currentTime = percentage * this.duration
       this.template.currentTime.innerHTML = secondToTime(this.currentTime)
     }
 
-    const dragEndHandler = () => {
+    const dragEndHandler = (e) => {
       this.dragging = false
       this.player.classList.remove('Seeking')
       this.seek(this.currentTime)
@@ -95,10 +123,12 @@ class Player {
     }
 
     const instantSeek = (e) => {
+      if (this.dragging) return
       dragMoveHandler(e)
       this.seek(this.currentTime)
+      console.log('instant seeking')
     }
-    this.template.barWrap.addEventListener('click', instantSeek)
+    this.template.barWrap.addEventListener(dragEnd, instantSeek)
     this.template.handle.addEventListener(dragStart, dragStartHandler)
   }
 
@@ -229,6 +259,7 @@ class Player {
   destroy() {
     audio.pause()
     audio.src = ''
+    clearInterval(interval)
   }
 }
 

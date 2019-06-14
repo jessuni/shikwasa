@@ -15,13 +15,21 @@ export function secondToTime(time) {
   return `${hour}:${min}:${sec}`
 }
 
-export function getCoords(el) {
-  return el.getBoundingClientRect()
-}
-
 export function numToString(num) {
   const float = parseFloat(num).toFixed(2)
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
+}
+
+export function carousel(el, distance = 0, duration = 8000, pause = 2000) {
+  function transform() {
+    el.style.transitionDuration = `${duration / 1000}s`
+    el.style.transform = `translateX(${distance}px)`
+    setTimeout(() => {
+      el.style.transform = 'translateX(0px)'
+    }, duration + pause)
+  }
+  transform()
+  return setInterval(() => transform(), duration * 2 + pause * 2)
 }
 
 export function handleOptions(options) {

@@ -60,6 +60,7 @@ html, body {
   padding: 14px 30px 10px;
   border: none;
   border-left: 5px solid var(--primary-color);
+  width: calc(100% - 120px);
 }
 .shk_cover {
   background-color: var(--primary-color);
@@ -68,14 +69,6 @@ html, body {
   height: 100%;
   width: 100%;
 }
-/*
-.shk_cover img {
-  width: 100%;
-  height: 100%;
-  display: inline-block;
-  vertical-align: middle;
-}
-*/
 .shk_btn {
   appearance: none;
   -webkit-appearance: none;
@@ -112,11 +105,19 @@ html, body {
 }
 .shk.Pause .shk_btn .shk_btn_play,
 .shk.Play .shk_btn .shk_btn_pause {
-  display: inline-block;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.05s 0.01s ease-in, visibility 0.01s;
 }
 .shk.Pause .shk_btn .shk_btn_pause,
 .shk.Play .shk_btn .shk_btn_play {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.01s ease-in, visibility 0.01s 0.01s;
+}
+.shk_text {
+  overflow: hidden;
+  width: 100%;
 }
 .shk_text,
 .shk_controls,
@@ -127,18 +128,28 @@ html, body {
   user-select: none;
 }
 .shk_subtitle {
+  display: inline-block;
   font-weight: 500;
   color: var(--primary-color);
+  max-width: calc(100% - 164px);
+  white-space: nowrap;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: clip;
 }
 .shk_title {
+  display: inline-block;
   font-weight: 100;
-  margin: 2px 0;
+  margin-top: 2px;
   font-size: 24px;
+  white-space: nowrap;
+  transition: transform 0s ease-in-out;
 }
 .shk_controls {
   position: absolute;
   top: 8px;
   right: 20px;
+  z-index: 1;
 }
 .shk_controls .shk_btn:hover {
   opacity: 0.8;
@@ -204,9 +215,9 @@ html, body {
   position: absolute;
   top: 0;
   right: 0px;
-  margin-top: -7px;
+  margin-top: -6px;
   margin-right: -8px;
-  height: 18px;
+  height: 16px;
   width: 8px;
   cursor: move;
   cursor: grab;
@@ -220,8 +231,8 @@ html, body {
 }
 .shk_bottom {
   position: absolute;
-  right: 0;
-  top: 18px;
+  right: 30px;
+  bottom: 10px;
   font-size: 0px;
   font-weight: 400;
   color: #555555;
@@ -231,6 +242,7 @@ html, body {
 }
 .shk_loader {
   display: none;
+  color: var(--primary-color);
 }
 .shk.Loading .shk_loader {
   display: inline-block;
@@ -242,9 +254,6 @@ html, body {
   -webkit-animation: rotate 1.4s linear infinite;
   -moz-animation: rotate 1.4s linear infinite;
   position: relative;
-}
-.shk_loader stop {
-  stop-color: var(--primary-color);
 }
 .shk_visuallyhidden:not(:focus):not(:active) {
   position: absolute;
