@@ -1,5 +1,8 @@
 const CONFIG = {
-  fixed: false,
+  fixed: {
+    value: false,
+    position: null,
+  },
   autoPlay: false, // autoplay the next track
   muted: false,
   preload: 'metadata', // none, metadata, auto

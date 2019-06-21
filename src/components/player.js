@@ -51,7 +51,12 @@ class Player {
 
   initOptions() {
     if (this.options.fixed) {
-      this.player.classList.add('Fixed')
+      if (this.options.fixed.value) {
+        this.player.classList.add('Fixed')
+      }
+      if (this.options.fixed.position === 'top') {
+        this.player.classList.add('Top')
+      }
     }
     if (this.options.muted) {
       this.player.classList.add('Mute')
