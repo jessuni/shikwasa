@@ -3,9 +3,9 @@ const CONFIG = {
     value: false,
     position: null,
   },
-  autoPlay: false, // autoplay the next track
+  autoPlay: false,
   muted: false,
-  preload: 'metadata', // none, metadata, auto
+  preload: 'metadata',
   speedOptions: [0.5, 0.75, 1.25, 1.5],
   audio: {},
 }
