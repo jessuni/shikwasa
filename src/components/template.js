@@ -25,11 +25,15 @@ export default class Template {
 
       this.audioPlayed.style.color = themeColor + '70'
 
-      this.cover.style.backgroundImage = `url(${audio.cover})`
-      this.title.innerHTML = audio.title
-      this.artist.innerHTML = audio.artist
-      this.currentTime.innerHTML = '0:00'
-      this.duration.innerHTML = audio.duration ? secondToTime(audio.duration) : '0:00'
+      this.update(audio)
     }
+  }
+
+  update(audio) {
+    this.cover.style.backgroundImage = `url(${audio.cover})`
+    this.title.innerHTML = audio.title
+    this.artist.innerHTML = audio.artist
+    this.currentTime.innerHTML = '0:00'
+    this.duration.innerHTML = audio.duration ? secondToTime(audio.duration) : '0:00'
   }
 }

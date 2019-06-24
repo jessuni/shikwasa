@@ -52,15 +52,19 @@ export function handleOptions(options) {
   if (options.speedOptions.length > 1) {
     options.speedOptions.sort((a, b) => a - b)
   }
+  options.audio = handleAudios(options.audio)
+  return options
+}
 
-  if (!Array.isArray(options.audio)) {
-    options.audio = [options.audio]
+export function handleAudios(audio) {
+  if (!Array.isArray(audio)) {
+    audio = [audio]
   }
-  options.audio.map(item => {
+  audio.map(item => {
     item.name = item.name || 'Unknown Title'
     item.artist = item.artist || 'Unknown Artist'
     item.cover = item.cover || null
     item.duration = item.duration || 0
   })
-  return options
+  return audio
 }

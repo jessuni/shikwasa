@@ -1,15 +1,4 @@
-import Player from './src/components/player'
+import './src/css/style.css'
+import Shikwasa from './src/components/player'
 
-const player = new Player({
-  fixed: {
-    value: true,
-    position: 'top',
-  },
-  audio: {
-    cover: 'https://i.typcdn.com/spiralpodcast/jcgXQ_pNlQsvFI3C_EPiOA.png',
-    artist: 'Food FM',
-    src: 'https://v.typcdn.com/spiralpodcast/8442357089_216588.mp3',
-    title: 'EP01: 唯有爱与美食不可辜负唯有爱与美食不可辜负',
-    duration: 3600,
-  }
-})
+export default Shikwasa

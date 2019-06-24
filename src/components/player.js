@@ -1,15 +1,18 @@
 import playerElement from '../template/player.html'
 import Template from './template'
 import Bar from './bar'
-import { secondToTime, carousel, numToString, handleOptions } from '../utils'
+import { secondToTime, carousel, numToString, handleOptions, handleAudios } from '../utils'
 
 let interval
 const isMobile = /mobile/i.test(window.navigator.userAgent)
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
 const dragEnd = isMobile ? 'touchend' : 'mouseup'
-
-
+const pressSpace = (e) => {
+  if (e.keyCode === 32) {
+    this.toggle()
+  }
+}
 
 class Player {
   constructor(options) {
@@ -18,6 +21,7 @@ class Player {
     this.player = document.getElementsByClassName('shk')[0]
     this.muted = this.options.muted
     this.initUI()
+    this.initKeyEvents()
     this.dragging = false
     this.currentSpeed = 1
     this.currentTime = 0
@@ -25,6 +29,7 @@ class Player {
 
   get duration() {
     if (!this.audio) {
+      // what if audio is an array
       return this.options.audio[0].duration
     } else {
       return isNaN(this.audio.duration) ? 0 : this.audio.duration
@@ -46,7 +51,6 @@ class Player {
     this.initOptions()
     this.initButtons()
     this.initBar()
-    this.initKeyEvents()
   }
 
   initOptions() {
@@ -62,15 +66,6 @@ class Player {
       this.player.classList.add('Mute')
     }
     this.options.autoPlay ? this.player.classList.add('Play') : this.player.classList.add('Pause')
-  }
-
-  initKeyEvents() {
-    document.addEventListener('keyup', (e) => {
-      if (e.keyCode === 32) {
-        console.log(e)
-        this.toggle()
-      }
-    })
   }
 
   initButtons() {
@@ -131,104 +126,66 @@ class Player {
       if (this.dragging) return
       dragMoveHandler(e)
       this.seek(this.currentTime)
-      console.log('instant seeking')
     }
     this.template.barWrap.addEventListener(dragEnd, instantSeek)
     this.template.handle.addEventListener(dragStart, dragStartHandler)
   }
 
+  initKeyEvents() {
+    document.addEventListener('keyup', pressSpace)
+  }
+
   initAudio() {
     if (this.options.audio.length) {
       this.audio = new Audio()
-      this.audio.src = this.options.audio[0].src
-      this.audio.preload = this.options.preload
-      this.audio.autoplay = this.options.autoPlay
-      this.audio.muted = this.muted
-      this.audio.currentTime = this.currentTime
-      this.audio.playbackRate = this.currentSpeed
+      this.updateAudio(this.options.audio[0].src)
 
-      this.addLoadingEvents()
-      this.audio.addEventListener('play', () => {
-        if (this.player.classList.contains('Pause')) {
-          this.setUIPlaying()
-        }
-      })
-      this.audio.addEventListener('pause', () => {
-        if (this.player.classList.contains('Pause')) {
-          this.setUIPaused()
-        }
-      })
-      this.audio.addEventListener('ended', () => {
-        this.setUIPaused()
-        this.seek(0)
-      })
-
-      this.audio.addEventListener('durationchange', () => {
-        // Android browsers will output 1 at first
-        if (this.duration !== 1) {
-          this.template.duration.innerHTML = secondToTime(this.duration)
-        }
-      })
-      this.audio.addEventListener('progress', () => {
-        if (this.audio.buffered.length) {
-          const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
-          this.bar.set('audioLoaded', percentage)
-        }
-      })
-      this.audio.addEventListener('timeupdate', () => {
-        if (this.dragging) return
-        if (Math.floor(this.currentTime) !== Math.floor(this.audio.currentTime)) {
-          this.template.currentTime.innerHTML = secondToTime(this.audio.currentTime)
-          this.currentTime = +this.audio.currentTime
-          const percentage = this.audio.currentTime ? this.audio.currentTime / this.duration : 0
-          this.bar.set('audioPlayed', percentage)
-        }
-      })
+      this.initLoadingEvents()
+      this.initAudioEvents()
 
       this.inited = true
     }
   }
 
-  setUIPlaying() {
-    this.player.classList.add('Play')
-    this.player.classList.remove('Pause')
+  initAudioEvents() {
+    this.audio.addEventListener('play', () => {
+      if (this.player.classList.contains('Pause')) {
+        this.setUIPlaying()
+      }
+    })
+    this.audio.addEventListener('pause', () => {
+      if (this.player.classList.contains('Pause')) {
+        this.setUIPaused()
+      }
+    })
+    this.audio.addEventListener('ended', () => {
+      this.setUIPaused()
+      this.seek(0)
+    })
+    this.audio.addEventListener('durationchange', () => {
+      // Android browsers will output 1 at first
+      if (this.duration !== 1) {
+        this.template.duration.innerHTML = secondToTime(this.duration)
+      }
+    })
+    this.audio.addEventListener('progress', () => {
+      if (this.audio.buffered.length) {
+        const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
+        this.bar.set('audioLoaded', percentage)
+      }
+    })
+    this.audio.addEventListener('timeupdate', () => {
+      if (this.dragging) return
+      if (Math.floor(this.currentTime) !== Math.floor(this.audio.currentTime)) {
+        this.template.currentTime.innerHTML = secondToTime(this.audio.currentTime)
+        this.currentTime = +this.audio.currentTime
+        const percentage = this.audio.currentTime ? this.audio.currentTime / this.duration : 0
+        this.bar.set('audioPlayed', percentage)
+      }
+    })
   }
 
-  setUIPaused() {
-    this.player.classList.add('Pause')
-    this.player.classList.remove('Play')
-    this.player.classList.remove('Loading')
-  }
-
-  play() {
-    if (!this.inited) {
-      this.initAudio()
-    }
-    if (!this.audio.paused) return
-    this.setUIPlaying()
-    this.audio.play()
-
-  }
-
-  pause() {
-    if (!this.inited) {
-      this.initAudio()
-    }
-    if (this.audio.paused) return
-    this.setUIPaused()
-    this.audio.pause()
-  }
-
-  toggle() {
-    if (!this.inited) {
-      this.initAudio()
-    }
-    if (this.audio) {
-      this.audio.paused ? this.play() : this.pause()
-    }
-  }
-
-  addLoadingEvents() {
+  initLoadingEvents() {
     this.audio.addEventListener('canplay', () => {
       if (this.player.classList.contains('Loading')) {
         this.player.classList.remove('Loading')
@@ -250,6 +207,53 @@ class Player {
     })
   }
 
+
+  setUIPlaying() {
+    this.player.classList.add('Play')
+    this.player.classList.remove('Pause')
+  }
+
+  setUIPaused() {
+    this.player.classList.add('Pause')
+    this.player.classList.remove('Play')
+    this.player.classList.remove('Loading')
+  }
+
+  play(audio) {
+    if (!this.inited) {
+      this.initAudio()
+    }
+    if (audio && audio.src) {
+      this.template.update(audio)
+      //audio = handleAudios(audio)
+      this.currentTime = 0
+      this.updateAudio(audio.src)
+    }
+    if (!this.audio.paused) return
+    this.setUIPlaying()
+    setTimeout(() => {
+      this.audio.play()
+    }, 500)
+  }
+
+  pause() {
+    if (!this.inited) {
+      this.initAudio()
+    }
+    if (this.audio.paused) return
+    this.setUIPaused()
+    this.audio.pause()
+  }
+
+  toggle() {
+    if (!this.inited) {
+      this.initAudio()
+    }
+    if (this.audio) {
+      this.audio.paused ? this.play() : this.pause()
+    }
+  }
+
   seek(time) {
     time = Math.min(time, this.duration)
     time = Math.max(time, 0)
@@ -261,10 +265,23 @@ class Player {
     }
   }
 
+  updateAudio(src) {
+    this.audio.src = src
+    this.audio.preload = this.options.preload
+    this.audio.autoplay = this.options.autoPlay
+    this.audio.muted = this.muted
+    this.audio.currentTime = this.currentTime
+    this.audio.playbackRate = this.currentSpeed
+    console.log(src, this.audio)
+  }
+
   destroy() {
-    audio.pause()
-    audio.src = ''
+    this.audio.pause()
+    this.audio.src = ''
+    this.audio.load()
+    this.audio = null
     clearInterval(interval)
+    document.removeEventListener('keyup', pressSpace)
   }
 }
 
