@@ -8,6 +8,8 @@ const player = new Shikwasa({
     value: true,
     position: bottom,
   }
+  container: document.querySelector('body'),
+  themeColor: '#00869B',
   autoPlay: false,
   muted: false,
   preload: 'metadata', 
@@ -49,14 +51,16 @@ player.destroy() // destroy player
 
 ### Options
 
-| Property                 | Type    | default Value                                           | Valid values                                                                                                     |
-|--------------------------|---------|---------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| `fixed`(optional)        | Object  | <code>{<br>value: false,<br>position: null,<br>}</code> | `value`: Boolean<br>`position`: `top`, `bottom`                                                                  |
-| `autoplay`(optional)     | Boolean | false                                                   |                                                                                                                  |
-| `muted`(optional)        | Boolean | false                                                   |                                                                                                                  |
-| `preload`(optional)      | String  | `metadata`                                              | `auto`, `metadata`, `none`                                                                                       |
-| `speedOptions`(optional) | Array   | `[0.5, 0.75, 1.25, 1.5]`                                | each value of the array should be between the range of 0.25 to 5.0, or will likely be muted by certain browsers  |
-| `audio`(required)        | Object  | {}                                                      | <code>{<br>title: String,<br>artist: String,<br>cover: String,<br>src: String,<br>}</code>                       |
+| Property                 | Type            | default Value                                           | Valid values                                                                                                       |
+|--------------------------|-----------------|---------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `fixed`(optional)        | Object          | <code>{<br>value: false,<br>position: null,<br>}</code> | `value`: Boolean<br>`position`: `top`, `bottom`                                                                    |
+| `container`(optional)    | HTMLCollection  | document.querySelector('body')                          |                                                                                                                    |
+| `themeColor`(optional)   | String          | '#00869B'                                               |                                                                                                                    |
+| `autoplay`(optional)     | Boolean         | false                                                   |                                                                                                                    |
+| `muted`(optional)        | Boolean         | false                                                   |                                                                                                                    |
+| `preload`(optional)      | String          | `metadata`                                              | `auto`, `metadata`, `none`                                                                                         |
+| `speedOptions`(optional) | Array           | `[0.5, 0.75, 1.25, 1.5]`                                | each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers  |
+| `audio`(required)        | Object          | {}                                                      | <code>{<br>title: String,<br>artist: String,<br>cover: String,<br>src: String,<br>}</code>                         |
 
 
 
