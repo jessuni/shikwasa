@@ -41,9 +41,9 @@ player.play({  // pass a designated audio object to play it immediately
   src:
 })
 
-player.pause()  //pause the current audio
+player.pause()  // pause the current audio
 
-player.toggle()  //toggle play/pause
+player.toggle()  // toggle audio play state between play and pause
 player.destroy() // destroy player
 ```
 
