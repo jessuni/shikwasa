@@ -10,8 +10,4 @@ export default class Bar {
     percentage = Math.max(percentage, 0)
     this.elements[type].style.width = percentage * 100 + '%'
   }
-
-  get(type) {
-    return parseFloat(this.elements[type].style.width) / 100
-  }
 }

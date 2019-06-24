@@ -1,5 +1,4 @@
 import config from './config'
-import { isNumber } from 'util';
 
 export function secondToTime(time) {
   time = Math.round(time)

@@ -1,12 +1,3 @@
-:root {
-      --primary-color: #F9AA53;
-}
-html, body {
-  padding: 0;
-  margin: 0;
-}
-
-/* above should be removed */
 @keyframes rotate {
   to {
     transform: rotate(360deg);
@@ -33,7 +24,7 @@ html, body {
   border: none;
   box-shadow: 0px 0px 14px 6px #e2e2e280;
   cursor: auto;
-  font: 400 18px/1.42 Pingfang SC, Hiragano, Helvetica Neue,/*  var(--en-sans), var(--cjk-sans), */ sans-serif;
+  font: 400 18px/1.42 Pingfang SC, Hiragano, Helvetica Neue,var(--en-sans), var(--cjk-sans), sans-serif;
 }
 .shk.Fixed {
   position: fixed;
@@ -211,8 +202,7 @@ html, body {
   z-index: 1;
 }
 .shk_bar .shk_bar_played {
-  /* use setter for background color opacity */
-  background: #F9AA5370;
+  background: #e7e7e770;
   z-index: 2;
 
 }
