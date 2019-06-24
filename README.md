@@ -1,6 +1,6 @@
 ## how to use after installation
 
-### To create a new instance
+### Usage
 
 ```javascript
 const player = new Shikwasa({
