@@ -49,14 +49,14 @@ player.destroy() // destroy player
 
 ### Options
 
-| Property | Type | default Value | Valid values |
-|---|---|---|---|---|
-| `fixed` | Object | `{ value: false, position: null }` | `value`: Boolean, `position`: `top`, `bottom` |
-| `autoplay` | Boolean | false |
-| `muted` | Boolean | false |
-| `preload` | String | `metadata` | `auto`, `metadata`, `none` |
-| `speedOptions` | Array | `[0.5, 0.75, 1.25, 1.5]` | each value of the array should be between the range of 0.25 to 5.0, or will likely be muted by certain browsers  |
-| `audio` | Object | {} | `{ title: String, artist: String, cover: String, src: String }` |
+| Property       | Type    | default Value                      | Valid values                                                                                                     |
+|----------------|---------|------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| `fixed`        | Object  | `{ value: false, position: null }` | `value`: Boolean, `position`: `top`, `bottom`                                                                    |
+| `autoplay`     | Boolean | false                              |                                                                                                                  |
+| `muted`        | Boolean | false                              |                                                                                                                  |
+| `preload`      | String  | `metadata`                         | `auto`, `metadata`, `none`                                                                                       |
+| `speedOptions` | Array   | `[0.5, 0.75, 1.25, 1.5]`           | each value of the array should be between the range of 0.25 to 5.0, or will likely be muted by certain browsers  |
+| `audio`        | Object  | {}                                 | `{ title: String, artist: String, cover: String, src: String }`                                                  |
 
 
 
