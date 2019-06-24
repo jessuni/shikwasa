@@ -33,6 +33,8 @@ export function carousel(el, distance = 0, duration = 8000, pause = 2000) {
 
 export function handleOptions(options) {
   options.fixed = options.fixed || config.fixed
+  options.container = options.container || config.container
+  options.themeColor = options.themeColor || config.themeColor
   options.autoPlay = options.autoPlay || config.autoPlay
   options.muted = options.muted || config.muted
   options.preload = options.preload || config.preload
@@ -49,7 +51,7 @@ export function handleOptions(options) {
   if (options.speedOptions.length > 1) {
     options.speedOptions.sort((a, b) => a - b)
   }
-  options.audio.name = options.audio.name || 'Unknown Title'
+  options.audio.title = options.audio.title || 'Unknown Title'
   options.audio.artist = options.audio.artist || 'Unknown Artist'
   options.audio.cover = options.audio.cover || null
   options.audio.duration = options.audio.duration || 0

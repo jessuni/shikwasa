@@ -24,7 +24,7 @@
   border: none;
   box-shadow: 0px 0px 14px 6px #e2e2e280;
   cursor: auto;
-  font: 400 18px/1.42 Pingfang SC, Hiragano, Helvetica Neue,var(--en-sans), var(--cjk-sans), sans-serif;
+  font: 400 18px/1.42 Pingfang SC, Hiragano, Helvetica Neue, sans-serif;
 }
 .shk.Fixed {
   position: fixed;
@@ -53,11 +53,11 @@
   height: 100%;
   padding: 14px 30px 10px;
   border: none;
-  border-left: 5px solid var(--primary-color);
+  border-left: 5px solid var(--theme-color);
   width: calc(100% - 120px);
 }
 .shk_cover {
-  background-color: var(--primary-color);
+  background-color: var(--theme-color);
   background-size: cover;
   background-repeat: no-repeat;
   height: 100%;
@@ -85,7 +85,7 @@
   vertical-align: middle;
   width: 36px;
   height: 36px;
-  color: var(--primary-color);
+  color: var(--theme-color);
   font-size: 13px;
 }
 .shk_left .shk_btn svg {
@@ -127,7 +127,7 @@
 .shk_subtitle {
   display: inline-block;
   font-weight: 500;
-  color: var(--primary-color);
+  color: var(--theme-color);
   max-width: calc(100% - 164px);
   white-space: nowrap;
   vertical-align: middle;
@@ -155,7 +155,7 @@
   width: 16px;
   height: 16px;
   padding: 10px;
-  fill: var(--primary-color);
+  fill: var(--theme-color);
   vertical-align: middle;
 }
 .shk_btn.shk_btn_forward svg,
@@ -197,7 +197,7 @@
   bottom: 0;
 }
 .shk_bar .shk_bar_loaded {
-  background: var(--primary-color);
+  background: var(--theme-color);
   filter: opacity(30%);
   z-index: 1;
 }
@@ -207,7 +207,7 @@
 
 }
 .shk_bar .bar-handle {
-  background: var(--primary-color);
+  background: var(--theme-color);
   position: absolute;
   top: 0;
   right: 0px;
@@ -238,7 +238,7 @@
 }
 .shk_loader {
   display: none;
-  color: var(--primary-color);
+  color: var(--theme-color);
 }
 .shk.Loading .shk_loader {
   display: inline-block;
