@@ -21,7 +21,7 @@ const player = new Shikwasa({
 })
 ```
 
-The script will automatically look for container with the classname `shk`, for example:
+The script will automatically look for container with the classname `shk`, and inject the player into the container. For example:
 
 ```html
 <div class="shk">
