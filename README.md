@@ -56,7 +56,7 @@ player.destroy() // destroy player
 | `muted`        | Boolean | false                                                   |                                                                                                                  |
 | `preload`      | String  | `metadata`                                              | `auto`, `metadata`, `none`                                                                                       |
 | `speedOptions` | Array   | `[0.5, 0.75, 1.25, 1.5]`                                | each value of the array should be between the range of 0.25 to 5.0, or will likely be muted by certain browsers  |
-| `audio`        | Object  | {}                                                      | <code>{<br>title: String,<br>artist: String,<br>cover: String,<br>src: String }</code>                           |
+| `audio`        | Object  | {}                                                      | <code>{<br>title: String,<br>artist: String,<br>cover: String,<br>src: String<br>}</code>                           |
 
 
 
