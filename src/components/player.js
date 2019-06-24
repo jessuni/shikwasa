@@ -1,7 +1,7 @@
 import playerElement from '../template/player.html'
 import Template from './template'
 import Bar from './bar'
-import { secondToTime, carousel, numToString, handleOptions, handleAudios } from '../utils'
+import { secondToTime, carousel, numToString, handleOptions } from '../utils'
 
 let interval
 const isMobile = /mobile/i.test(window.navigator.userAgent)
@@ -29,8 +29,7 @@ class Player {
 
   get duration() {
     if (!this.audio) {
-      // what if audio is an array
-      return this.options.audio[0].duration
+      return this.options.audio.duration
     } else {
       return isNaN(this.audio.duration) ? 0 : this.audio.duration
     }
@@ -40,7 +39,7 @@ class Player {
     this.player.innerHTML = playerElement
     const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color')
     this.player.style.boxShadow = `0px 0px 14px 6px ${themeColor}20`
-    this.template = new Template(this.player, this.options.audio[0], themeColor)
+    this.template = new Template(this.player, this.options.audio, themeColor)
     this.bar = new Bar(this.template)
 
     const titleOverflow = this.template.title.offsetWidth - this.template.texts.offsetWidth
@@ -57,9 +56,9 @@ class Player {
     if (this.options.fixed) {
       if (this.options.fixed.value) {
         this.player.classList.add('Fixed')
-      }
-      if (this.options.fixed.position === 'top') {
-        this.player.classList.add('Top')
+        if (this.options.fixed.position === 'top') {
+          this.player.classList.add('Top')
+        }
       }
     }
     if (this.options.muted) {
@@ -89,7 +88,8 @@ class Player {
     })
     this.template.speedBtn.addEventListener('click', () => {
       const index = this.options.speedOptions.indexOf(this.currentSpeed)
-      this.currentSpeed = (index + 1 >= this.options.speedOptions.length) ? this.options.speedOptions[0] : this.options.speedOptions[index + 1]
+      const speedRange = this.options.speedOptions
+      this.currentSpeed = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
       this.template.speedBtn.innerHTML = numToString(this.currentSpeed) + 'x'
       if(this.audio) {
         this.audio.playbackRate = this.currentSpeed
@@ -136,9 +136,9 @@ class Player {
   }
 
   initAudio() {
-    if (this.options.audio.length) {
+    if (this.options.audio.src) {
       this.audio = new Audio()
-      this.updateAudio(this.options.audio[0].src)
+      this.updateAudio(this.options.audio.src)
 
       this.initLoadingEvents()
       this.initAudioEvents()
@@ -163,7 +163,7 @@ class Player {
       this.seek(0)
     })
     this.audio.addEventListener('durationchange', () => {
-      // Android browsers will output 1 at first
+      // Android browsers will output 1 as initial value
       if (this.duration !== 1) {
         this.template.duration.innerHTML = secondToTime(this.duration)
       }
@@ -225,15 +225,12 @@ class Player {
     }
     if (audio && audio.src) {
       this.template.update(audio)
-      //audio = handleAudios(audio)
       this.currentTime = 0
       this.updateAudio(audio.src)
     }
     if (!this.audio.paused) return
     this.setUIPlaying()
-    setTimeout(() => {
-      this.audio.play()
-    }, 500)
+    this.audio.play()
   }
 
   pause() {
@@ -272,7 +269,6 @@ class Player {
     this.audio.muted = this.muted
     this.audio.currentTime = this.currentTime
     this.audio.playbackRate = this.currentSpeed
-    console.log(src, this.audio)
   }
 
   destroy() {

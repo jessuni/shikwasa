@@ -38,8 +38,6 @@ export function handleOptions(options) {
   options.muted = options.muted || config.muted
   options.preload = options.preload || config.preload
   options.speedOptions = options.speedOptions || config.speedOptions
-  // put a regex here to tranlate string into seconds
-  //const hour = options.audio.duration.match(/([0-1]?\d|2[0-3])/)[0]
   if (!Array.isArray(options.speedOptions)) {
     options.speedOptions = [options.speedOptions]
   }
@@ -52,19 +50,9 @@ export function handleOptions(options) {
   if (options.speedOptions.length > 1) {
     options.speedOptions.sort((a, b) => a - b)
   }
-  options.audio = handleAudios(options.audio)
+  options.audio.name = options.audio.name || 'Unknown Title'
+  options.audio.artist = options.audio.artist || 'Unknown Artist'
+  options.audio.cover = options.audio.cover || null
+  options.audio.duration = options.audio.duration || 0
   return options
-}
-
-export function handleAudios(audio) {
-  if (!Array.isArray(audio)) {
-    audio = [audio]
-  }
-  audio.map(item => {
-    item.name = item.name || 'Unknown Title'
-    item.artist = item.artist || 'Unknown Artist'
-    item.cover = item.cover || null
-    item.duration = item.duration || 0
-  })
-  return audio
 }

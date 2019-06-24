@@ -7,7 +7,7 @@ const CONFIG = {
   muted: false,
   preload: 'metadata', // none, metadata, auto
   speedOptions: [0.5, 0.75, 1.25, 1.5],
-  audio: [],
+  audio: {},
 }
 
 export default CONFIG
