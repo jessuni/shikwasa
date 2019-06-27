@@ -63,16 +63,16 @@ player.destroy()
 
 ## Options
 
-| Property               | Type            | Default Value                                           | Description |
-|------------------------|-----------------|---------------------------------------------------------|-------------|
-| fixed(optional)        | Object          | <code>{<br>value: false,<br>position: null,<br>}</code> | Whether player should be fixed to viewport.<br>value: Boolean<br>position: `top`, `bottom` |
-| container(optional)    | HTMLCollection  | `document.querySelector('body')`                        | Container element for the player |
-| themeColor(optional)   | String          | `#00869B`                                               | Theme color of the player |
-| autoplay(optional)     | Boolean         | `false`                                                 | If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default |
-| muted(optional)        | Boolean         | `false `                                                | Whether audio should be muted by default |
-| preload(optional)      | String          | `metadata`                                              | `auto`, `metadata`, `none`, for details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload) |
-| speedOptions(optional) | Array           | `[0.5, 0.75, 1.25, 1.5]`                                | each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers |
-| audio(required)        | Object          | `null`                                                  | <code>{<br>title: String,<br>artist: String,<br>cover: String,<br>src: String,<br>}</code> |
+| Property               | Type            | Default Value                                               | Description |
+|------------------------|-----------------|-------------------------------------------------------------|-------------|
+| fixed(optional)        | Object          | <code>{<br>  value: false,<br>  position: null,<br>}</code> | Whether player should be fixed to viewport.<br>{<br>&ensp;value: `Boolean`,<br>&ensp;position: `top`, `bottom`,<br>{ |
+| container(optional)    | HTMLCollection  | `document.querySelector('body')`                            | Container element for the player |
+| themeColor(optional)   | String          | `#00869B`                                                   | Theme color of the player |
+| autoplay(optional)     | Boolean         | `false`                                                     | If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default |
+| muted(optional)        | Boolean         | `false `                                                    | Whether audio should be muted by default |
+| preload(optional)      | String          | `metadata`                                                  | `auto`, `metadata`, `none`, for details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload) |
+| speedOptions(optional) | Array           | `[0.5, 0.75, 1.25, 1.5]`                                    | each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers |
+| audio(required)        | Object          | `null`                                                      | {<br>&ensp;title: `String`,<br>&ensp;artist: `String`,<br>&ensp;cover: `String`,<br>&ensp;src: `String`,<br>} |
 
 
 
