@@ -1,6 +1,6 @@
 {
   "name": "shikwasa",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An audio player born for podcasts, made with love by a podcast enthusiast. It is equipped with playback speed and forward/backward controls, and is best paired with your podcasting website.",
   "main": "dist/shikwasa.cjs.js",
   "dependencies": {},
