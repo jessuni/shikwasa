@@ -13,27 +13,27 @@ In case you wonder, it's a popular citrus fruit from Okinawa, Japan.
    /* this is where the player will be placed */
    </div>
    ```
-2. create a new instance
-```javascript
-const player = new Shikwasa({
-  fixed: {
-    value: true,
-    position: bottom,
-  },
-  container: document.querySelector('.elementOfYourChoice'),
-  themeColor: '#00869B',
-  autoPlay: false,
-  muted: false,
-  preload: 'metadata', 
-  speedOptions: [0.5, 0.75, 1.25, 1.5],
-  audio: {
-    title: 'Hello World!',
-    artist: 'Shikwasa FM',
-    cover: 'image.png',
-    src: 'audio.mp3',
-  },
-})
-```
+2. Create a new instance
+   ```javascript
+   const player = new Shikwasa({
+     fixed: {
+       value: true,
+       position: bottom,
+     },
+     container: document.querySelector('.elementOfYourChoice'),
+     themeColor: '#00869B',
+     autoPlay: false,
+     muted: false,
+     preload: 'metadata', 
+     speedOptions: [0.5, 0.75, 1.25, 1.5],
+     audio: {
+       title: 'Hello World!',
+       artist: 'Shikwasa FM',
+       cover: 'image.png',
+       src: 'audio.mp3',
+     },
+   })
+   ```
 
 Note: For now, only one player per page is supported.
 
@@ -56,7 +56,7 @@ player.toggle()  // toggle audio play state between play and pause
 player.destroy() // destroy player
 ```
 
-### Options
+## Options
 
 | Property               | Type            | default Value                                           | Valid values                                                                                                       |
 |------------------------|-----------------|---------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -71,4 +71,6 @@ player.destroy() // destroy player
 
 
 
-
+## Possible Future Features
+1. podcast playlist
+2. multiple players with independent controls in one page
