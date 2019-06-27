@@ -7,14 +7,20 @@ Shikwasa is an audio player born for podcast. You may enjoy a podcast with occas
 In case you wonder, it's a popular citrus fruit from Okinawa, Japan. 
 
 ## Usage
-
+1. Specify a container for the player to be injected into. For example:
+   ```html
+      <div class="elementOfYourChoice">
+      /* this is where the player will be placed */
+      </div>
+   ```
+2. create a new instance
 ```javascript
 const player = new Shikwasa({
   fixed: {
     value: true,
     position: bottom,
   },
-  container: document.querySelector('body'),
+  container: document.querySelector('.elementOfYourChoice'),
   themeColor: '#00869B',
   autoPlay: false,
   muted: false,
@@ -29,13 +35,7 @@ const player = new Shikwasa({
 })
 ```
 
-The script will automatically look for container with the classname `shk`, and inject the player into the container. For example:
-
-```html
-<div class="shk">
-/* this is where the player will be placed */
-</div>
-```
+Note: For now, only one player per page is supported.
 
 ## Methods
 
@@ -60,7 +60,7 @@ player.destroy() // destroy player
 
 | Property               | Type            | default Value                                           | Valid values                                                                                                       |
 |------------------------|-----------------|---------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| fixed(optional)        | Object          | <code>{<br>value: false,<br>position: null,<br>}</code> | `value`: Boolean<br>`position`: `top`, `bottom`                                                                    |
+| fixed(optional)        | Object          | <code>{<br>value: false,<br>position: null,<br>}</code> | value: Boolean<br>position: `top`, `bottom`                                                                    |
 | container(optional)    | HTMLCollection  | `document.querySelector('body')`                        |                                                                                                                    |
 | themeColor(optional)   | String          | `#00869B`                                               |                                                                                                                    |
 | autoplay(optional)     | Boolean         | `false`                                                 |                                                                                                                    |
