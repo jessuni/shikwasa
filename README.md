@@ -9,9 +9,9 @@ In case you wonder, it's a popular citrus fruit from Okinawa, Japan.
 ## Usage
 1. Specify a container for the player to be injected into. For example:
    ```html
-      <div class="elementOfYourChoice">
-      /* this is where the player will be placed */
-      </div>
+   <div class="elementOfYourChoice">
+   /* this is where the player will be placed */
+   </div>
    ```
 2. create a new instance
 ```javascript
