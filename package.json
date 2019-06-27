@@ -1,16 +1,25 @@
 {
-  "name": "player",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "parcel-bundler": "^1.12.3"
+  "name": "shikwasa",
+  "version": "1.0.0",
+  "description": "An audio player born for podcasts, made with love by a podcast enthusiast. It is equipped with playback speed and forward/backward controls, and is best paired with your podcasting website.",
+  "main": "dist/shikwasa.cjs.js",
+  "dependencies": {},
+  "devDependencies": {
+    "acorn": "^6.1.1",
+    "parcel-bundler": "^1.12.3",
+    "rollup": "^1.16.2",
+    "rollup-plugin-babel-minify": "^8.0.0",
+    "rollup-plugin-html": "^0.2.1",
+    "rollup-plugin-postcss": "^2.0.3"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel serve index.html"
+    "build": "npm run build:iife && npm run build:cjs",
+    "build:iife": "FORMAT=iife rollup -c",
+    "build:cjs": "FORMAT=cjs rollup -c",
+    "dev": "parcel serve index.html"
   },
   "author": "jessuni@gmail.com",
-  "license": "ISC"
+  "keywords": ["podcast", "audio", "player", "html5audio", "shikwasa", "playback"],
+  "license": "MIT"
 }

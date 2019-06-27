@@ -8,11 +8,6 @@ const isMobile = /mobile/i.test(window.navigator.userAgent)
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
 const dragEnd = isMobile ? 'touchend' : 'mouseup'
-const pressSpace = (e) => {
-  if (e.keyCode === 32) {
-    this.toggle()
-  }
-}
 
 class Player {
   constructor(options) {
@@ -93,7 +88,7 @@ class Player {
       const speedRange = this.options.speedOptions
       this.currentSpeed = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
       this.template.speedBtn.innerHTML = numToString(this.currentSpeed) + 'x'
-      if(this.audio) {
+      if (this.audio) {
         this.audio.playbackRate = this.currentSpeed
       }
     })
@@ -134,7 +129,7 @@ class Player {
   }
 
   initKeyEvents() {
-    document.addEventListener('keyup', pressSpace)
+    document.addEventListener('keyup', this.pressSpace)
   }
 
   initAudio() {
@@ -165,7 +160,6 @@ class Player {
       this.seek(0)
     })
     this.audio.addEventListener('durationchange', () => {
-      // Android browsers will output 1 as initial value
       if (this.duration !== 1) {
         this.template.duration.innerHTML = secondToTime(this.duration)
       }
@@ -208,7 +202,6 @@ class Player {
       }
     })
   }
-
 
   setUIPlaying() {
     this.el.classList.add('Play')
@@ -273,8 +266,14 @@ class Player {
     this.audio.playbackRate = this.currentSpeed
   }
 
-  mount(container){
+  mount(container) {
     container.append(this.el)
+  }
+
+  pressSpace(e) {
+    if (e.keyCode === 32) {
+      this.toggle()
+    }
   }
 
   destroy() {
@@ -283,9 +282,8 @@ class Player {
     this.audio.load()
     this.audio = null
     clearInterval(carouselInterval)
-    document.removeEventListener('keyup', pressSpace)
+    document.removeEventListener('keyup', this.pressSpace)
   }
 }
 
 export default Player
-
