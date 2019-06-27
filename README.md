@@ -1,10 +1,10 @@
 ## About
 
-Shikwasa is an audio player born for podcast.You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play a music on 1.5x speed?
+Shikwasa is an audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play a music on 1.5x speed?
 
 ### What does Shikwasa mean?
 
-It sounds like a strange name. In case you wonder, it's a popular citrus fruit from Okinawa, Japan. 
+In case you wonder, it's a popular citrus fruit from Okinawa, Japan. 
 
 ## Usage
 
