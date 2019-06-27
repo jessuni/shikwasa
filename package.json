@@ -13,7 +13,6 @@
     "rollup-plugin-postcss": "^2.0.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run build:iife && npm run build:cjs",
     "build:iife": "FORMAT=iife rollup -c",
     "build:cjs": "FORMAT=cjs rollup -c",
@@ -21,5 +20,6 @@
   },
   "author": "jessuni@gmail.com",
   "keywords": ["podcast", "audio", "player", "html5audio", "shikwasa", "playback"],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": "github:jessuni/shikwasa"
 }
