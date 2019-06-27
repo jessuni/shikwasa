@@ -39,7 +39,7 @@ Note: For now, only one player per page is supported.
 
 ## Methods
 
-```
+```javascript
 // play the current audio
 player.play()
 
