@@ -40,20 +40,25 @@ Note: For now, only one player per page is supported.
 ## Methods
 
 ```
-player.play()  // play the current audio
+// play the current audio
+player.play()
 
-player.play({  // pass a designated audio object to play it immediately
+// pass a designated audio object to play it immediately
+player.play({
   title: 'Embrace the universe with a cup of shikwasa juice',
   artist: 'Shikwasa',
   cover: 'image.png',
   src: 'sourceAudio.mp3'
 })
 
-player.pause()  // pause the current audio
+// pause the current audio
+player.pause()  
 
-player.toggle()  // toggle audio play state between play and pause
+// toggle audio play state between play and pause
+player.toggle()  
 
-player.destroy() // destroy player
+// destroy player
+player.destroy() 
 ```
 
 ## Options
