@@ -24,7 +24,7 @@ const plugins = [
 
 if (process.env.FORMAT === 'iife') {
   output.file = 'dist/shikwasa.min.js'
-  output.name = 'shikwasa'
+  output.name = 'Shikwasa'
   plugins.push(minify({
     comments: false,
     banner: false,

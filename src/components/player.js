@@ -22,6 +22,7 @@ class Player {
     this.currentSpeed = 1
     this.currentTime = 0
     this.mount(this.options.container)
+    this.afterMount()
   }
 
   get duration() {
@@ -38,12 +39,6 @@ class Player {
     this.el.style.boxShadow = `0px 0px 14px 6px ${this.options.themeColor}20`
     this.template = new Template(this.el, this.options.audio, this.options.themeColor)
     this.bar = new Bar(this.template)
-
-    const titleOverflow = this.template.title.offsetWidth - this.template.texts.offsetWidth
-    if (titleOverflow > 0) {
-      carouselInterval = carousel(this.template.title, -titleOverflow)
-    }
-    if (this.template.subtitle.offsetWidth > this.template.texts.offsetWidth) {}
     this.initOptions()
     this.initButtons()
     this.initBar()
@@ -268,6 +263,13 @@ class Player {
 
   mount(container) {
     container.append(this.el)
+  }
+
+  afterMount() {
+    const titleOverflow = this.template.title.offsetWidth - this.template.texts.offsetWidth
+    if (titleOverflow > 0) {
+      carouselInterval = carousel(this.template.title, -titleOverflow)
+    }
   }
 
   pressSpace(e) {

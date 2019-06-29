@@ -1,11 +1,12 @@
 {
   "name": "shikwasa",
   "version": "1.0.1",
-  "description": "An audio player born for podcasts, made with love by a podcast enthusiast. It is equipped with playback speed and forward/backward controls, and is best paired with your podcasting website.",
+  "description": "A web audio player born for podcasts, made with love by a podcast enthusiast. It is equipped with playback speed and forward/backward controls, and is best paired with your podcasting website.",
   "main": "dist/shikwasa.cjs.js",
   "dependencies": {},
   "devDependencies": {
     "acorn": "^6.1.1",
+    "gh-pages": "^2.0.1",
     "parcel-bundler": "^1.12.3",
     "rollup": "^1.16.2",
     "rollup-plugin-babel-minify": "^8.0.0",
@@ -19,7 +20,14 @@
     "dev": "parcel serve index.html"
   },
   "author": "jessuni@gmail.com",
-  "keywords": ["podcast", "audio", "player", "html5audio", "shikwasa", "playback"],
+  "keywords": [
+    "podcast",
+    "audio",
+    "player",
+    "html5audio",
+    "shikwasa",
+    "playback"
+  ],
   "license": "MIT",
   "repository": "github:jessuni/shikwasa"
 }

@@ -19,7 +19,7 @@ export function numToString(num) {
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
 
-export function carousel(el, distance = 0, duration = 8000, pause = 2000) {
+export function carousel(el, distance = 0, duration = 5000, pause = 2000) {
   function transform() {
     el.style.transitionDuration = `${duration / 1000}s`
     el.style.transform = `translateX(${distance}px)`
