@@ -17,9 +17,10 @@
     "build": "npm run build:iife && npm run build:cjs",
     "build:iife": "FORMAT=iife rollup -c",
     "build:cjs": "FORMAT=cjs rollup -c",
-    "dev": "parcel serve index.html"
+    "dev": "parcel serve index.html",
+    "deploy": "gh-pages -d dist"
   },
-  "author": "jessuni@gmail.com",
+  "author": "jessunix@gmail.com",
   "keywords": [
     "podcast",
     "audio",
