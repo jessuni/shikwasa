@@ -4,7 +4,10 @@ Shikwasa is an audio player born for podcast. You may enjoy a podcast with occas
 
 ### What does Shikwasa mean?
 
-In case you wonder, it's a popular citrus fruit from Okinawa, Japan. 
+In case you wonder, it's a popular citrus fruit from Okinawa, Japan.
+
+## Installation
+`npm install shikwasa`
 
 ## Usage
 1. Specify a container for the player to be injected into. For example:
@@ -24,7 +27,7 @@ In case you wonder, it's a popular citrus fruit from Okinawa, Japan.
      themeColor: '#00869B',
      autoPlay: false,
      muted: false,
-     preload: 'metadata', 
+     preload: 'metadata',
      speedOptions: [0.5, 0.75, 1.25, 1.5],
      audio: {
        title: 'Hello World!',
@@ -52,13 +55,13 @@ player.play({
 })
 
 // pause the current audio
-player.pause()  
+player.pause()
 
 // toggle audio play state between play and pause
-player.toggle()  
+player.toggle()
 
 // destroy player
-player.destroy() 
+player.destroy()
 ```
 
 ## Options
