@@ -39,7 +39,7 @@ export function handleOptions(options) {
   if (!result) {
     options.fixed.type = config.fixed.type
   }
-  options.transitionDuration = options.transitionDuration || config.transitionDuration
+  options.transitionDuration = +options.transitionDuration || config.transitionDuration
   options.themeColor = options.themeColor || config.themeColor
   options.autoPlay = options.autoPlay || config.autoPlay
   options.muted = options.muted || config.muted
