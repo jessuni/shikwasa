@@ -32,8 +32,14 @@ export function carousel(el, distance = 0, duration = 5000, pause = 2000) {
 }
 
 export function handleOptions(options) {
-  options.fixed = options.fixed || config.fixed
   options.container = options.container || config.container
+  options.fixed = options.fixed || config.fixed
+  const fixedOptions = ['auto', 'static', 'fixed']
+  const result = fixedOptions.filter(item => item === options.fixed.type)[0]
+  if (!result) {
+    options.fixed.type = config.fixed.type
+  }
+  options.transitionDuration = options.transitionDuration || config.transitionDuration
   options.themeColor = options.themeColor || config.themeColor
   options.autoPlay = options.autoPlay || config.autoPlay
   options.muted = options.muted || config.muted

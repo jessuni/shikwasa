@@ -45,12 +45,10 @@ class Player {
   }
 
   initOptions() {
-    if (this.options.fixed) {
-      if (this.options.fixed.value) {
-        this.el.classList.add('Fixed')
-        if (this.options.fixed.position === 'top') {
-          this.el.classList.add('Top')
-        }
+    if (this.options.fixed.type !== 'static' ) {
+      this.options.fixed.type === 'fixed' ? this.el.classList.add('Fixed') : this.el.classList.add('Auto')
+      if (this.options.fixed.position === 'top') {
+        this.el.classList.add('Top')
       }
     }
     if (this.options.muted) {
@@ -268,7 +266,7 @@ class Player {
   afterMount() {
     const titleOverflow = this.template.title.offsetWidth - this.template.texts.offsetWidth
     if (titleOverflow > 0) {
-      carouselInterval = carousel(this.template.title, -titleOverflow)
+      carouselInterval = carousel(this.template.title, -titleOverflow, this.options.transitionDuration)
     }
   }
 

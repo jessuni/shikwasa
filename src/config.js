@@ -1,9 +1,10 @@
 const CONFIG = {
-  fixed: {
-    value: false,
-    position: null,
-  },
   container: document.querySelector('body'),
+  fixed: {
+    type: 'auto',
+    position: 'bottom',
+  },
+  transitionDuration: '5000',
   themeColor: '#00869B',
   autoPlay: false,
   muted: false,

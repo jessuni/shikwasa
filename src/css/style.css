@@ -34,6 +34,7 @@
 }
 .shk.Fixed.Top {
   top: 0;
+  bottom: auto;
 }
 .shk.Seeking {
   cursor: grabbing;
@@ -55,6 +56,7 @@
   border: none;
   border-left: 5px solid var(--theme-color);
   width: calc(100% - 120px);
+  background-color: #fff;
 }
 .shk_cover {
   background-color: var(--theme-color);
@@ -276,6 +278,17 @@
 }
 
 @media (max-width: 768px) {
+  .shk.Auto {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    width: 100%;
+  }
+  .shk.Auto.Top {
+    top: 0;
+    bottom: auto;
+  }
   .shk {
     height: 60px;
   }
