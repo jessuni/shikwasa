@@ -8,7 +8,7 @@
     "acorn": "^6.1.1",
     "gh-pages": "^2.0.1",
     "parcel-bundler": "^1.12.3",
-    "rollup": "^1.16.2",
+    "rollup": "^1.16.7",
     "rollup-plugin-babel-minify": "^8.0.0",
     "rollup-plugin-html": "^0.2.1",
     "rollup-plugin-postcss": "^2.0.3"
