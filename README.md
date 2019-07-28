@@ -107,14 +107,14 @@ fixed: {
 
 | Property      | Type     |  Description                             |
 |---------------|----------|------------------------------------------|
-| type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fixed to viewport |
+| type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fix to viewport |
 | position      | `String` | either `bottom` or `top` <br>Note: `position` will be ignored when `type` is set to `static`         |
 
 **transitionDuration** (optional)
 
 - type: `Number`
 - default: `5000`
-- description: If audio title is longer than container, a text-scroll will be triggered. This property will control the duration of one complete scroll.
+- description: If audio title overflows, a text-scroll will be triggered. This property will control the duration of one complete scroll.
 
 **themeColor** (optional)
 
