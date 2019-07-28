@@ -70,7 +70,7 @@ player.destroy()
 
 ## Options
 
-*audio* (required)
+**audio** (required)
 
 - type: `Object`
 - default: `null`
@@ -87,13 +87,13 @@ player.destroy()
 ```
 
 
-*container* (optional)
+**container** (optional)
 
 - type: `HTMLCollection`
 - default: `document.querySelector('body')`
 - description: Container element for the player.
 
-*fixed* (optional)
+**fixed** (optional)
 
 - type: `Object`
 - default:
@@ -110,32 +110,32 @@ fixed: {
 | type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fixed to viewport |
 | position      | `String` | either `bottom` or `top` <br>Note: `position` will be ignored when `type` is set to `static`         |
 
-*transitionDuration* (optional)
+**transitionDuration** (optional)
 
 - type: `Number`
 - default: `5000`
 - description: If audio title is longer than container, a text-scroll will be triggered. This property will control the duration of one complete scroll.
 
-*themeColor* (optional)
+**themeColor** (optional)
 
 - type: `String`
 - default: `#00869B`
 - description: Theme color of the player.
 
-*autoplay* (optional)
+**autoplay** (optional)
 
 - type: `Boolean`
 - default: `false`
 - description: If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default
 
 
-*muted* (optional)
+**muted** (optional)
 
 - type: `Boolean`
 - default: `false`
 - description: Whether audio should be muted by default. Right now this will not have any impact on `audio` object's `defaultMuted` property.
 
-*preload* (optional)
+**preload** (optional)
 
 - type: `String`
 
@@ -143,7 +143,7 @@ fixed: {
 
 - description: choose from `auto`, `metadata` and `none`. For details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload).
 
-*speedOptions* (optional)
+**speedOptions** (optional)
 
 - type: `Array`
 
@@ -151,7 +151,7 @@ fixed: {
 
 - description: The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers
 
-*download* (optional)
+**download** (optional)
 
 - type: `Boolean`
 - default: `true`
