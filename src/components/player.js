@@ -37,7 +37,7 @@ class Player {
     this.el.innerHTML = playerElement
     this.el.style = `--theme-color: ${this.options.themeColor}`
     this.el.style.boxShadow = `0px 0px 14px 6px ${this.options.themeColor}20`
-    this.template = new Template(this.el, this.options.audio, this.options.themeColor)
+    this.template = new Template(this.el, this.options)
     this.bar = new Bar(this.template)
     this.initOptions()
     this.initButtons()

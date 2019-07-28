@@ -4,6 +4,7 @@ const CONFIG = {
     type: 'auto',
     position: 'bottom',
   },
+  download: true,
   transitionDuration: '5000',
   themeColor: '#00869B',
   autoPlay: false,

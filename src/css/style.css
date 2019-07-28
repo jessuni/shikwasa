@@ -170,6 +170,10 @@
   fill: var(--theme-color);
   vertical-align: middle;
 }
+.shk_btn.shk_btn_download svg {
+  fill: none;
+  stroke: var(--theme-color);
+}
 .shk_btn_forward svg,
 .shk_btn_backward svg {
   width: 18px;
