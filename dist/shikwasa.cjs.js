@@ -52,7 +52,7 @@ function carousel(el, distance = 0, duration = 5000, pause = 2000) {
 function handleOptions(options) {
   options.container = options.container || CONFIG.container;
   options.fixed = options.fixed || CONFIG.fixed;
-  options.download = options.download || CONFIG.download;
+  options.download = typeof options.download === 'boolean' ? options.download : CONFIG.download;
   const fixedOptions = ['auto', 'static', 'fixed'];
   const result = fixedOptions.filter(item => item === options.fixed.type)[0];
   if (!result) {
