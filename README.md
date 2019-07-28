@@ -1,3 +1,4 @@
+![shikwasa branding image](https://i.typcdn.com/jessuni/8438051210_7579.png)
 ## About
 
 Shikwasa is a web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play a music on 1.5x speed?
