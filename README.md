@@ -70,15 +70,12 @@ player.destroy()
 
 ## Options
 
-### audio (required)
+*audio* (required)
 
-type: `Object`
-
-default: `null`
-
-description: The target audio to be played.
-
-properties:
+- type: `Object`
+- default: `null`
+- description: The target audio to be played.
+- properties:
 
 ```
   audio: {
@@ -90,89 +87,75 @@ properties:
 ```
 
 
-### container (optional)
+*container* (optional)
 
-type: `HTMLCollection`
+- type: `HTMLCollection`
+- default: `document.querySelector('body')`
+- description: Container element for the player.
 
-default: `document.querySelector('body')`
+*fixed* (optional)
 
-description: Container element for the player
-
-### fixed (optional)
-
-type: `Object`
-
-default:
+- type: `Object`
+- default:
 ```
 fixed: {
   type: 'auto',
   position: 'bottom',
 }
 ```
-
-description: Whether player should be fixed to viewport.
+- description: Whether player should be fixed to viewport.
 
 | Property      | Type     |  Description                             |
 |---------------|----------|------------------------------------------|
 | type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fixed to viewport |
 | position      | `String` | either `bottom` or `top` <br>Note: `position` will be ignored when `type` is set to `static`         |
 
-### transitionDuration (optional)
+*transitionDuration* (optional)
 
-type: `Number`
+- type: `Number`
+- default: `5000`
+- description: If audio title is longer than container, a text-scroll will be triggered. This property will control the duration of one complete scroll.
 
-default: `5000`
+*themeColor* (optional)
 
-description: If audio title is longer than container, a text-scroll will be triggered. This property will control the duration of one complete scroll.
+- type: `String`
+- default: `#00869B`
+- description: Theme color of the player.
 
-### themeColor (optional)
+*autoplay* (optional)
 
-type: `String`
-
-default: `#00869B`
-
-description: Theme color of the player.
-
-### autoplay (optional)
-
-type: `Boolean`
-
-default: `false`
-
-description: If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default
+- type: `Boolean`
+- default: `false`
+- description: If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default
 
 
-### muted (optional)
+*muted* (optional)
 
-type: `Boolean`
+- type: `Boolean`
+- default: `false`
+- description: Whether audio should be muted by default. Right now this will not have any impact on `audio` object's `defaultMuted` property.
 
-default: `false`
+*preload* (optional)
 
-description: Whether audio should be muted by default. Right now this will not have any impact on `audio` object's `defaultMuted` property.
+- type: `String`
 
-### preload (optional)
+- default: `metadata`
 
-type: `String`
+- description: choose from `auto`, `metadata` and `none`. For details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload).
 
-default: `metadata`
+*speedOptions* (optional)
 
-description: choose from `auto`, `metadata` and `none`. For details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload).
+- type: `Array`
 
-### speedOptions (optional)
+- default: `[0.5, 0.75, 1.25, 1.5]`
 
-type: `Array`
+- description: The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers
 
-default: `[0.5, 0.75, 1.25, 1.5]`
+*download* (optional)
 
-description: The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers
-
-### download (optional)
-
-type: `Boolean`
-
-default: `true`
-
-description: whether a user can download the audio file. When set to `true`, a download button shows up on the player.
+- type: `Boolean`
+- default: `true`
+- description: whether a user can download the audio file. When set to `true`, a download button shows up on the player.
 
 ## Possible Future Features
 1. podcast playlist
