@@ -79,12 +79,14 @@ description: The target audio to be played.
 
 properties:
 
-| Property      | Type     |
-|---------------|----------|
-| title         | `String` |
-| artist        | `String` |
-| cover         | `String` |
-| src           | `String` |
+```
+  audio: {
+    title: String,
+    artist: String,
+    cover: String,
+    src: String,
+  }
+```
 
 
 ### container (optional)
@@ -101,9 +103,9 @@ type: `Object`
 
 default:
 ```
-{
+fixed: {
   type: 'auto',
-  position: 'bottom'
+  position: 'bottom',
 }
 ```
 
