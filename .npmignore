@@ -2,5 +2,7 @@ node_modules
 .cache
 dist/assets
 dist/index.html
+dist/index.js
 gh.js
 src
+parcel

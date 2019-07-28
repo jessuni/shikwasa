@@ -1,4 +1,6 @@
 node_modules
 .cache
-dist
 gh.js
+dist/index.js
+dist/index.html
+parcel
