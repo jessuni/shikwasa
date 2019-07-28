@@ -78,6 +78,7 @@ default: `null`
 description: The target audio to be played.
 
 properties:
+
 | Property      | Type     |
 |---------------|----------|
 | title         | `String` |
