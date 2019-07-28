@@ -6,7 +6,7 @@ Shikwasa is a web audio player born for podcast. You may enjoy a podcast with oc
 
 ### What does Shikwasa mean?
 
-In case you wonder, it's a popular citrus fruit from Okinawa, Japan. 🍊
+In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan. 🍊
 
 ## Installation
 `npm install shikwasa`
@@ -69,19 +69,106 @@ player.destroy()
 
 ## Options
 
-| Property               | Type           | Default Value       | Description                                         |
-|------------------------|----------------|-------------------- |---------------------------------------------------|
-| audio(required)        | Object          | `null`                                                      | {<br>&ensp;title: `String`,<br>&ensp;artist: `String`,<br>&ensp;cover: `String`,<br>&ensp;src: `String`,<br>} |
-| container(optional)    | HTMLCollection | `document.querySelector('body')`                            | Container element for the player |
-| fixed(optional)        | Object         | <code>{<br>  type: 'auto',<br>  position: 'bottom',<br>}</code> | Whether player should be fixed to viewport.<br>{<br>&ensp;type: `auto`,`static`,`fixed`,<br>&ensp;position: `top`, `bottom`,<br>}<br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fixed to viewport<br>Note: `position` will be ignored when `type` is set to `static` |
-| transitionDuration(optional)   | Number          | `5000`                                                   | If audio title is longer than container, it will scroll. This property will control the duration of one complete scroll |
-| themeColor(optional)   | String         | `#00869B`                                                   | Theme color of the player |
-| autoplay(optional)     | Boolean        | `false`                                                     | If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default |
-| muted(optional)        | Boolean        | `false `                                                    | Whether audio should be muted by default |
-| preload(optional)      | String         | `metadata`                                                  | `auto`, `metadata`, `none`, for details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload) |
-| speedOptions(optional) | Array          | `[0.5, 0.75, 1.25, 1.5]`                                    | each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers |
+### audio (required)
+
+type: `Object`
+
+default: `null`
+
+description: The target audio to be played.
+
+properties:
+| Property      | Type     |
+|---------------|----------|
+| title         | `String` |
+| artist        | `String` |
+| cover         | `String` |
+| src           | `String` |
 
 
+### container (optional)
+
+type: `HTMLCollection`
+
+default: `document.querySelector('body')`
+
+description: Container element for the player
+
+### fixed (optional)
+
+type: `Object`
+
+default:
+```
+{
+  type: 'auto',
+  position: 'bottom'
+}
+```
+
+description: Whether player should be fixed to viewport.
+
+| Property      | Type     |  Description                             |
+|---------------|----------|------------------------------------------|
+| type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fixed to viewport |
+| position      | `String` | either `bottom` or `top` <br>Note: `position` will be ignored when `type` is set to `static`         |
+
+### transitionDuration (optional)
+
+type: `Number`
+
+default: `5000`
+
+description: If audio title is longer than container, a text-scroll will be triggered. This property will control the duration of one complete scroll.
+
+### themeColor (optional)
+
+type: `String`
+
+default: `#00869B`
+
+description: Theme color of the player.
+
+### autoplay (optional)
+
+type: `Boolean`
+
+default: `false`
+
+description: If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default
+
+
+### muted (optional)
+
+type: `Boolean`
+
+default: `false`
+
+description: Whether audio should be muted by default. Right now this will not have any impact on `audio` object's `defaultMuted` property.
+
+### preload (optional)
+
+type: `String`
+
+default: `metadata`
+
+description: choose from `auto`, `metadata` and `none`. For details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload).
+
+### speedOptions (optional)
+
+type: `Array`
+
+default: `[0.5, 0.75, 1.25, 1.5]`
+
+description: The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers
+
+### download (optional)
+
+type: `Boolean`
+
+default: `true`
+
+description: whether a user can download the audio file. When set to `true`, a download button shows up on the player.
 
 ## Possible Future Features
 1. podcast playlist
