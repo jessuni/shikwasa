@@ -1,4 +1,5 @@
-import playerElement from '../template/player.html'
+import normalPlayer from '../template/normal.html'
+import oembedPlayer from '../template/oembed.html'
 import Template from './template'
 import Bar from './bar'
 import { secondToTime, carousel, numToString, handleOptions } from '../utils'
@@ -34,7 +35,7 @@ class Player {
   }
 
   initUI() {
-    this.el.innerHTML = playerElement
+    this.el.innerHTML = normalPlayer
     this.el.style = `--theme-color: ${this.options.themeColor}`
     this.el.style.boxShadow = `0px 0px 14px 6px ${this.options.themeColor}20`
     this.template = new Template(this.el, this.options)
