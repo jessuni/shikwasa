@@ -58,9 +58,13 @@ export function handleOptions(options) {
   if (options.speedOptions.length > 1) {
     options.speedOptions.sort((a, b) => a - b)
   }
-  options.audio.title = options.audio.title || 'Unknown Title'
-  options.audio.artist = options.audio.artist || 'Unknown Artist'
-  options.audio.cover = options.audio.cover || null
-  options.audio.duration = options.audio.duration || 0
+  if (!options.audio) {
+    console.error('audio is not specified')
+  } else {
+    options.audio.title = options.audio.title || 'Unknown Title'
+    options.audio.artist = options.audio.artist || 'Unknown Artist'
+    options.audio.cover = options.audio.cover || null
+    options.audio.duration = options.audio.duration || 0
+  }
   return options
 }
