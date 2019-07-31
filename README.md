@@ -21,6 +21,7 @@ In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan.
    ```
 2. Create a new instance
    ```javascript
+   // a detailed example
    const player = new Shikwasa({
      fixed: {
        type: 'auto',
@@ -74,7 +75,7 @@ player.destroy()
 
 - type: `Object`
 - default: `null`
-- description: The target audio to be played.
+- description: The target audio to be played. If `duration` is passed in, players with `preload` option set to `none` will have a audio duration time display before the audio metadata is fetched. However, after the audio metadata is loaded, this prop will be ignored.
 - properties:
 
 ```
@@ -83,9 +84,9 @@ player.destroy()
     artist: String,
     cover: String,
     src: String,
+    duration: Number,  // optional
   }
 ```
-
 
 **container** (optional)
 
@@ -158,5 +159,7 @@ fixed: {
 - description: whether a user can download the audio file. When set to `true`, a download button shows up on the player.
 
 ## Possible Future Features
-1. podcast playlist
+1. exposing native audio events
 2. multiple players with independent controls in one page
+3. dark mode
+4. podcast playlist
