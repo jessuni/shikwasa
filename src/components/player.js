@@ -187,16 +187,12 @@ class Player {
       }
     }
     this.audio.addEventListener('canplay', () => {
-      console.log('canplay')
       addLoadingClass()
     })
     this.audio.addEventListener('canplaythrough', () => {
-      console.log('canplaythrough')
-      console.log(this.audio, 'autoplay='+this.audio.autoplay)
       addLoadingClass()
     })
     this.audio.addEventListener('waiting', () => {
-      console.log('waiting')
       if (!this.el.classList.contains('Loading')) {
         this.el.classList.add('Loading')
       }
@@ -217,6 +213,7 @@ class Player {
   play(audio) {
     if (!this.inited) {
       this.audio.src = this.options.audio.src
+      this.inited = true
     }
     if (audio && audio.src) {
       this.template.update(audio)
