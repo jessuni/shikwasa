@@ -1,10 +1,9 @@
-import normalPlayer from '../template/normal.html'
-import oembedPlayer from '../template/oembed.html'
+import playerElement from '../template/player.html'
 import Template from './template'
 import Bar from './bar'
 import { secondToTime, carousel, numToString, handleOptions } from '../utils'
 
-let carouselInterval
+let carouselInterval, pressSpace
 const isMobile = /mobile/i.test(window.navigator.userAgent)
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -35,7 +34,7 @@ class Player {
   }
 
   initUI() {
-    this.el.innerHTML = normalPlayer
+    this.el.innerHTML = playerElement
     this.el.style = `--theme-color: ${this.options.themeColor}`
     this.el.style.boxShadow = `0px 0px 14px 6px ${this.options.themeColor}20`
     this.template = new Template(this.el, this.options)
@@ -123,14 +122,18 @@ class Player {
   }
 
   initKeyEvents() {
-    document.addEventListener('keyup', this.pressSpace)
+    pressSpace = (e) => {
+      if (e.keyCode === 32) {
+        this.toggle()
+      }
+    }
+    document.addEventListener('keyup', pressSpace)
   }
 
   initAudio() {
     if (this.options.audio.src) {
       this.audio = new Audio()
       this.updateAudio(this.options.audio.src)
-
       this.initLoadingEvents()
       this.initAudioEvents()
 
@@ -271,19 +274,13 @@ class Player {
     }
   }
 
-  pressSpace(e) {
-    if (e.keyCode === 32) {
-      this.toggle()
-    }
-  }
-
   destroy() {
     this.audio.pause()
     this.audio.src = ''
     this.audio.load()
     this.audio = null
     clearInterval(carouselInterval)
-    document.removeEventListener('keyup', this.pressSpace)
+    document.removeEventListener('keyup', pressSpace)
   }
 }
 
