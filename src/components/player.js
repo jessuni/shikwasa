@@ -3,7 +3,7 @@ import Template from './template'
 import Bar from './bar'
 import { secondToTime, carousel, numToString, handleOptions } from '../utils'
 
-let carouselInterval
+let carouselInterval, pressSpace
 const isMobile = /mobile/i.test(window.navigator.userAgent)
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -15,6 +15,7 @@ class Player {
     this.el.classList.add('shk')
     this.options = handleOptions(options)
     this.inited = false
+    this.initAudio()
     this.muted = this.options.muted
     this.initUI()
     this.initKeyEvents()
@@ -122,18 +123,23 @@ class Player {
   }
 
   initKeyEvents() {
-    document.addEventListener('keyup', this.pressSpace)
+    pressSpace = (e) => {
+      if (e.keyCode === 32) {
+        this.toggle()
+      }
+    }
+    document.addEventListener('keyup', pressSpace)
   }
 
   initAudio() {
     if (this.options.audio.src) {
       this.audio = new Audio()
-      this.updateAudio(this.options.audio.src)
-
       this.initLoadingEvents()
       this.initAudioEvents()
-
-      this.inited = true
+      if (this.options.preload !== 'none') {
+        this.updateAudio(this.options.audio.src)
+        this.inited = true
+      }
     }
   }
 
@@ -175,21 +181,22 @@ class Player {
   }
 
   initLoadingEvents() {
-    this.audio.addEventListener('canplay', () => {
+    const addLoadingClass = () => {
       if (this.el.classList.contains('Loading')) {
         this.el.classList.remove('Loading')
       }
+    }
+    this.audio.addEventListener('canplay', () => {
+      console.log('canplay')
+      addLoadingClass()
     })
     this.audio.addEventListener('canplaythrough', () => {
-      if (this.el.classList.contains('Loading'))
-        this.el.classList.remove('Loading')
-    })
-    this.audio.addEventListener('loadstart', () => {
-      if (!this.el.classList.contains('Loading')) {
-        this.el.classList.add('Loading')
-      }
+      console.log('canplaythrough')
+      console.log(this.audio, 'autoplay='+this.audio.autoplay)
+      addLoadingClass()
     })
     this.audio.addEventListener('waiting', () => {
+      console.log('waiting')
       if (!this.el.classList.contains('Loading')) {
         this.el.classList.add('Loading')
       }
@@ -209,7 +216,7 @@ class Player {
 
   play(audio) {
     if (!this.inited) {
-      this.initAudio()
+      this.audio.src = this.options.audio.src
     }
     if (audio && audio.src) {
       this.template.update(audio)
@@ -218,13 +225,17 @@ class Player {
     }
     if (!this.audio.paused) return
     this.setUIPlaying()
-    this.audio.play()
+    const promise = this.audio.play()
+    if (promise instanceof Promise) {
+      promise.catch((e) => {
+        if (e.name === 'NotAllowedError' || e.name === 'NotSupportedError') {
+          this.pause()
+        }
+      })
+    }
   }
 
   pause() {
-    if (!this.inited) {
-      this.initAudio()
-    }
     if (this.audio.paused) return
     this.setUIPaused()
     this.audio.pause()
@@ -232,11 +243,11 @@ class Player {
 
   toggle() {
     if (!this.inited) {
-      this.initAudio()
+      this.audio.src = this.options.audio.src
+      this.inited = true
     }
-    if (this.audio) {
-      this.audio.paused ? this.play() : this.pause()
-    }
+
+    this.audio.paused ? this.play() : this.pause()
   }
 
   seek(time) {
@@ -252,6 +263,7 @@ class Player {
 
   updateAudio(src) {
     this.audio.src = src
+    this.audio.autoplay = false
     this.audio.preload = this.options.preload
     this.audio.autoplay = this.options.autoPlay
     this.audio.muted = this.muted
@@ -270,19 +282,13 @@ class Player {
     }
   }
 
-  pressSpace(e) {
-    if (e.keyCode === 32) {
-      this.toggle()
-    }
-  }
-
   destroy() {
     this.audio.pause()
     this.audio.src = ''
     this.audio.load()
     this.audio = null
     clearInterval(carouselInterval)
-    document.removeEventListener('keyup', this.pressSpace)
+    document.removeEventListener('keyup', pressSpace)
   }
 }
 
