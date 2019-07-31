@@ -20,15 +20,16 @@ export function numToString(num) {
 }
 
 export function carousel(el, distance = 0, duration = 5000, pause = 2000) {
+  const interval = duration + pause
   function transform() {
     el.style.transitionDuration = `${duration / 1000}s`
     el.style.transform = `translateX(${distance}px)`
     setTimeout(() => {
       el.style.transform = 'translateX(0px)'
-    }, duration + pause)
+    }, interval)
   }
   transform()
-  return setInterval(() => transform(), duration * 2 + pause * 2)
+  return setInterval(() => transform(), interval * 2)
 }
 
 export function handleOptions(options) {
