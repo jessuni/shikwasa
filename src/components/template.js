@@ -3,7 +3,7 @@ import { secondToTime } from '../utils'
 export default class Template {
   constructor(container, options) {
     if (!container) return
-    this.playBtn = container.querySelector('.shk_left .shk_btn')
+    this.playBtn = container.querySelector('.shk_cover .shk_btn')
     this.downloadBtn = container.querySelector('.shk_btn_download')
     this.fwdBtn = container.querySelector('.shk_btn_forward')
     this.bwdBtn = container.querySelector('.shk_btn_backward')
@@ -20,7 +20,7 @@ export default class Template {
     this.audioPlayed = container.querySelector('.shk_bar_played')
     this.audioLoaded = container.querySelector('.shk_bar_loaded')
     this.handle = container.querySelector('.bar-handle')
-    this.cover = container.querySelector('.shk_cover')
+    this.cover = container.querySelector('.shk_img')
 
     this.audioPlayed.style.color = options.themeColor + '70'
     if (!options.download) {

@@ -41,13 +41,13 @@
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
 }
-.shk_left {
+.shk_cover {
   position: relative;
   width: 120px;
   flex-shrink: 0;
   height: 100%;
 }
-.shk_right {
+.shk_main {
   position: relative;
   box-sizing: border-box;
   flex-grow: 1;
@@ -58,7 +58,7 @@
   width: calc(100% - 120px);
   background-color: #fff;
 }
-.shk_cover {
+.shk_img {
   background-color: var(--theme-color);
   background-size: cover;
   background-repeat: no-repeat;
@@ -75,27 +75,21 @@
   padding: 0;
   cursor: pointer;
 }
-.shk_left .shk_btn {
+.shk_cover .shk_btn {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
-.shk_right .shk_btn {
-  display: inline-block;
-  vertical-align: middle;
-  width: 36px;
-  height: 36px;
-  color: var(--theme-color);
-  font-size: 13px;
-}
-.shk_left .shk_btn svg {
-  box-sizing: border-box;
-}
-.shk_btn:hover .shk_btn_play,
-.shk_btn:hover .shk_btn_pause {
   opacity: 0.8;
+}
+.shk_cover .shk_btn:hover,
+.shk_cover .shk_btn:focus {
+  opacity: 1;
+  transition: all 1s ease;
+}
+.shk_cover .shk_btn svg {
+  box-sizing: border-box;
 }
 .shk_btn_play {
   width: 100px;
@@ -160,10 +154,20 @@
   right: 20px;
   z-index: 1;
 }
-.shk_controls .shk_btn:hover {
+.shk_controls .shk_btn {
+  display: inline-block;
+  vertical-align: middle;
+  width: 36px;
+  height: 36px;
+  color: var(--theme-color);
+  font-size: 13px;
+  opacity: 1;
+}
+.shk_controls .shk_btn:hover,
+.shk_controls .shk_btn:focus {
   opacity: 0.8;
 }
-.shk_right .shk_btn svg {
+.shk_main .shk_btn svg {
   width: 16px;
   height: 16px;
   padding: 10px;
@@ -304,13 +308,13 @@ svg.shk_btn_mute,
   .shk {
     height: 60px;
   }
-  .shk_left {
+  .shk_cover {
     width: 60px;
   }
-  .shk_left .shk_btn svg {
+  .shk_cover .shk_btn svg {
     width: 100%;
     height: 100%;
-    padding: 5px;
+    padding: 10px;
   }
   .shk_btn_pause {
     bottom: 0;
@@ -320,7 +324,7 @@ svg.shk_btn_mute,
     stroke-width: 2;
     r: 40;
   }
-  .shk_right {
+  .shk_main {
     border-left: none;
     padding: 5px 10px;
   }
@@ -330,15 +334,12 @@ svg.shk_btn_mute,
   .shk_title {
     font-size: 1rem;
     margin: 0;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
   }
   .shk_controls {
     bottom: 0;
     left: 0;
     top: auto;
+    right: auto;
   }
   .shk_bar-wrap {
     display: none;
