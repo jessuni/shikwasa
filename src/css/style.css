@@ -162,9 +162,9 @@
   color: var(--theme-color);
   font-size: 13px;
   opacity: 1;
+  transform: scale(1);
 }
-.shk_controls .shk_btn:hover,
-.shk_controls .shk_btn:focus {
+.shk_controls .shk_btn:hover {
   opacity: 0.8;
 }
 .shk_main .shk_btn svg {
@@ -340,6 +340,9 @@ svg.shk_btn_mute,
     left: 0;
     top: auto;
     right: auto;
+  }
+  .shk_controls .shk_btn:hover {
+    opacity: 1;
   }
   .shk_bar-wrap {
     display: none;
