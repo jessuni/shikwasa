@@ -23,7 +23,9 @@ export default class Template {
     this.cover = container.querySelector('.shk_img')
 
     this.audioPlayed.style.color = options.themeColor + '70'
-    if (!options.download) {
+      if (options.download && options.audio && options.audio.src) {
+      this.downloadBtn.href= options.audio.src
+    } else {
       this.downloadBtn.remove()
     }
     if (options.audio) {
