@@ -15,13 +15,13 @@ class Player {
     this.el.classList.add('shk')
     this.options = handleOptions(options)
     this.inited = false
-    this.initAudio()
     this.muted = this.options.muted
     this.initUI()
     this.initKeyEvents()
     this.dragging = false
     this.currentSpeed = 1
     this.currentTime = 0
+    this.initAudio()
     this.mount(this.options.container)
     this.afterMount()
   }
