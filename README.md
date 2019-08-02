@@ -19,16 +19,17 @@ In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan.
    /* this is where the player will be placed */
    </div>
    ```
-2. Create a new instance
+2. Create an instance of the player
    ```javascript
-   // a detailed example
+   // a detailed init example
+
    const player = new Shikwasa({
      fixed: {
        type: 'auto',
        position: 'bottom',
      },
      container: document.querySelector('.elementOfYourChoice'),
-     transitionDuration: 5000,
+     transitionSpeed: 3,
      themeColor: '#00869B',
      autoPlay: false,
      muted: false,
@@ -78,7 +79,7 @@ player.destroy()
 - description: The target audio to be played. If `duration` is passed in, players with `preload` option set to `none` will have a audio duration time display before the audio metadata is fetched. However, after the audio metadata is loaded, this prop will be ignored.
 - properties:
 
-```
+```javascript
   audio: {
     title: String,
     artist: String,
@@ -98,7 +99,7 @@ player.destroy()
 
 - type: `Object`
 - default:
-```
+```javascript
 fixed: {
   type: 'auto',
   position: 'bottom',
@@ -111,11 +112,11 @@ fixed: {
 | type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fix to viewport |
 | position      | `String` | either `bottom` or `top` <br>Note: `position` will be ignored when `type` is set to `static`         |
 
-**transitionDuration** (optional)
+**transitionSpeed** (optional)
 
 - type: `Number`
-- default: `5000`
-- description: If audio title overflows, a text-scroll will be triggered. This property will control the duration of one complete scroll.
+- default: `3`
+- description: If audio title overflows, a text scroll will be triggered. This property will control the how fast the text will scroll. Choose between the range of `[1, 5]`, integer.
 
 **themeColor** (optional)
 

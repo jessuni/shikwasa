@@ -275,7 +275,7 @@ class Player {
   afterMount() {
     const titleOverflow = this.template.title.offsetWidth - this.template.texts.offsetWidth
     if (titleOverflow > 0) {
-      carouselInterval = carousel(this.template.title, -titleOverflow, this.options.transitionDuration)
+      carouselInterval = carousel(this.template.title, titleOverflow, this.options.transitionSpeed)
     }
   }
 

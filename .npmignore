@@ -1,5 +1,6 @@
 node_modules
 .cache
+.eslintrc
 dist/assets
 dist/index.html
 dist/index.js

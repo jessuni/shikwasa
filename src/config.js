@@ -5,7 +5,7 @@ const CONFIG = {
     position: 'bottom',
   },
   download: true,
-  transitionDuration: 5000,
+  transitionSpeed: 3,
   themeColor: '#00869B',
   autoPlay: false,
   muted: false,
