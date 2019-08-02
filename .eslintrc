@@ -1,0 +1,27 @@
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "node": true,
+    "browser": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "semi": ["error", "never"],
+    "quotes": [1, "single"],
+    "comma-dangle": ["error", {
+      "objects": "only-multiline",
+      "arrays": "never"
+    }],
+    "object-curly-spacing": 0,
+    "no-process-env": 0,
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    }
+  }
+}
