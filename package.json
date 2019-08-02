@@ -19,7 +19,8 @@
     "build:iife": "FORMAT=iife rollup -c",
     "build:cjs": "FORMAT=cjs rollup -c",
     "dev": "parcel serve ./dist/index.html -d parcel",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "lint": "eslint --fix src"
   },
   "author": "jessunix@gmail.com",
   "keywords": [
