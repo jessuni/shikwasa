@@ -9,7 +9,7 @@ const CONFIG = {
     position: 'bottom',
   },
   download: true,
-  transitionDuration: 5000,
+  transitionSpeed: 3,
   themeColor: '#00869B',
   autoPlay: false,
   muted: false,
@@ -37,11 +37,12 @@ function numToString(num) {
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
 
-function carousel(el, distance = 0, duration = 5000, pause = 2000) {
+function carousel(el, distance = 0, speed = 3, pause = 2000) {
+  const duration = distance / speed * 100;
   const interval = duration + pause;
   function transform() {
     el.style.transitionDuration = `${duration / 1000}s`;
-    el.style.transform = `translateX(${distance}px)`;
+    el.style.transform = `translateX(-${distance}px)`;
     setTimeout(() => {
       el.style.transform = 'translateX(0px)';
     }, interval);
@@ -59,7 +60,18 @@ function handleOptions(options) {
   if (!result) {
     options.fixed.type = CONFIG.fixed.type;
   }
-  options.transitionDuration = +options.transitionDuration || CONFIG.transitionDuration;
+  if (options.transitionSpeed) {
+    let speed = parseInt(options.transitionSpeed);
+    if (isNaN(speed)) {
+      options.transitionSpeed = CONFIG.transitionSpeed;
+    } else {
+      speed = Math.max(speed, 1);
+      speed = Math.min(speed, 5);
+      options.transitionSpeed = speed;
+    }
+  } else {
+    options.transitionSpeed = CONFIG.transitionSpeed;
+  }
   options.themeColor = options.themeColor || CONFIG.themeColor;
   options.autoPlay = options.autoPlay || CONFIG.autoPlay;
   options.muted = options.muted || CONFIG.muted;
@@ -246,7 +258,7 @@ class Player {
       this.template.currentTime.innerHTML = secondToTime(this.currentTime);
     };
 
-    const dragEndHandler = (e) => {
+    const dragEndHandler = () => {
       this.dragging = false;
       this.el.classList.remove('Seeking');
       this.seek(this.currentTime);
@@ -416,7 +428,7 @@ class Player {
   afterMount() {
     const titleOverflow = this.template.title.offsetWidth - this.template.texts.offsetWidth;
     if (titleOverflow > 0) {
-      carouselInterval = carousel(this.template.title, -titleOverflow, this.options.transitionDuration);
+      carouselInterval = carousel(this.template.title, titleOverflow, this.options.transitionSpeed);
     }
   }
 
