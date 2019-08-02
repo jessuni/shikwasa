@@ -105,7 +105,7 @@ class Player {
       this.template.currentTime.innerHTML = secondToTime(this.currentTime)
     }
 
-    const dragEndHandler = (e) => {
+    const dragEndHandler = () => {
       this.dragging = false
       this.el.classList.remove('Seeking')
       this.seek(this.currentTime)

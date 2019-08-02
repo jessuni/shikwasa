@@ -6,6 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "acorn": "^6.2.1",
+    "eslint": "^6.1.0",
     "gh-pages": "^2.0.1",
     "parcel-bundler": "^1.12.3",
     "rollup": "^1.17.0",

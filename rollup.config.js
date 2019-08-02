@@ -18,8 +18,8 @@ const plugins = [
       collapseBooleanAttributes: true,
       collapseWhitespace: true,
       conservativeCollapse: true,
-    }
-  }),
+    },
+  })
 ]
 
 if (process.env.FORMAT === 'iife') {
