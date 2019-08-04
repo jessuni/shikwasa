@@ -1,7 +1,14 @@
 ![shikwasa branding image](https://i.typcdn.com/jessuni/8438051210_7579.png)
+
+<br>
+
+[![npm][npm]][npm-url]
+[![size][size]][size-url]
+[![license][license]][license-url]
+
 ## About
 
-Shikwasa is a web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play a music on 1.5x speed?
+Shikwasa is a **lightweight**, **dependency-free** web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play a music on 1.5x speed?
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
 
@@ -164,3 +171,14 @@ fixed: {
 2. multiple players with independent controls in one page
 3. dark mode
 4. podcast playlist
+
+## License
+[MIT](./LICENSE)
+
+
+[npm]: https://img.shields.io/npm/v/shikwasa.svg?style=flat-square
+[npm-url]: https://npmjs.com/package/shikwasa
+[size]:https://badge-size.herokuapp.com/jessuni/shikwasa/master/dist/shikwasa.min.js?compression=gzip&style=flat-square
+[size-url]:https://github.com/jessuni/shikwasa/tree/master/dist
+[license]:https://img.shields.io/github/license/jessuni/shikwasa?style=flat-square
+[license-url]:https://github.com/jessuni/shikwasa/blob/master/LICENSE.md

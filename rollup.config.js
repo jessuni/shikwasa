@@ -1,6 +1,10 @@
 import postcss from 'rollup-plugin-postcss'
 import html from 'rollup-plugin-html'
 import minify from 'rollup-plugin-babel-minify'
+import replace from 'rollup-plugin-replace'
+import pkg from './package.json'
+
+const CONSOLE_CODE = `console.log(\`%c🍊%c Shikwasa Podcast Player v${pkg.version} %c https://jessunix.github.io/shikwasa/\`,'background-color:#00869B40;padding:4px;','background:#00869B80;color:#fff;padding:4px 0','padding: 2px 0;')`
 
 const output = {
   file: 'dist/shikwasa.js',
@@ -8,6 +12,11 @@ const output = {
 }
 
 const plugins = [
+  replace({
+    include: './src/main.js',
+    delimiters: ['/** ', ' */'],
+    'CONSOLE_MSG': CONSOLE_CODE,
+  }),
   postcss({
     extract: true,
     minimize: true,

@@ -442,4 +442,6 @@ class Player {
   }
 }
 
+console.log(`%c🍊%c Shikwasa Podcast Player v1.0.5 %c https://jessunix.github.io/shikwasa/`,'background-color:#00869B40;padding:4px;','background:#00869B80;color:#fff;padding:4px 0','padding: 2px 0;');
+
 module.exports = Player;
