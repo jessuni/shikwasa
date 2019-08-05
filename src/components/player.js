@@ -1,4 +1,5 @@
-import playerElement from '../template/player.html'
+import playerTemplate from '../template/player.html'
+import iconTemplate from '../template/icons.html'
 import Template from './template'
 import Bar from './bar'
 import { secondToTime, carousel, numToString, handleOptions } from '../utils'
@@ -13,6 +14,8 @@ class Player {
   constructor(options) {
     this.el = document.createElement('div')
     this.el.classList.add('shk')
+    this.icons = document.createElement('div')
+    this.icons.classList.add('shk_icons')
     this.options = handleOptions(options)
     this.inited = false
     this.muted = this.options.muted
@@ -35,7 +38,8 @@ class Player {
   }
 
   initUI() {
-    this.el.innerHTML = playerElement
+    this.el.innerHTML = playerTemplate
+    this.icons.innerHTML = iconTemplate
     this.el.style = `--theme-color: ${this.options.themeColor}`
     this.el.style.boxShadow = `0px 0px 14px 6px ${this.options.themeColor}20`
     this.template = new Template(this.el, this.options)
@@ -270,6 +274,7 @@ class Player {
 
   mount(container) {
     container.append(this.el)
+    container.append(this.icons)
   }
 
   afterMount() {

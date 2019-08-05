@@ -292,7 +292,9 @@ svg.shk_btn_mute,
   content: '/';
   margin: 0 4px;
 }
-
+.shk_icons {
+  display: none;
+}
 @media (max-width: 768px) {
   .shk.Auto {
     position: fixed;
