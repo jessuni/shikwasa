@@ -8,7 +8,7 @@
 
 ## About
 
-Shikwasa is a **lightweight**, **dependency-free** web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play a music on 1.5x speed?
+Shikwasa is an **ultra-lightweight**, **dependency-free** web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play music on 1.5x speed?
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
 
@@ -51,7 +51,7 @@ In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan.
    })
    ```
 
-Note: For now, only one player per page is supported.
+If `container` has any child nodes, it will be cleared before Shikwasa mounts. *Note: For now, only one player per page is supported.*
 
 ## Methods
 
@@ -164,7 +164,7 @@ fixed: {
 
 - type: `Boolean`
 - default: `true`
-- description: whether a user can download the audio file. When set to `true`, a download button shows up on the player.
+- description: whether the current audio file is download-able. When set to `true`, a download button shows up on the player.
 
 ## Possible Future Features
 1. exposing native audio events

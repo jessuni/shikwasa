@@ -273,6 +273,7 @@ class Player {
   }
 
   mount(container) {
+    container.innerHTML = ''
     container.append(this.el)
     container.append(this.icons)
   }
