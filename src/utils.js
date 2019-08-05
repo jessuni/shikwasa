@@ -20,17 +20,19 @@ export function numToString(num) {
 }
 
 export function carousel(el, distance = 0, speed = 3, pause = 2000) {
+  let carouselTimeout, carouselInterval
   const duration = distance / speed * 100
   const interval = duration + pause
   function transform() {
     el.style.transitionDuration = `${duration / 1000}s`
     el.style.transform = `translateX(-${distance}px)`
-    setTimeout(() => {
+    carouselTimeout = setTimeout(() => {
       el.style.transform = 'translateX(0px)'
     }, interval)
   }
   transform()
-  return setInterval(() => transform(), interval * 2)
+  carouselInterval = setInterval(() => transform(), interval * 2)
+  return [carouselTimeout, carouselInterval]
 }
 
 export function handleOptions(options) {

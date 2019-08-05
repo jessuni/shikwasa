@@ -1,10 +1,8 @@
-import playerTemplate from '../template/player.html'
-import iconTemplate from '../template/icons.html'
 import Template from './template'
 import Bar from './bar'
-import { secondToTime, carousel, numToString, handleOptions } from '../utils'
+import { secondToTime, numToString, handleOptions } from '../utils'
 
-let carouselInterval, pressSpace
+let pressSpace
 const isMobile = /mobile/i.test(window.navigator.userAgent)
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -12,21 +10,16 @@ const dragEnd = isMobile ? 'touchend' : 'mouseup'
 
 class Player {
   constructor(options) {
-    this.el = document.createElement('div')
-    this.el.classList.add('shk')
-    this.icons = document.createElement('div')
-    this.icons.classList.add('shk_icons')
-    this.options = handleOptions(options)
     this.inited = false
+    this.dragging = false
+    this.options = handleOptions(options)
     this.muted = this.options.muted
     this.initUI()
     this.initKeyEvents()
-    this.dragging = false
     this.currentSpeed = 1
     this.currentTime = 0
     this.initAudio()
-    this.mount(this.options.container)
-    this.afterMount()
+    this.template.mount(this.options.container)
   }
 
   get duration() {
@@ -38,31 +31,14 @@ class Player {
   }
 
   initUI() {
-    this.el.innerHTML = playerTemplate
-    this.icons.innerHTML = iconTemplate
-    this.el.style = `--theme-color: ${this.options.themeColor}`
-    this.el.style.boxShadow = `0px 0px 14px 6px ${this.options.themeColor}20`
-    this.template = new Template(this.el, this.options)
+    this.template = new Template(this.options)
+    this.el = this.template.el
     this.bar = new Bar(this.template)
-    this.initOptions()
-    this.initButtons()
-    this.initBar()
+    this.initButtonEvents()
+    this.initBarEvents()
   }
 
-  initOptions() {
-    if (this.options.fixed.type !== 'static' ) {
-      this.options.fixed.type === 'fixed' ? this.el.classList.add('Fixed') : this.el.classList.add('Auto')
-      if (this.options.fixed.position === 'top') {
-        this.el.classList.add('Top')
-      }
-    }
-    if (this.options.muted) {
-      this.el.classList.add('Mute')
-    }
-    this.options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
-  }
-
-  initButtons() {
+  initButtonEvents() {
     this.template.playBtn.addEventListener('click', () => {
       this.toggle()
     })
@@ -92,7 +68,7 @@ class Player {
     })
   }
 
-  initBar() {
+  initBarEvents() {
     const dragStartHandler = () => {
       this.el.classList.add('Seeking')
       this.dragging = true
@@ -264,33 +240,26 @@ class Player {
 
   updateAudio(src) {
     this.audio.src = src
-    this.audio.autoplay = false
     this.audio.preload = this.options.preload
-    this.audio.autoplay = this.options.autoPlay
     this.audio.muted = this.muted
+    if (this.options.autoplay && this.muted) {
+      this.audio.autoplay = this.options.autoPlay
+    }
     this.audio.currentTime = this.currentTime
     this.audio.playbackRate = this.currentSpeed
   }
 
-  mount(container) {
-    container.innerHTML = ''
-    container.append(this.el)
-    container.append(this.icons)
-  }
-
-  afterMount() {
-    const titleOverflow = this.template.title.offsetWidth - this.template.texts.offsetWidth
-    if (titleOverflow > 0) {
-      carouselInterval = carousel(this.template.title, titleOverflow, this.options.transitionSpeed)
-    }
-  }
-
-  destroy() {
+  destroyAudio() {
     this.audio.pause()
     this.audio.src = ''
     this.audio.load()
     this.audio = null
-    clearInterval(carouselInterval)
+  }
+
+  destroy() {
+    this.destroyAudio()
+    this.template.destroy()
+    this.container.innerHTML = ''
     document.removeEventListener('keyup', pressSpace)
   }
 }
