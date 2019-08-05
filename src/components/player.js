@@ -75,7 +75,6 @@ class Player {
       document.addEventListener(dragMove, dragMoveHandler)
       document.addEventListener(dragEnd, dragEndHandler)
     }
-
     const dragMoveHandler = (e) => {
       let percentage = ((e.clientX || e.changedTouches[0].clientX) - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
       percentage = Math.min(percentage, 1)
@@ -84,7 +83,6 @@ class Player {
       this.currentTime = percentage * this.duration
       this.template.currentTime.innerHTML = secondToTime(this.currentTime)
     }
-
     const dragEndHandler = () => {
       this.dragging = false
       this.el.classList.remove('Seeking')
@@ -92,7 +90,6 @@ class Player {
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
     }
-
     const instantSeek = (e) => {
       if (this.dragging) return
       dragMoveHandler(e)
