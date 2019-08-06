@@ -1,4 +1,5 @@
 import postcss from 'rollup-plugin-postcss'
+import autoprefixer from 'autoprefixer'
 import html from 'rollup-plugin-html'
 import minify from 'rollup-plugin-babel-minify'
 import replace from 'rollup-plugin-replace'
@@ -19,7 +20,10 @@ const plugins = [
   }),
   postcss({
     extract: true,
-    minimize: true,
+    minimize: true, // Use cssnano
+    plugins: [
+      autoprefixer()
+    ],
   }),
   html({
     include: 'src/template/*.html',
