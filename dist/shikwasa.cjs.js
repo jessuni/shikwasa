@@ -146,24 +146,20 @@ class Template {
     this.el.style.boxShadow = `0px 0px 14px 6px ${options.themeColor}20`;
     this.audioPlayed.style.color = options.themeColor + '70';
     options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause');
-
     if (options.download && options.audio && options.audio.src) {
       this.downloadBtn.href = options.audio.src;
     } else {
       this.downloadBtn.remove();
     }
-
     if (options.fixed.type !== 'static') {
       options.fixed.type === 'fixed' ? this.el.classList.add('Fixed') : this.el.classList.add('Auto');
       if (options.fixed.position === 'top') {
         this.el.classList.add('Top');
       }
     }
-
     if (options.muted) {
       this.el.classList.add('Mute');
     }
-
     if (options.audio) {
       this.update(options.audio);
     }
@@ -298,7 +294,6 @@ class Player {
       document.addEventListener(dragMove, dragMoveHandler);
       document.addEventListener(dragEnd, dragEndHandler);
     };
-
     const dragMoveHandler = (e) => {
       let percentage = ((e.clientX || e.changedTouches[0].clientX) - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth;
       percentage = Math.min(percentage, 1);
@@ -307,7 +302,6 @@ class Player {
       this.currentTime = percentage * this.duration;
       this.template.currentTime.innerHTML = secondToTime(this.currentTime);
     };
-
     const dragEndHandler = () => {
       this.dragging = false;
       this.el.classList.remove('Seeking');
@@ -315,7 +309,6 @@ class Player {
       document.removeEventListener(dragMove, dragMoveHandler);
       document.removeEventListener(dragEnd, dragEndHandler);
     };
-
     const instantSeek = (e) => {
       if (this.dragging) return
       dragMoveHandler(e);
