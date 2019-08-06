@@ -3,16 +3,6 @@
     transform: rotate(360deg);
   }
 }
-@-webkit-keyframes rotate {
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-@-moz-keyframes rotate {
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 .shk {
   position: inherit;
@@ -38,8 +28,6 @@
 }
 .shk.Seeking {
   cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
 }
 .shk_cover {
   position: relative;
@@ -67,8 +55,6 @@
 }
 .shk_btn {
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   background: transparent;
   border: none;
   outline: none;
@@ -126,9 +112,6 @@
 .shk_text,
 .shk_controls,
 .shk_time {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 .shk_subtitle {
@@ -235,13 +218,9 @@ svg.shk_btn_mute,
   width: 8px;
   cursor: move;
   cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
 }
 .bar-handle:active {
   cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
 }
 .shk_bottom {
   position: absolute;
@@ -265,8 +244,6 @@ svg.shk_btn_mute,
   width: 12px;
   height: 12px;
   animation: rotate 1.4s linear infinite;
-  -webkit-animation: rotate 1.4s linear infinite;
-  -moz-animation: rotate 1.4s linear infinite;
   position: relative;
 }
 .shk_visuallyhidden:not(:focus):not(:active) {
