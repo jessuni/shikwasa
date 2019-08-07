@@ -20,13 +20,26 @@ In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan.
 `npm install shikwasa`
 
 ## Usage
-1. Specify a container for the player to be injected into. For example:
+1. include stylesheet and script
+
    ```html
-   <div class="elementOfYourChoice">
-   /* this is where the player will be placed */
-   </div>
+    <head>
+      <link rel="stylesheet" href="shikwasa.min.css">
+    </head>
+    <body>
+      <script src="shikwasa.min.js"></script>
+    </body>
    ```
-2. Create an instance of the player
+2. Specify a container for the player to be injected into. For example:
+
+   ```html
+    <div class="elementOfYourChoice">
+      <!-- this is where the player will be injected -->
+    </div>
+   ```
+
+3. Create an instance of the player
+
    ```javascript
    // a detailed init example
 
@@ -52,6 +65,15 @@ In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan.
    ```
 
 If `container` has any child nodes, it will be cleared before Shikwasa mounts. *Note: For now, only one player per page is supported.*
+
+4. If you use module system, import like this:
+
+   ```javascript
+    import 'shikwasa/dist/shikwasa.min.css'
+    import Shikwasa from 'shikwasa'
+
+    const player = new Shikwasa(options)
+   ```
 
 ## Methods
 
@@ -135,7 +157,7 @@ fixed: {
 
 - type: `Boolean`
 - default: `false`
-- description: If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default
+- description: If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default. To comply with this policy, see details in [Chrome Developers](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) and [Webkit Announcement](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/).
 
 
 **muted** (optional)
