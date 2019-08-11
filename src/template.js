@@ -1,6 +1,6 @@
-import playerTemplate from '../template/player.html'
-import iconTemplate from '../template/icons.html'
-import { secondToTime, carousel } from '../utils'
+import playerTemplate from './template/player.html'
+import iconTemplate from './template/icons.html'
+import { secondToTime, carousel } from './utils'
 
 let carouselTimeout, carouselInterval
 

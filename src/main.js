@@ -1,5 +1,5 @@
 import './css/style.css'
-import Shikwasa from './components/player'
+import Shikwasa from './player'
 
 export default Shikwasa
 /** CONSOLE_MSG */

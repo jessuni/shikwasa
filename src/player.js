@@ -1,6 +1,7 @@
 import Template from './template'
 import Bar from './bar'
-import { secondToTime, numToString, handleOptions } from '../utils'
+import Events from './events'
+import { secondToTime, numToString, handleOptions } from './utils'
 
 let pressSpace
 const isMobile = /mobile/i.test(window.navigator.userAgent)
@@ -18,6 +19,7 @@ class Player {
     this.initKeyEvents()
     this.currentSpeed = 1
     this.currentTime = 0
+    this.events = new Events()
     this.initAudio()
     this.template.mount(this.options.container)
   }
@@ -113,6 +115,11 @@ class Player {
       this.audio = new Audio()
       this.initLoadingEvents()
       this.initAudioEvents()
+      this.events.audioEvents.forEach(name => {
+        this.audio.addEventListener(name, (e) => {
+          this.events.trigger(name, e)
+        })
+      })
       if (this.options.preload !== 'none') {
         this.updateAudio(this.options.audio.src)
         this.inited = true
@@ -121,32 +128,32 @@ class Player {
   }
 
   initAudioEvents() {
-    this.audio.addEventListener('play', () => {
+    this.on('play', () => {
       if (this.el.classList.contains('Pause')) {
         this.setUIPlaying()
       }
     })
-    this.audio.addEventListener('pause', () => {
+    this.on('pause', () => {
       if (this.el.classList.contains('Pause')) {
         this.setUIPaused()
       }
     })
-    this.audio.addEventListener('ended', () => {
+    this.on('ended', () => {
       this.setUIPaused()
       this.seek(0)
     })
-    this.audio.addEventListener('durationchange', () => {
+    this.on('durationchange', () => {
       if (this.duration !== 1) {
         this.template.duration.innerHTML = secondToTime(this.duration)
       }
     })
-    this.audio.addEventListener('progress', () => {
+    this.on('progress', () => {
       if (this.audio.buffered.length) {
         const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
         this.bar.set('audioLoaded', percentage)
       }
     })
-    this.audio.addEventListener('timeupdate', () => {
+    this.on('timeupdate', () => {
       if (this.dragging) return
       if (Math.floor(this.currentTime) !== Math.floor(this.audio.currentTime)) {
         this.template.currentTime.innerHTML = secondToTime(this.audio.currentTime)
@@ -163,17 +170,21 @@ class Player {
         this.el.classList.remove('Loading')
       }
     }
-    this.audio.addEventListener('canplay', () => {
+    this.on('canplay', () => {
       addLoadingClass()
     })
-    this.audio.addEventListener('canplaythrough', () => {
+    this.on('canplaythrough', () => {
       addLoadingClass()
     })
-    this.audio.addEventListener('waiting', () => {
+    this.on('waiting', () => {
       if (!this.el.classList.contains('Loading')) {
         this.el.classList.add('Loading')
       }
     })
+  }
+
+  on(name, callback) {
+    this.events.on(name, callback)
   }
 
   setUIPlaying() {
@@ -220,7 +231,6 @@ class Player {
       this.audio.src = this.options.audio.src
       this.inited = true
     }
-
     this.audio.paused ? this.play() : this.pause()
   }
 
