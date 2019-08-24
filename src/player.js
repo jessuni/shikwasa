@@ -25,10 +25,10 @@ class Player {
   }
 
   get duration() {
-    if (!this.audio) {
+    if (!this.audio || !this.audio.src) {
       return this.options.audio.duration
     } else {
-      return isNaN(this.audio.duration) ? 0 : this.audio.duration
+      return isNaN(this.audio.duration) ? this.options.audio.duration : this.audio.duration
     }
   }
 
@@ -71,6 +71,7 @@ class Player {
   }
 
   initBarEvents() {
+    let seekingTime = 0
     const dragStartHandler = () => {
       this.el.classList.add('Seeking')
       this.dragging = true
@@ -78,24 +79,25 @@ class Player {
       document.addEventListener(dragEnd, dragEndHandler)
     }
     const dragMoveHandler = (e) => {
-      let percentage = ((e.clientX || e.changedTouches[0].clientX) - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
+      const offset = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0
+      let percentage = (offset - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
       percentage = Math.min(percentage, 1)
       percentage = Math.max(0, percentage)
       this.bar.set('audioPlayed', percentage)
-      this.currentTime = percentage * this.duration
-      this.template.currentTime.innerHTML = secondToTime(this.currentTime)
+      seekingTime = percentage * this.duration
+      this.template.currentTime.innerHTML = secondToTime(seekingTime)
     }
     const dragEndHandler = () => {
       this.dragging = false
       this.el.classList.remove('Seeking')
-      this.seek(this.currentTime)
+      this.seek(seekingTime)
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
     }
     const instantSeek = (e) => {
       if (this.dragging) return
       dragMoveHandler(e)
-      this.seek(this.currentTime)
+      this.seek(seekingTime)
     }
     this.template.barWrap.addEventListener(dragEnd, instantSeek)
     this.template.handle.addEventListener(dragStart, dragStartHandler)
@@ -154,12 +156,13 @@ class Player {
       }
     })
     this.on('timeupdate', () => {
-      if (this.dragging) return
       if (Math.floor(this.currentTime) !== Math.floor(this.audio.currentTime)) {
-        this.template.currentTime.innerHTML = secondToTime(this.audio.currentTime)
         this.currentTime = +this.audio.currentTime
-        const percentage = this.audio.currentTime ? this.audio.currentTime / this.duration : 0
-        this.bar.set('audioPlayed', percentage)
+        if (!this.dragging) {
+          this.template.currentTime.innerHTML = secondToTime(this.audio.currentTime)
+          const percentage = this.audio.currentTime ? this.audio.currentTime / this.duration : 0
+          this.bar.set('audioPlayed', percentage)
+        }
       }
     })
   }
@@ -205,8 +208,9 @@ class Player {
     }
     if (audio && audio.src) {
       this.template.update(audio)
-      this.currentTime = 0
       this.updateAudio(audio.src)
+      this.currentTime = 0
+      this.seek(this.currentTime)
     }
     if (!this.audio.paused) return
     this.setUIPlaying()
@@ -238,10 +242,9 @@ class Player {
     time = Math.min(time, this.duration)
     time = Math.max(time, 0)
     this.template.currentTime.innerHTML = secondToTime(time)
+    this.currentTime = time
     if (this.audio) {
       this.audio.currentTime = time
-    } else {
-      this.currentTime = time
     }
   }
 
@@ -252,7 +255,6 @@ class Player {
     if (this.options.autoplay && this.muted) {
       this.audio.autoplay = this.options.autoPlay
     }
-    this.audio.currentTime = this.currentTime
     this.audio.playbackRate = this.currentSpeed
   }
 

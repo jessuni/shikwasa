@@ -1,13 +1,12 @@
 export default class Bar {
   constructor(template) {
-    this.elements = {}
-    this.elements.audioPlayed = template.audioPlayed
-    this.elements.audioLoaded = template.audioLoaded
+    this.audioPlayed = template.audioPlayed
+    this.audioLoaded = template.audioLoaded
   }
 
   set (type, percentage) {
     percentage = Math.min(percentage, 1)
     percentage = Math.max(percentage, 0)
-    this.elements[type].style.width = percentage * 100 + '%'
+    this[type].style.width = percentage * 100 + '%'
   }
 }
