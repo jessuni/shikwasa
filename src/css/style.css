@@ -13,7 +13,7 @@
   border: none;
   box-shadow: 0px 0px 14px 6px #e2e2e280;
   cursor: auto;
-  font: 400 18px/1.42 Pingfang SC, Hiragano, Helvetica Neue, sans-serif;
+  font: 400 18px/1.42 Hiragano, Helvetica Neue, Pingfang SC,sans-serif;
 }
 .shk.Fixed {
   position: fixed;
@@ -127,7 +127,7 @@
   display: inline-block;
   font-weight: 300;
   margin-top: 2px;
-  font-size: 24px;
+  font-size: 1.33em;
   white-space: nowrap;
   transition: transform 0s ease-in-out;
 }
@@ -143,7 +143,7 @@
   width: 36px;
   height: 36px;
   color: var(--theme-color);
-  font-size: 13px;
+  font-size: 0.8em;
   opacity: 1;
   transform: scale(1);
 }
@@ -226,8 +226,8 @@ svg.shk_btn_mute,
   position: absolute;
   right: 30px;
   bottom: 10px;
-  font-size: 0px;
   font-weight: 400;
+  font-size: 1em;
   color: #555555;
 }
 .shk_bottom span {
@@ -263,7 +263,7 @@ svg.shk_btn_mute,
   display: inline-block;
 }
 .shk_time span {
-  font-size: 12px;
+  font-size: 0.7em;
 }
 .shk_time_duration::before {
   content: '/';
@@ -328,6 +328,6 @@ svg.shk_btn_mute,
   }
   .shk_bottom {
     right: 10px;
-    bottom: 10px;
+    bottom: 6px;
   }
 }
