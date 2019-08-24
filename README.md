@@ -41,20 +41,10 @@ In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan.
 3. Create an instance of the player
 
    ```javascript
-   // a detailed init example
+   // an example with basic init options
 
    const player = new Shikwasa({
-     fixed: {
-       type: 'auto',
-       position: 'bottom',
-     },
      container: document.querySelector('.elementOfYourChoice'),
-     transitionSpeed: 3,
-     themeColor: '#00869B',
-     autoPlay: false,
-     muted: false,
-     preload: 'metadata',
-     speedOptions: [0.5, 0.75, 1.25, 1.5],
      audio: {
        title: 'Hello World!',
        artist: 'Shikwasa FM',
@@ -185,14 +175,16 @@ fixed: {
 **download** (optional)
 
 - type: `Boolean`
-- default: `true`
+- default: `false`
 - description: whether the current audio file is download-able. When set to `true`, a download button shows up on the player.
 
-## Possible Future Features
-1. exposing native audio events
-2. multiple players with independent controls in one page
-3. dark mode
-4. podcast playlist
+## Ongoing Future Features
+- [x] exposing native audio events (will be released under v1.1.0)
+- [x] fast seeking API (will be released under v1.1.0)
+- [] supporting audio id3 metadata and fast seeking API
+- [] multiple players with independent controls in one page
+- [] dark mode
+- [] podcast playlist
 
 ## License
 [MIT](./LICENSE)
