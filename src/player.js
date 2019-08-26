@@ -32,6 +32,10 @@ class Player {
     }
   }
 
+  get current() {
+    return this.currentTime
+  }
+
   initUI() {
     this.template = new Template(this.options)
     this.el = this.template.el
