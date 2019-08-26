@@ -243,12 +243,17 @@ class Player {
   }
 
   seek(time) {
-    time = Math.min(time, this.duration)
-    time = Math.max(time, 0)
-    this.template.currentTime.innerHTML = secondToTime(time)
-    this.currentTime = time
+    let _time = parseInt(time)
+    if (isNaN(_time)) {
+      console.error('seeking time is NaN')
+      return
+    }
+    _time = Math.min(_time, this.duration)
+    _time = Math.max(_time, 0)
+    this.template.currentTime.innerHTML = secondToTime(_time)
+    this.currentTime = _time
     if (this.audio) {
-      this.audio.currentTime = time
+      this.audio.currentTime = _time
     }
   }
 
