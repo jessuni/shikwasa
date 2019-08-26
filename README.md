@@ -242,7 +242,7 @@ Under v1.0.0:
 - [ ] dark mode
 
 Others:
-- [] podcast playlist
+- [ ] podcast playlist
 
 ## License
 [MIT](./LICENSE)
