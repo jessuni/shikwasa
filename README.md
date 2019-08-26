@@ -10,10 +10,13 @@
 
 Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play music on 1.5x speed?
 
+*...wait, explain this weird name to me!* In case you wonder, *Shikwasa* is the name of a popular citrus fruit from Okinawa, Japan. 🍊
+
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
 
+⚠️Note: The current documentation is in sync with this repo and may be ahead of its npm released version. For version-specific documentation, please view: [v1.0.6](https://github.com/jessuni/shikwasa/tree/v1.0.6)
 <details>
-  <summary>Table of Contents</summary>
+  <summary>📖Table of Contents</summary>
 
   * [Installation](#installation)
   * [Usage](#usage)
@@ -36,10 +39,6 @@ Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player b
   * [License](#license)
 
 </details>
-
-### What does Shikwasa mean?
-
-In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan. 🍊
 
 ## Installation
 `npm install shikwasa`
@@ -79,7 +78,7 @@ In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan.
    })
    ```
 
-If `container` has any child nodes, it will be cleared before Shikwasa mounts. *Note: For now, only one player per page is supported.*
+If `container` has any child nodes, it will be cleared before Shikwasa mounts. *⚠️Note: For now, only one player per page is supported.*
 
 4. If you use module system, import like this:
 
@@ -99,9 +98,10 @@ If `container` has any child nodes, it will be cleared before Shikwasa mounts. *
 If no parameter supplied, calling it will play the current audio. Passing an [`audio` object](#audio) in will replace the previous audio source, and play the new one immediately.
 
 ```javascript
+// play with the current audio source
 player.play()
 
-// pass an audio object to play the new audio source immediately
+// pass an audio object to play with the new audio source immediately
 player.play({
   title: 'Embrace the universe with a cup of shikwasa juice',
   artist: 'Shikwasa',
@@ -111,11 +111,11 @@ player.play({
 ```
 **.pause()**
 
-Pause the current audio
+Pause the current audio.
 
 **.toggle()**
 
-Toggle audio play state between play and pause
+Toggle audio play state between play and pause.
 
 **.seek(time)**
 
@@ -123,7 +123,7 @@ Toggle audio play state between play and pause
 
 **destroy()**
 
-destroy the player instance
+Destroy the player instance.
 
 ### Properties
 
@@ -177,7 +177,7 @@ fixed: {
 | Property      | Type     |  Description                             |
 |---------------|----------|------------------------------------------|
 | type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fix to viewport |
-| position      | `String` | either `bottom` or `top` <br>Note: `position` will be ignored when `type` is set to `static`         |
+| position      | `String` | either `bottom` or `top` <br>⚠️Note: `position` will be ignored when `type` is set to `static`         |
 
 ### transitionSpeed
 
@@ -195,7 +195,7 @@ fixed: {
 
 ### autoplay
 
-(Optional) If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default. To comply with this policy, see details in [Chrome Developers](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) and [Webkit Announcement](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/).
+(Optional) If audio should autoplay on load. ⚠️Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default. To comply with this policy, see details in [Chrome Developers](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) and [Webkit Announcement](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/).
 
 - type: `Boolean`
 - default: `false`
