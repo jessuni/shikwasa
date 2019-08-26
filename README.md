@@ -8,9 +8,34 @@
 
 ## About
 
-Shikwasa is an **ultra-lightweight**, **dependency-free** web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play music on 1.5x speed?
+Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play music on 1.5x speed?
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
+
+<details>
+  <summary>Table of Contents</summary>
+
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [API](#api)
+    * [Methods](#methods)
+    * [Properties](#properties)
+  * [Options](#options)
+    * [Audio](#audio)
+    * [Container](#container)
+    * [Fixed](#fixed)
+    * [transitionSpeed](#transitionppeed)
+    * [themeColor](#themecolor)
+    * [autoplay](#autoplay)
+    * [muted](#muted)
+    * [preload](#preload)
+    * [speedOptions](#speedoptions)
+    * [download](#download)
+  * [Events](#events)
+  * [Roadmap](#roadmap)
+  * [License](#license)
+
+</details>
 
 ### What does Shikwasa mean?
 
@@ -41,20 +66,10 @@ In case you wonder, it's the name of a popular citrus fruit from Okinawa, Japan.
 3. Create an instance of the player
 
    ```javascript
-   // a detailed init example
+   // an example with basic init options
 
    const player = new Shikwasa({
-     fixed: {
-       type: 'auto',
-       position: 'bottom',
-     },
      container: document.querySelector('.elementOfYourChoice'),
-     transitionSpeed: 3,
-     themeColor: '#00869B',
-     autoPlay: false,
-     muted: false,
-     preload: 'metadata',
-     speedOptions: [0.5, 0.75, 1.25, 1.5],
      audio: {
        title: 'Hello World!',
        artist: 'Shikwasa FM',
@@ -75,37 +90,56 @@ If `container` has any child nodes, it will be cleared before Shikwasa mounts. *
     const player = new Shikwasa(options)
    ```
 
-## Methods
+## API
+
+### Methods
+
+**.play(audio)**
+
+If no parameter supplied, calling it will play the current audio. Passing an [`audio` object](#audio) in will replace the previous audio source, and play the new one immediately.
 
 ```javascript
-// play the current audio
 player.play()
 
-// pass a designated audio object to play it immediately
+// pass an audio object to play the new audio source immediately
 player.play({
   title: 'Embrace the universe with a cup of shikwasa juice',
   artist: 'Shikwasa',
   cover: 'image.png',
   src: 'sourceAudio.mp3'
 })
-
-// pause the current audio
-player.pause()
-
-// toggle audio play state between play and pause
-player.toggle()
-
-// destroy player
-player.destroy()
 ```
+**.pause()**
+
+Pause the current audio
+
+**.toggle()**
+
+Toggle audio play state between play and pause
+
+**.seek(time)**
+
+`time` is a **number** that specifies target playback time. Calling this method with `time` will seek the audio to the new time.
+
+**destroy()**
+
+destroy the player instance
+
+### Properties
+
+**.current**
+
+A read-only **property** that indicates the current playback time. Similar to the native [`htmlMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
 
 ## Options
 
-**audio** (required)
+### Audio
 
+(Required) The target audio to be played. If `duration` is passed in, players with `preload` option set to `none` will have a audio duration time display before the audio metadata is fetched. However, after the audio metadata is loaded, this prop will be ignored.
+
+- **required**
 - type: `Object`
 - default: `null`
-- description: The target audio to be played. If `duration` is passed in, players with `preload` option set to `none` will have a audio duration time display before the audio metadata is fetched. However, after the audio metadata is loaded, this prop will be ignored.
 - properties:
 
 ```javascript
@@ -118,81 +152,97 @@ player.destroy()
   }
 ```
 
-**container** (optional)
+### container
+
+(Optional) The container element for the player.
 
 - type: `HTMLCollection`
 - default: `document.querySelector('body')`
-- description: Container element for the player.
 
-**fixed** (optional)
+### fixed
+
+(Optional) Whether player should be fixed to viewport.
 
 - type: `Object`
 - default:
+
 ```javascript
 fixed: {
   type: 'auto',
   position: 'bottom',
 }
 ```
-- description: Whether player should be fixed to viewport.
+- details:
 
 | Property      | Type     |  Description                             |
 |---------------|----------|------------------------------------------|
 | type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fix to viewport |
 | position      | `String` | either `bottom` or `top` <br>Note: `position` will be ignored when `type` is set to `static`         |
 
-**transitionSpeed** (optional)
+### transitionSpeed
+
+(Optional) If audio title overflows, a text scroll will be triggered. This property will control the how fast the text will scroll. Choose between the range of `[1, 5]`, integer.
 
 - type: `Number`
 - default: `3`
-- description: If audio title overflows, a text scroll will be triggered. This property will control the how fast the text will scroll. Choose between the range of `[1, 5]`, integer.
 
-**themeColor** (optional)
+### themeColor
+
+(Optional) Theme color of the player.
 
 - type: `String`
 - default: `#00869B`
-- description: Theme color of the player.
 
-**autoplay** (optional)
+### autoplay
 
-- type: `Boolean`
-- default: `false`
-- description: If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default. To comply with this policy, see details in [Chrome Developers](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) and [Webkit Announcement](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/).
-
-
-**muted** (optional)
+(Optional) If audio should autoplay on load. Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default. To comply with this policy, see details in [Chrome Developers](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) and [Webkit Announcement](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/).
 
 - type: `Boolean`
 - default: `false`
-- description: Whether audio should be muted by default. Right now this will not have any impact on `audio` object's `defaultMuted` property.
 
-**preload** (optional)
+### muted
+
+Whether audio should be muted by default. Right now this will not have any impact on `audio` object's `defaultMuted` property.
+
+- type: `Boolean`
+- default: `false`
+
+### preload
+
+(Optional) Choose from `auto`, `metadata` and `none`. For details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload).
 
 - type: `String`
-
 - default: `metadata`
 
-- description: choose from `auto`, `metadata` and `none`. For details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload).
+### speedOptions
 
-**speedOptions** (optional)
+(Optional) The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers
 
 - type: `Array`
-
 - default: `[0.5, 0.75, 1.25, 1.5]`
 
-- description: The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers
+### download
 
-**download** (optional)
+(Optional) Whether the current audio file is download-able. When set to `true`, a download button shows up on the player.
 
 - type: `Boolean`
-- default: `true`
-- description: whether the current audio file is download-able. When set to `true`, a download button shows up on the player.
+- default: `false`
 
-## Possible Future Features
-1. exposing native audio events
-2. multiple players with independent controls in one page
-3. dark mode
-4. podcast playlist
+## Events
+Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) & Audio native events.
+
+## Roadmap
+
+Under v1.0.0:
+- [x] exposing native audio events
+- [x] API support for seeking and audio's `currentTime` property, allowing to seek from a certain timestamp & share episode content with timestamp
+- [] supporting audio id3 metadata
+- [] multiple players with independent controls in one page
+- [] cleaner & sleeker interface
+- [] dark mode
+
+Others:
+- [] podcast playlist
 
 ## License
 [MIT](./LICENSE)

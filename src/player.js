@@ -1,6 +1,7 @@
 import Template from './template'
 import Bar from './bar'
-import { secondToTime, numToString, handleOptions } from '../utils'
+import Events from './events'
+import { secondToTime, numToString, handleOptions } from './utils'
 
 let pressSpace
 const isMobile = /mobile/i.test(window.navigator.userAgent)
@@ -18,16 +19,21 @@ class Player {
     this.initKeyEvents()
     this.currentSpeed = 1
     this.currentTime = 0
+    this.events = new Events()
     this.initAudio()
     this.template.mount(this.options.container)
   }
 
   get duration() {
-    if (!this.audio) {
+    if (!this.audio || !this.audio.src) {
       return this.options.audio.duration
     } else {
-      return isNaN(this.audio.duration) ? 0 : this.audio.duration
+      return isNaN(this.audio.duration) ? this.options.audio.duration : this.audio.duration
     }
+  }
+
+  get current() {
+    return this.currentTime
   }
 
   initUI() {
@@ -69,6 +75,7 @@ class Player {
   }
 
   initBarEvents() {
+    let seekingTime = 0
     const dragStartHandler = () => {
       this.el.classList.add('Seeking')
       this.dragging = true
@@ -76,24 +83,25 @@ class Player {
       document.addEventListener(dragEnd, dragEndHandler)
     }
     const dragMoveHandler = (e) => {
-      let percentage = ((e.clientX || e.changedTouches[0].clientX) - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
+      const offset = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0
+      let percentage = (offset - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
       percentage = Math.min(percentage, 1)
       percentage = Math.max(0, percentage)
       this.bar.set('audioPlayed', percentage)
-      this.currentTime = percentage * this.duration
-      this.template.currentTime.innerHTML = secondToTime(this.currentTime)
+      seekingTime = percentage * this.duration
+      this.template.currentTime.innerHTML = secondToTime(seekingTime)
     }
     const dragEndHandler = () => {
       this.dragging = false
       this.el.classList.remove('Seeking')
-      this.seek(this.currentTime)
+      this.seek(seekingTime)
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
     }
     const instantSeek = (e) => {
       if (this.dragging) return
       dragMoveHandler(e)
-      this.seek(this.currentTime)
+      this.seek(seekingTime)
     }
     this.template.barWrap.addEventListener(dragEnd, instantSeek)
     this.template.handle.addEventListener(dragStart, dragStartHandler)
@@ -113,6 +121,11 @@ class Player {
       this.audio = new Audio()
       this.initLoadingEvents()
       this.initAudioEvents()
+      this.events.audioEvents.forEach(name => {
+        this.audio.addEventListener(name, (e) => {
+          this.events.trigger(name, e)
+        })
+      })
       if (this.options.preload !== 'none') {
         this.updateAudio(this.options.audio.src)
         this.inited = true
@@ -121,38 +134,39 @@ class Player {
   }
 
   initAudioEvents() {
-    this.audio.addEventListener('play', () => {
+    this.on('play', () => {
       if (this.el.classList.contains('Pause')) {
         this.setUIPlaying()
       }
     })
-    this.audio.addEventListener('pause', () => {
+    this.on('pause', () => {
       if (this.el.classList.contains('Pause')) {
         this.setUIPaused()
       }
     })
-    this.audio.addEventListener('ended', () => {
+    this.on('ended', () => {
       this.setUIPaused()
       this.seek(0)
     })
-    this.audio.addEventListener('durationchange', () => {
+    this.on('durationchange', () => {
       if (this.duration !== 1) {
         this.template.duration.innerHTML = secondToTime(this.duration)
       }
     })
-    this.audio.addEventListener('progress', () => {
+    this.on('progress', () => {
       if (this.audio.buffered.length) {
         const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
         this.bar.set('audioLoaded', percentage)
       }
     })
-    this.audio.addEventListener('timeupdate', () => {
-      if (this.dragging) return
+    this.on('timeupdate', () => {
       if (Math.floor(this.currentTime) !== Math.floor(this.audio.currentTime)) {
-        this.template.currentTime.innerHTML = secondToTime(this.audio.currentTime)
         this.currentTime = +this.audio.currentTime
-        const percentage = this.audio.currentTime ? this.audio.currentTime / this.duration : 0
-        this.bar.set('audioPlayed', percentage)
+        if (!this.dragging) {
+          this.template.currentTime.innerHTML = secondToTime(this.audio.currentTime)
+          const percentage = this.audio.currentTime ? this.audio.currentTime / this.duration : 0
+          this.bar.set('audioPlayed', percentage)
+        }
       }
     })
   }
@@ -163,17 +177,21 @@ class Player {
         this.el.classList.remove('Loading')
       }
     }
-    this.audio.addEventListener('canplay', () => {
+    this.on('canplay', () => {
       addLoadingClass()
     })
-    this.audio.addEventListener('canplaythrough', () => {
+    this.on('canplaythrough', () => {
       addLoadingClass()
     })
-    this.audio.addEventListener('waiting', () => {
+    this.on('waiting', () => {
       if (!this.el.classList.contains('Loading')) {
         this.el.classList.add('Loading')
       }
     })
+  }
+
+  on(name, callback) {
+    this.events.on(name, callback)
   }
 
   setUIPlaying() {
@@ -194,8 +212,9 @@ class Player {
     }
     if (audio && audio.src) {
       this.template.update(audio)
-      this.currentTime = 0
       this.updateAudio(audio.src)
+      this.currentTime = 0
+      this.seek(this.currentTime)
     }
     if (!this.audio.paused) return
     this.setUIPlaying()
@@ -220,18 +239,21 @@ class Player {
       this.audio.src = this.options.audio.src
       this.inited = true
     }
-
     this.audio.paused ? this.play() : this.pause()
   }
 
   seek(time) {
-    time = Math.min(time, this.duration)
-    time = Math.max(time, 0)
-    this.template.currentTime.innerHTML = secondToTime(time)
+    let _time = parseInt(time)
+    if (isNaN(_time)) {
+      console.error('seeking time is NaN')
+      return
+    }
+    _time = Math.min(_time, this.duration)
+    _time = Math.max(_time, 0)
+    this.template.currentTime.innerHTML = secondToTime(_time)
+    this.currentTime = _time
     if (this.audio) {
-      this.audio.currentTime = time
-    } else {
-      this.currentTime = time
+      this.audio.currentTime = _time
     }
   }
 
@@ -242,7 +264,6 @@ class Player {
     if (this.options.autoplay && this.muted) {
       this.audio.autoplay = this.options.autoPlay
     }
-    this.audio.currentTime = this.currentTime
     this.audio.playbackRate = this.currentSpeed
   }
 
