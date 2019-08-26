@@ -236,10 +236,10 @@ Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/
 Under v1.0.0:
 - [x] exposing native audio events
 - [x] API support for seeking and audio's `currentTime` property, allowing to seek from a certain timestamp & share episode content with timestamp
-- [] supporting audio id3 metadata
-- [] multiple players with independent controls in one page
-- [] cleaner & sleeker interface
-- [] dark mode
+- [ ] supporting audio id3 metadata
+- [ ] multiple players with independent controls in one page
+- [ ] cleaner & sleeker interface
+- [ ] dark mode
 
 Others:
 - [] podcast playlist
