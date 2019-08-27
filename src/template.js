@@ -7,18 +7,22 @@ let carouselTimeout, carouselInterval
 export default class Template {
   constructor(options) {
     this.mounted = false
-    this.icons = document.createElement('div')
-    this.icons.classList.add('shk_icons')
-    this.icons.innerHTML = iconTemplate
+    const iconExists = document.querySelector('.shk_icons')
+    if (!iconExists) {
+      this.icons = document.createElement('div')
+      this.icons.classList.add('shk_icons')
+      this.icons.innerHTML = iconTemplate
+    }
     this.initVariable()
     this.initOptions(options)
   }
 
   initVariable() {
     this.el = document.createElement('div')
+    this.el.tabIndex = 0
     this.el.classList.add('shk')
     this.el.innerHTML = playerTemplate
-    this.playBtn = this.el.querySelector('.shk_cover .shk_btn')
+    this.playBtn = this.el.querySelector('.shk_cover .shk_btn_toggle')
     this.downloadBtn = this.el.querySelector('.shk_btn_download')
     this.fwdBtn = this.el.querySelector('.shk_btn_forward')
     this.bwdBtn = this.el.querySelector('.shk_btn_backward')
@@ -92,7 +96,9 @@ export default class Template {
   mount(container) {
     container.innerHTML = ''
     container.append(this.el)
-    container.append(this.icons)
+    if (this.icons) {
+      container.append(this.icons)
+    }
     this.mounted = true
     this.textScroll()
   }

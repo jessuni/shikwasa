@@ -3,7 +3,7 @@ import Bar from './bar'
 import Events from './events'
 import { secondToTime, numToString, handleOptions } from './utils'
 
-let pressSpace
+const playerArr = []
 const isMobile = /mobile/i.test(window.navigator.userAgent)
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -11,6 +11,8 @@ const dragEnd = isMobile ? 'touchend' : 'mouseup'
 
 class Player {
   constructor(options) {
+    this.id = playerArr.length
+    playerArr.push(this)
     this.inited = false
     this.dragging = false
     this.options = handleOptions(options)
@@ -108,12 +110,15 @@ class Player {
   }
 
   initKeyEvents() {
-    pressSpace = (e) => {
+    const pressSpace = (e) => {
       if (e.keyCode === 32) {
-        this.toggle()
+        const activeEl = document.activeElement
+        if (!activeEl.classList.contains('shk_btn_toggle')) {
+          this.toggle()
+        }
       }
     }
-    document.addEventListener('keyup', pressSpace)
+    this.el.addEventListener('keyup', pressSpace)
   }
 
   initAudio() {
@@ -138,6 +143,11 @@ class Player {
       if (this.el.classList.contains('Pause')) {
         this.setUIPlaying()
       }
+      playerArr.forEach(player => {
+        if (player.id !== this.id && player.audio && !player.audio.paused) {
+          player.pause()
+        }
+      })
     })
     this.on('pause', () => {
       if (this.el.classList.contains('Pause')) {
@@ -277,8 +287,7 @@ class Player {
   destroy() {
     this.destroyAudio()
     this.template.destroy()
-    this.container.innerHTML = ''
-    document.removeEventListener('keyup', pressSpace)
+    this.options.container.innerHTML = ''
   }
 }
 
