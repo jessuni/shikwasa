@@ -22,7 +22,7 @@ export default class Template {
     this.el.tabIndex = 0
     this.el.classList.add('shk')
     this.el.innerHTML = playerTemplate
-    this.playBtn = this.el.querySelector('.shk_cover .shk_btn_toggle')
+    this.playBtn = this.el.querySelector('.shk_btn_toggle')
     this.downloadBtn = this.el.querySelector('.shk_btn_download')
     this.fwdBtn = this.el.querySelector('.shk_btn_forward')
     this.bwdBtn = this.el.querySelector('.shk_btn_backward')
