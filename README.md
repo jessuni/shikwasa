@@ -78,7 +78,7 @@ Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player b
    })
    ```
 
-If `container` has any child nodes, it will be cleared before Shikwasa mounts. *⚠️Note: For now, only one player per page is supported.*
+If `container` has any child nodes, it will be cleared before Shikwasa mounts.
 
 4. If you use module system, import like this:
 
@@ -229,13 +229,15 @@ Whether audio should be muted by default. Right now this will not have any impac
 - default: `false`
 
 ## Events
-Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) & Audio native events.
+Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) & [Audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio) native events.
 
 ## Roadmap
 
 Under v1.0.0:
 - [x] exposing native audio events
 - [x] API support for seeking and audio's `currentTime` property, allowing to seek from a certain timestamp & share episode content with timestamp
+- [x] automatically pausing other Shikwasa players in the same page while one is playing
+- [x] improving keyboard support for situation where multiple Shikwasa players are mounted in the same page
 - [ ] supporting audio id3 metadata
 - [ ] multiple players with independent controls in one page
 - [ ] cleaner & sleeker interface
