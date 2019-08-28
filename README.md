@@ -24,9 +24,9 @@ Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player b
     * [Methods](#methods)
     * [Properties](#properties)
   * [Options](#options)
-    * [Audio](#audio)
-    * [Container](#container)
-    * [Fixed](#fixed)
+    * [audio](#audio)
+    * [container](#container)
+    * [fixed](#fixed)
     * [transitionSpeed](#transitionppeed)
     * [themeColor](#themecolor)
     * [autoplay](#autoplay)
@@ -78,7 +78,7 @@ Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player b
    })
    ```
 
-If `container` has any child nodes, it will be cleared before Shikwasa mounts.
+  If `container` has any child nodes, it will be cleared before Shikwasa mounts.
 
 4. If you use module system, import like this:
 
@@ -121,7 +121,7 @@ Toggle audio play state between play and pause.
 
 `time` is a **number** that specifies target playback time. Calling this method with `time` will seek the audio to the new time.
 
-**destroy()**
+**.destroy()**
 
 Destroy the player instance.
 
@@ -239,7 +239,6 @@ Under v1.0.0:
 - [x] automatically pausing other Shikwasa players in the same page while one is playing
 - [x] improving keyboard support for situation where multiple Shikwasa players are mounted in the same page
 - [ ] supporting audio id3 metadata
-- [ ] multiple players with independent controls in one page
 - [ ] cleaner & sleeker interface
 - [ ] dark mode
 
