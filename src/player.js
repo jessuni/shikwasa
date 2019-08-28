@@ -89,9 +89,8 @@ class Player {
       let percentage = (offset - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
       percentage = Math.min(percentage, 1)
       percentage = Math.max(0, percentage)
-      this.bar.set('audioPlayed', percentage)
       seekingTime = percentage * this.duration
-      this.template.currentTime.innerHTML = secondToTime(seekingTime)
+      this.setDisplayAndBarByTime(seekingTime)
     }
     const dragEndHandler = () => {
       this.dragging = false
@@ -170,28 +169,21 @@ class Player {
       }
     })
     this.on('timeupdate', () => {
-      if (Math.floor(this.currentTime) !== Math.floor(this.audio.currentTime)) {
-        this.currentTime = +this.audio.currentTime
-        if (!this.dragging) {
-          this.template.currentTime.innerHTML = secondToTime(this.audio.currentTime)
-          const percentage = this.audio.currentTime ? this.audio.currentTime / this.duration : 0
-          this.bar.set('audioPlayed', percentage)
-        }
+      this.currentTime = this.audio.currentTime
+      if (!this.dragging) {
+        this.setDisplayAndBarByTime(this.audio.currentTime)
       }
     })
   }
 
   initLoadingEvents() {
-    const addLoadingClass = () => {
+    const removeClass = () => {
       if (this.el.classList.contains('Loading')) {
         this.el.classList.remove('Loading')
       }
     }
-    this.on('canplay', () => {
-      addLoadingClass()
-    })
     this.on('canplaythrough', () => {
-      addLoadingClass()
+      removeClass()
     })
     this.on('waiting', () => {
       if (!this.el.classList.contains('Loading')) {
@@ -202,6 +194,13 @@ class Player {
 
   on(name, callback) {
     this.events.on(name, callback)
+  }
+
+  setDisplayAndBarByTime(time) {
+    time = time || 0
+    const percentage = time / this.duration || 0
+    this.template.currentTime.innerHTML = secondToTime(time)
+    this.bar.set('audioPlayed', percentage)
   }
 
   setUIPlaying() {
@@ -260,7 +259,7 @@ class Player {
     }
     _time = Math.min(_time, this.duration)
     _time = Math.max(_time, 0)
-    this.template.currentTime.innerHTML = secondToTime(_time)
+    this.setDisplayAndBarByTime(_time)
     this.currentTime = _time
     if (this.audio) {
       this.audio.currentTime = _time
