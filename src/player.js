@@ -262,10 +262,6 @@ class Player {
     }
     _time = Math.min(_time, this.duration)
     _time = Math.max(_time, 0)
-<<<<<<< HEAD
-=======
-
->>>>>>> fd7bd989c551f85a369e6ecdb62a5a3b7ccfe884
     this.setDisplayAndBarByTime(_time)
     if (!this.canplay) {
       initSeek = time
