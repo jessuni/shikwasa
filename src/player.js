@@ -22,7 +22,6 @@ class Player {
     this.initUI()
     this.initKeyEvents()
     this.currentSpeed = 1
-    this.currentTime = 0
     this.events = new Events()
     this.initAudio()
     this.template.mount(this.options.container)
@@ -36,8 +35,8 @@ class Player {
     }
   }
 
-  get current() {
-    return this.currentTime
+  get currentTime() {
+    return this.audio ? this.audio.currentTime : undefined
   }
 
   initUI() {
@@ -170,7 +169,6 @@ class Player {
       }
     })
     this.on('timeupdate', () => {
-      this.currentTime = this.audio.currentTime
       if (!this.dragging) {
         this.setDisplayAndBarByTime(this.audio.currentTime)
       }
@@ -277,21 +275,18 @@ class Player {
     this.setDisplayAndBarByTime(_time)
     if (!this.canplay) {
       initSeek = time
-    } else {
-      this.currentTime = _time
-      if (this.audio) {
-        this.audio.currentTime = _time
-      }
+    } else if (this.audio) {
+      this.audio.currentTime = _time
     }
   }
 
   seekForward(time = 10) {
-    const seekingTime = Math.min(this.duration, this.currentTime + time)
+    const seekingTime = Math.min(this.duration, this.audio.currentTime + time)
     this.seek(seekingTime)
   }
 
   seekBackward(time = 10) {
-    const seekingTime = Math.max(0, this.currentTime - time)
+    const seekingTime = Math.max(0, this.audio.currentTime - time)
     this.seek(seekingTime)
   }
 

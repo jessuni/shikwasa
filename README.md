@@ -130,7 +130,7 @@ Register an event listener. Supported events see: [Events](#events)
 
 ### Properties
 
-**.current**
+**.currentTime**
 
 A read-only property that indicates the current playback time. Similar to the native [`htmlMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
 
