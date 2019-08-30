@@ -86,6 +86,7 @@ export function handleOptions(options) {
 
 export function setMediaSession(audio, fns = {}, self) {
   if ('mediaSession' in navigator) {
+    /* global MediaMetadata */
     navigator.mediaSession.metadata = new MediaMetadata({
       title: audio.title,
       artist: audio.artist,
