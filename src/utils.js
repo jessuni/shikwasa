@@ -19,9 +19,9 @@ export function numToString(num) {
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
 
-export function carousel(el, distance = 0, speed = 3, pause = 2000) {
+export function carousel(el, distance = 0, pause = 2000) {
   let carouselTimeout, carouselInterval
-  const duration = distance / speed * 100
+  const duration = distance * 50
   const interval = duration + pause
   function transform() {
     el.style.transitionDuration = `${duration / 1000}s`
@@ -43,18 +43,6 @@ export function handleOptions(options) {
   const result = fixedOptions.filter(item => item === options.fixed.type)[0]
   if (!result) {
     options.fixed.type = config.fixed.type
-  }
-  if (options.transitionSpeed) {
-    let speed = parseInt(options.transitionSpeed)
-    if (isNaN(speed)) {
-      options.transitionSpeed = config.transitionSpeed
-    } else {
-      speed = Math.max(speed, 1)
-      speed = Math.min(speed, 5)
-      options.transitionSpeed = speed
-    }
-  } else {
-    options.transitionSpeed = config.transitionSpeed
   }
   options.themeColor = options.themeColor || config.themeColor
   options.autoPlay = options.autoPlay || config.autoPlay

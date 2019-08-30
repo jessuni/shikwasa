@@ -43,7 +43,6 @@ export default class Template {
   }
 
   initOptions(options) {
-    this.transitionSpeed = options.transitionSpeed
     this.el.style = `--theme-color: ${options.themeColor}`
     this.el.style.boxShadow = `0px 0px 14px 6px ${options.themeColor}20`
     this.audioPlayed.style.color = options.themeColor + '70'
@@ -86,7 +85,7 @@ export default class Template {
     }
     const titleOverflow = this.title.offsetWidth - this.texts.offsetWidth
     if (titleOverflow > 0) {
-      [carouselTimeout, carouselInterval] = carousel(this.title, titleOverflow, this.transitionSpeed)
+      [carouselTimeout, carouselInterval] = carousel(this.title, titleOverflow)
     } else {
       this.title.style.transform = 'none'
       this.title.style.transitionDuration = '0s'

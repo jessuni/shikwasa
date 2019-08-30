@@ -27,7 +27,6 @@ Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player b
     * [audio](#audio)
     * [container](#container)
     * [fixed](#fixed)
-    * [transitionSpeed](#transitionppeed)
     * [themeColor](#themecolor)
     * [autoplay](#autoplay)
     * [muted](#muted)
@@ -125,11 +124,15 @@ Toggle audio play state between play and pause.
 
 Destroy the player instance.
 
+**.on(event, callback)**
+
+Register an event listener. Supported events see: [Events](#events)
+
 ### Properties
 
 **.current**
 
-A read-only **property** that indicates the current playback time. Similar to the native [`htmlMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
+A read-only property that indicates the current playback time. Similar to the native [`htmlMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
 
 ## Options
 
@@ -179,13 +182,6 @@ fixed: {
 | type          | `String` |  either `auto`, `static` or `fixed` <br>`auto`: player position is controlled by media queries. Normally the player stays static, but on small screens it will be fixed to viewport<br>`static`: force the player to remain static regardless of screen width<br>`fixed`: force the player to fix to viewport |
 | position      | `String` | either `bottom` or `top` <br>⚠️Note: `position` will be ignored when `type` is set to `static`         |
 
-### transitionSpeed
-
-(Optional) If audio title overflows, a text scroll will be triggered. This property will control the how fast the text will scroll. Choose between the range of `[1, 5]`, integer.
-
-- type: `Number`
-- default: `3`
-
 ### themeColor
 
 (Optional) Theme color of the player.
@@ -229,7 +225,7 @@ Whether audio should be muted by default. Right now this will not have any impac
 - default: `false`
 
 ## Events
-Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) & [Audio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio) native events.
+Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) native events.
 
 ## Roadmap
 
