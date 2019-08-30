@@ -1,7 +1,7 @@
 import Template from './template'
 import Bar from './bar'
 import Events from './events'
-import { secondToTime, numToString, handleOptions } from './utils'
+import { secondToTime, numToString, handleOptions, setMediaSession } from './utils'
 
 const playerArr = []
 let initSeek
@@ -60,12 +60,10 @@ class Player {
       }
     })
     this.template.fwdBtn.addEventListener('click', () => {
-      const time = Math.min(this.duration, this.currentTime + 10)
-      this.seek(time)
+      this.seekForward()
     })
     this.template.bwdBtn.addEventListener('click', () => {
-      const time = Math.max(0, this.currentTime - 10)
-      this.seek(time)
+      this.seekBackward()
     })
     this.template.speedBtn.addEventListener('click', () => {
       const index = this.options.speedOptions.indexOf(this.currentSpeed)
@@ -125,6 +123,7 @@ class Player {
   initAudio() {
     if (this.options.audio.src) {
       this.audio = new Audio()
+      this.audio.title = this.options.audio.title
       this.initLoadingEvents()
       this.initAudioEvents()
       this.events.audioEvents.forEach(name => {
@@ -232,12 +231,25 @@ class Player {
     }
     if (!this.audio.paused) return
     const promise = this.audio.play()
+    const self = this
+    const targetAudio = audio || this.options.audio
+    const controls = {
+      play: this.play,
+      pause: this.pause,
+      seekforward: this.seekForward,
+      seekbackward: this.seekBackward,
+    }
     if (promise instanceof Promise) {
+      promise.then(() => {
+        setMediaSession(targetAudio, controls, self)
+      })
       promise.catch((e) => {
         if (e.name === 'NotAllowedError' || e.name === 'NotSupportedError') {
           this.pause()
         }
       })
+    } else {
+      setMediaSession(targetAudio, controls, self)
     }
   }
 
@@ -271,6 +283,16 @@ class Player {
         this.audio.currentTime = _time
       }
     }
+  }
+
+  seekForward(time = 10) {
+    const seekingTime = Math.min(this.duration, this.currentTime + time)
+    this.seek(seekingTime)
+  }
+
+  seekBackward(time = 10) {
+    const seekingTime = Math.max(0, this.currentTime - time)
+    this.seek(seekingTime)
   }
 
   updateAudio(src) {

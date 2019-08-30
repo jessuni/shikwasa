@@ -83,3 +83,20 @@ export function handleOptions(options) {
   }
   return options
 }
+
+export function setMediaSession(audio, fns = {}, self) {
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: audio.title,
+      artist: audio.artist,
+      artwork: [
+        { src: audio.cover }
+      ]
+    })
+    if (Object.entries(fns).length && fns.constructor === Object) {
+      Object.keys(fns).forEach(key => {
+        navigator.mediaSession.setActionHandler(key, fns[key].bind(self))
+      })
+    }
+  }
+}
