@@ -1,0 +1,408 @@
+:root {
+  --theme-color: #00869B;
+}
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.shk {
+  font: 400 16px/1.42 Open Sans, Hiragino, Helvetica Neue, Pingfang SC, sans-serif;
+  height: 120px;
+  border: none;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 6px 0px #00869b21;
+  outline: none;
+  cursor: auto;
+  position: relative;
+}
+.shk.Fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  width: 100%;
+}
+.shk.Fixed.Top {
+  top: 0;
+  bottom: auto;
+}
+.shk.Seeking {
+  cursor: grabbing;
+}
+.shk.Extra .shk_extra {
+  display: block;
+}
+.shk_body {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  user-select: none;
+}
+.shk_cover {
+  width: 80px;
+  height: 80px;
+  flex: 0 0 auto;
+  margin-right: 16px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.shk_main {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+.shk_text {
+  overflow: hidden;
+}
+.shk_artist-wrap.overflow,
+.shk_title-wrap.overflow {
+  mask-image: linear-gradient(to right,transparent,#202124 5%,#202124 95%,transparent);
+}
+.shk_artist,
+.shk_title {
+  white-space: nowrap;
+  text-overflow: clip;
+  transition: transform 0s ease-in-out;
+}
+.shk_artist {
+  font-weight: 500;
+}
+.shk_title {
+  font-weight: 300;
+  font-size: 1.33em;
+}
+.shk_controls {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.shk_btn {
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--theme-color);
+  fill: var(--theme-color);
+  box-sizing: content-box;
+  padding: 10px;
+}
+.shk_btn:disabled {
+  cursor: not-allowed;
+}
+.shk_btn svg {
+  width: 24px;
+  height: 24px;
+}
+.shk_btn_toggle svg {
+  width: 32px;
+  height: 32px;
+}
+.shk.Pause .shk_btn_play,
+.shk.Play .shk_btn_pause {
+  display: inline;
+}
+.shk.Pause .shk_btn_pause,
+.shk.Play .shk_btn_play {
+  display: none;
+}
+.shk_btn_speed {
+  font-size: 1em;
+  font-weight: 400;
+  width: 40px;
+}
+.shk_btn_more {
+  position: relative;
+  z-index: 3;
+  transition: transform .1s;
+}
+.shk.Extra .shk_btn_more {
+  transform: rotate(90deg);
+}
+.shk_extra {
+  visibility: none;
+  position: absolute;
+  top: -4px;
+  right: 0;
+  width: 0;
+  bottom: 0;
+  z-index: 3;
+  transition: width .1s .1s ease-in-out, visibility .1s ease;
+}
+.shk.Extra .shk_extra {
+  visibility: visible;
+  width: 100%;
+}
+.shk_extra_controls {
+  visibility: hidden;
+  position: absolute;
+  right: 60px;
+  top: 46px;
+  text-overflow: clip;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: right;
+  width: 0;
+  transition: width .1s .1s ease-in-out, visibility .1s ease;
+}
+.shk.Extra .shk_extra_controls {
+  width: 200px;
+  visibility: visible;
+}
+svg.shk_btn_unmute,
+.shk.Mute svg.shk_btn_mute {
+  display: inline-block;
+}
+svg.shk_btn_mute,
+.shk.Mute svg.shk_btn_unmute {
+  display: none;
+}
+.shk_bar-wrap {
+  cursor: pointer;
+}
+.shk_bar {
+  position: relative;
+  z-index: 0;
+  height: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.shk_bar_loaded,
+.shk_bar_played {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0;
+}
+.shk_bar_loaded {
+  background: #b9b6b64d;
+  z-index: 1;
+}
+.shk_bar_played {
+  background: #00869b80;
+  z-index: 2;
+}
+.shk_bar-handle {
+  background: var(--theme-color);
+  position: absolute;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  cursor: grab;
+  border-radius: 20px;
+}
+.shk_bar-handle:active {
+  cursor: grabbing;
+}
+.shk_display {
+  position: absolute;
+}
+.shk_loader {
+  display: none;
+  vertical-align: middle;
+  color: var(--theme-color);
+}
+.shk.Loading .shk_loader {
+  display: inline-block;
+}
+.shk_loader svg {
+  width: 12px;
+  height: 12px;
+  animation: rotate 1.4s linear infinite;
+  position: relative;
+}
+.shk_visuallyhidden:not(:focus):not(:active) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+.shk_time {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0.8em;
+  font-weight: 100;
+}
+.shk_icons {
+  display: none;
+}
+@media (min-width: 641px) {
+  .shk {
+    margin-top: 4px;
+    padding: 20px 16px;
+  }
+  .shk_main {
+    align-items: flex-end;
+    padding: 10px 0;
+    max-width: calc(100% - 96px);
+    flex-direction: row;
+  }
+  .shk_text {
+    flex: 2 1 auto;
+    max-width: calc(100% - 300px);
+  }
+  .shk_controls {
+    flex-grow: 1;
+    flex-shrink: 0;
+    min-width: 300px;
+  }
+  .shk_display {
+    top: -6px;
+    right: 10px;
+  }
+  .shk_bar-wrap {
+    position: absolute;
+    top: -4px;
+    left: 0px;
+    right: 0px;
+    padding: 4px 0 16px;
+  }
+  .shk_bar {
+    transition: height ease-in .15s;
+  }
+  .shk_bar-wrap:hover .shk_bar {
+    height: 12px;
+  }
+  .shk_bar-handle {
+    visibility: hidden;
+    top: -4px;
+    transform: scale(.001);
+    transition: transform .1s .05s ease-in, visibility .05s linear;
+  }
+  .shk_bar-wrap:hover .shk_bar-handle {
+    visibility: visible;
+    transform: scale(1);
+  }
+  .shk_loader {
+    margin-right: 4px;
+  }
+  .shk_time_duration::before {
+    content: '/';
+    margin: 0 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  .shk {
+    padding: 5px 16px;
+  }
+  .shk.Auto {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  .shk.Auto.Top {
+    top: 0;
+    bottom: auto;
+  }
+  .shk_cover {
+    display: none;
+  }
+  .shk_main {
+    width: 100%;
+    max-width: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+  .shk_text,
+  .shk_controls {
+    flex: 0 0 auto;
+  }
+  .shk_text {
+    width: 100%;
+    text-align: center;
+  }
+  .shk_artist {
+    font-size: 0.8em;
+    line-height: 1;
+  }
+  .shk_title {
+    font-size: 1em;
+    line-height: 1;
+  }
+  .shk_controls {
+    width: 280px;
+    margin: 0 auto;
+  }
+  .shk_controls .shk_btn_toggle {
+    padding: 6px 10px;
+  }
+  .shk_extra {
+    top: 0;
+  }
+  .shk_extra_controls {
+    display: flex;
+    flex-flow: column wrap;
+    right: 0;
+    top: 0px;
+    left: auto;
+    bottom: 49px;
+  }
+  .shk.Extra .shk_extra_controls {
+    width: 50%;
+  }
+  .shk.Extra .shk_extra_controls .shk_btn {
+    width: 100px;
+  }
+  .shk_exra_controls .shk_btn {
+    padding: 5px;
+  }
+  .shk_extra_controls .shk_btn svg {
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+  }
+  .shk_extra_controls .shk_btn:after {
+    content: attr(title);
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  .shk_bar-wrap {
+    padding: 10px 0;
+  }
+  .shk_bar-wrap .shk_bar-handle {
+    display: inline-block;
+    top: -8px;
+  }
+  .shk_bar {
+    background: #b9b6b64d;
+  }
+  .shk_bar_loaded {
+    opacity: 0;
+  }
+  .shk_display {
+    top: -3px;
+    left: 0;
+    right: 0;
+  }
+  .shk_loader {
+    position: absolute;
+    left: 0;
+    top: -5px;
+  }
+  .shk_time {
+    font-size: 0.7em;
+    width: calc(100% - 40px);
+    margin: 0 20px;
+    line-height: 1;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row nowrap;
+  }
+}

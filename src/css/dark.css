@@ -1,0 +1,42 @@
+@import url('./base.css');
+:root {
+ --color-mode: #333;
+ --color-mode-opaque: #33333300;
+ --color-secondary: #b9b6b6;
+ --color-font: #fff;
+ --color-shadow: #000;
+}
+
+.shk {
+  background-color: var(--color-mode);
+  color: var(--color-font);
+}
+.shk_artist {
+  color: var(--color-secondary);
+}
+.shk_title {
+  color: var(--color-font);
+}
+.shk_btn:disabled {
+  color: var(--color-secondary);
+}
+.shk_btn:disabled svg {
+  fill: var(--color-secondary);
+}
+.shk_extra {
+  background: linear-gradient(90deg,var(--color-mode-opaque), var(--color-mode-opaque) 30%,var(--color-mode) 50%)
+}
+.shk_bar {
+  background-color: var(--color-mode);
+}
+.shk_bar-handle {
+  box-shadow: 2px 2px 8px -2px var(--color-shadow);
+}
+.shk_time {
+  color: var(--color-font);
+}
+@media (max-width: 640px) {
+  .shk_bar {
+    background-color: #b9b6b64d;
+  }
+}
