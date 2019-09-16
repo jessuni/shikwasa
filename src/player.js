@@ -76,7 +76,7 @@ class Player {
   }
 
   initBarEvents() {
-    let seekingTime
+    let seekingTime = 0
     const dragStartHandler = () => {
       this.el.classList.add('Seeking')
       this.dragging = true
