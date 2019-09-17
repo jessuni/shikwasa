@@ -68,16 +68,17 @@
 .shk_text {
   overflow: hidden;
 }
-.shk_artist-wrap.Overflow,
 .shk_title-wrap.Overflow {
   mask-image: linear-gradient(to right,transparent,#202124 5%,#202124 95%,transparent);
+}
+.shk_title-wrap.Overflow .shk_title {
+  padding: 0 3%;
 }
 .shk_artist,
 .shk_title {
   display: inline-block;
   white-space: nowrap;
   text-overflow: clip;
-  transition: transform 0s ease-in-out;
 }
 .shk_artist {
   font-weight: 500;
@@ -87,6 +88,7 @@
   font-weight: 300;
   font-size: 1.33em;
   color: var(--color-font);
+  transition: transform 0s linear;
 }
 .shk_btn {
   appearance: none;
