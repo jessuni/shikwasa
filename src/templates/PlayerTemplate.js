@@ -35,10 +35,10 @@ const PlayerTemplate = /* template */`
     </div>
     <div class="shk_main">
       <div class="shk_text">
-        <div>
+        <div class="shk_artist-wrap">
           <span class="shk_artist"></span>
         </div>
-        <div>
+        <div class="shk_title-wrap">
           <span class="shk_title"></span>
         </div>
       </div>
