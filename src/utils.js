@@ -19,7 +19,7 @@ export function numToString(num) {
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
 
-export function carousel(el, distance = 0, pause = 2000) {
+export function carousel(el, distance = 0, pause = 1000) {
   let carouselTimeout, carouselInterval
   const duration = distance * 50
   const interval = duration + pause
@@ -40,7 +40,7 @@ export function handleOptions(options) {
   options.fixed = options.fixed || config.fixed
   options.download = typeof options.download === 'boolean' ? options.download : config.download
   const fixedOptions = ['auto', 'static', 'fixed']
-  const result = fixedOptions.filter(item => item === options.fixed.type)[0]
+  const result = fixedOptions.find(item => item === options.fixed.type)
   if (!result) {
     options.fixed.type = config.fixed.type
   }

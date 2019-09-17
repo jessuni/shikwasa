@@ -10,16 +10,11 @@ const PlayerTemplate = /* template */`
   <div class="shk_extra">
     <span class="shk_extra_controls">
       <button class="shk_btn shk_btn_volume" aria-label="toggle volume" title="volume">
-      <svg class="shk_btn_unmute" aria-hidden="true">
-        <use xlink:href="#shk_icon_unmute" />
-      </svg>
-      <svg class="shk_btn_mute" aria-hidden="true">
-        <use xlink:href="#shk_icon_mute" />
-      </svg>
-    </button>
-      <button class="shk_btn shk_btn_download" title="download" aria-label="download">
-        <svg aria-hidden="true">
-          <use xlink:href="#shk_icon_download" />
+        <svg class="shk_btn_unmute" aria-hidden="true">
+          <use xlink:href="#shk_icon_unmute" />
+        </svg>
+        <svg class="shk_btn_mute" aria-hidden="true">
+          <use xlink:href="#shk_icon_mute" />
         </svg>
       </button>
       <button class="shk_btn shk_btn_chapter" title="chapters" aria-label="view chapters">
