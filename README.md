@@ -10,6 +10,8 @@
 
 Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play music on 1.5x speed?
 
+If you are looking for the full power of Shikwasa player, but prefer customizing structures and styles of your own, check out [Shisa](https://github.com/jessuni/shisa)
+
 *...wait, explain this weird name to me!* In case you wonder, *Shikwasa* is the name of a popular citrus fruit from Okinawa, Japan. 🍊
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
