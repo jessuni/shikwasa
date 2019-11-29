@@ -5,7 +5,7 @@ import { secondToTime, numToString, handleOptions, setMediaSession } from './uti
 
 const playerArr = []
 let initSeek
-const isMobile = /mobile/i.test(window.navigator.userAgent)
+const isMobile = typeof window !== `undefined` ? /mobile/i.test(window.navigator.userAgent) : false
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
 const dragEnd = isMobile ? 'touchend' : 'mouseup'

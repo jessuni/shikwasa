@@ -1,5 +1,5 @@
 const CONFIG = {
-  container: document.querySelector('body'),
+  container: () => document.querySelector('body'),
   fixed: {
     type: 'auto',
     position: 'bottom',
