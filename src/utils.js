@@ -36,7 +36,7 @@ export function carousel(el, distance = 0, pause = 2000) {
 }
 
 export function handleOptions(options) {
-  options.container = options.container || config.container
+  options.container = options.container || config.container()
   options.fixed = options.fixed || config.fixed
   options.download = typeof options.download === 'boolean' ? options.download : config.download
   const fixedOptions = ['auto', 'static', 'fixed']
