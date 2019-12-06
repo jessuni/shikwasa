@@ -20,10 +20,9 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 - [ ] Podcast Chapters
 - [ ] Playlist
 
-⚠️If you are looking for the full power of Shikwasa player, but prefer customizing structures and styles of your own, check out a more flexible framework that helps you build your own player[Shisa](https://github.com/jessuni/shisa)
-
-
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
+
+⚠️If you are looking for the full power of Shikwasa player, but prefer customizing structures and styles of your own, check out a more flexible framework that helps you build your own player [Shisa](https://github.com/jessuni/shisa).
 
 <details>
   <summary>📖Table of Contents</summary>
