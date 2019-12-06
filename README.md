@@ -8,15 +8,21 @@
 
 ## About
 
-Shikwasa is an **🚀ultra-lightweight**, **dependency-free** web audio player born for podcast. You may enjoy a podcast with occasional playback controls to get the best listening experience, just like I do - tweaking with handy forward/backward or speed buttons. But chances are traditional html audio players don't offer them - who would play music on 1.5x speed?
+Shikwasa is an web audio player born for podcast. If you're tired of using music players as a substitute to play podcast, you've come to the right place. **SAY NO** to players that does not even support podcast common features!
 
-If you are looking for the full power of Shikwasa player, but prefer customizing structures and styles of your own, check out [Shisa](https://github.com/jessuni/shisa)
+- 🚀Ultra lightweight
+- 🐣Dependency free
+- 🏎Playback speed control
+- 🎮Skip forward/backward
+- 🎵Web Audio API
+- [ ] Podcast Chapters
+- [ ] Playlist
 
-*...wait, explain this weird name to me!* In case you wonder, *Shikwasa* is the name of a popular citrus fruit from Okinawa, Japan. 🍊
+⚠️If you are looking for the full power of Shikwasa player, but prefer customizing structures and styles of your own, check out a more flexible framework that helps you build your own player[Shisa](https://github.com/jessuni/shisa)
+
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
 
-⚠️Note: The current documentation is in sync with this repo and may be ahead of its npm released version. For version-specific documentation, please view: [v1.0.6](https://github.com/jessuni/shikwasa/tree/v1.0.6)
 <details>
   <summary>📖Table of Contents</summary>
 
@@ -37,6 +43,7 @@ If you are looking for the full power of Shikwasa player, but prefer customizing
     * [download](#download)
   * [Events](#events)
   * [Roadmap](#roadmap)
+  * [What about the weird name of this project?](#what-about-the-weird-name-of-this-project)
   * [License](#license)
 
 </details>
@@ -232,16 +239,18 @@ Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/
 ## Roadmap
 
 Under v1.0.0:
-- [x] exposing native audio events
-- [x] API support for seeking and audio's `currentTime` property, allowing to seek from a certain timestamp & share episode content with timestamp
-- [x] automatically pausing other Shikwasa players in the same page while one is playing
-- [x] improving keyboard support for situation where multiple Shikwasa players are mounted in the same page
-- [ ] supporting audio id3 metadata
+- [ ] supporting audio id3 metadata --currently working on this one
 - [ ] cleaner & sleeker interface
 - [ ] dark mode
 
 Others:
 - [ ] podcast playlist
+
+## What about the weird name of this project?
+
+*Shikwasa* is the name of a popular citrus fruit from Okinawa, Japan. 🍊
+
+Love it, name after it.
 
 ## License
 [MIT](./LICENSE)
