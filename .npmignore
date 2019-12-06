@@ -1,6 +1,7 @@
 node_modules
 .cache
 .eslintrc
+rollup.config.js
 gh.js
 dist/assets
 dist/index.html
@@ -8,3 +9,4 @@ dist/index.js
 src
 parcel
 demo
+dist/CNAME
