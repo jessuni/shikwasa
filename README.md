@@ -69,7 +69,7 @@ If you are looking for the full power of Shikwasa player, but prefer customizing
    // an example with basic init options
 
    const player = new Shikwasa({
-     container: document.querySelector('.elementOfYourChoice'),
+     container: '.elementOfYourChoice',
      audio: {
        title: 'Hello World!',
        artist: 'Shikwasa FM',
@@ -159,10 +159,10 @@ A read-only property that indicates the current playback time. Similar to the na
 
 ### container
 
-(Optional) The container element for the player.
+(Optional) The container element for the player, in CSS selector pattern.
 
-- type: `HTMLCollection`
-- default: `document.querySelector('body')`
+- type: `String`
+- default: `body`
 
 ### fixed
 
