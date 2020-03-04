@@ -19,7 +19,7 @@
     "build": "npm run build:iife && npm run build:cjs",
     "build:iife": "FORMAT=iife rollup -c",
     "build:cjs": "FORMAT=cjs rollup -c",
-    "dev": "parcel serve ./demo/playground.html -d parcel",
+    "dev": "parcel serve ./dev/playground.html -d parcel",
     "dev:dist": "parcel serve ./dist/index.html -d parcel",
     "deploy": "gh-pages -d dist",
     "lint": "eslint --fix src"
