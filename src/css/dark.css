@@ -1,8 +1,8 @@
 @import url('./base.css');
-:root {
- --color-mode: #333;
- --color-mode-opaque: #33333300;
- --color-secondary: #b9b6b6;
- --color-font: #fff;
- --color-shadow: #000;
+.shk {
+ --color-mode: #333 !important;
+ --color-mode-opaque: #33333300 !important;
+ --color-secondary: #b9b6b6 !important;
+ --color-font: #fff !important;
+ --color-shadow: #000 !important;
 }
