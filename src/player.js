@@ -4,6 +4,7 @@ import Events from './events'
 import { secondToTime, numToString, handleOptions, setMediaSession } from './utils'
 
 const playerArr = []
+const REGISTERED_COMPS = {}
 let initSeek
 const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.userAgent) : false
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
@@ -14,6 +15,7 @@ class Player {
   constructor(options) {
     this.id = playerArr.length
     playerArr.push(this)
+    this.comps = {}
     this.inited = false
     this.canplay = false
     this.dragging = false
@@ -24,7 +26,9 @@ class Player {
     this.currentSpeed = 1
     this.events = new Events()
     this.initAudio()
-    this.template.mount(this.options.container)
+    this._renderComponents()
+    const componentEls = Object.keys(this.comps).map(name => this.comps[name].el)
+    this.template.mount(this.options.container, componentEls)
   }
 
   get duration() {
@@ -312,6 +316,18 @@ class Player {
     this.template.destroy()
     this.options.container.innerHTML = ''
   }
+
+  _renderComponents() {
+    const keys = Object.keys(REGISTERED_COMPS)
+    if (!keys.length) return
+    for (let i = 0; i < keys.length; i++) {
+      this.comps[keys[i]] = new REGISTERED_COMPS[keys[i]].comp(this, REGISTERED_COMPS[keys[i]].options)
+    }
+  }
+}
+
+Player.use = function (name, comp, options) {
+  REGISTERED_COMPS[name] = { comp, options }
 }
 
 export default Player

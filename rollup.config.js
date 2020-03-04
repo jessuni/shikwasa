@@ -3,6 +3,7 @@ import autoprefixer from 'autoprefixer'
 import html from 'rollup-plugin-html'
 import babel from 'rollup-plugin-babel'
 import minify from 'rollup-plugin-babel-minify'
+import transformParameters from '@babel/plugin-transform-parameters'
 import replace from 'rollup-plugin-replace'
 import cleanup from 'rollup-plugin-cleanup'
 import pkg from './package.json'
@@ -50,6 +51,7 @@ if (process.env.FORMAT === 'iife') {
     comments: false,
     banner: false,
     sourceMap: false,
+    plugins: [transformParameters],
   }))
 } else if (process.env.FORMAT === 'cjs') {
   output.file = 'dist/shikwasa.cjs.js'

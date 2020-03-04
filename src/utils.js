@@ -89,3 +89,26 @@ export function setMediaSession(audio, fns = {}, self) {
     }
   }
 }
+
+export function createElement(options) {
+  options.tag = options.tag || 'div'
+  const el = document.createElement(options.tag)
+  if (options.className) {
+    if (typeof options.className === 'string') {
+      el.classList.add(options.className)
+    } else {
+      options.className.forEach(className => {
+        el.classList.add(className)
+      })
+    }
+  }
+  if (options.attrs) {
+    Object.keys(options.attrs).forEach(key => {
+      el.setAttribute(key, options.attrs[key])
+    })
+  }
+  if (options.innerHTML) {
+    el.innerHTML = options.innerHTML
+  }
+  return el
+}

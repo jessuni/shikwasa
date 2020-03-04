@@ -1,27 +1,28 @@
 import PlayerTemplate from './templates/PlayerTemplate'
 import IconTemplate from './templates/IconTemplate'
-import { secondToTime, carousel } from './utils'
+import { secondToTime, carousel, createElement } from './utils'
 
 let carouselTimeout, carouselInterval, resize
 
 export default class Template {
   constructor(options) {
     this.mounted = false
-    const iconExists = document.querySelector('.shk_icons')
-    if (!iconExists) {
-      this.icons = document.createElement('div')
-      this.icons.classList.add('shk_icons')
-      this.icons.innerHTML = IconTemplate
+    if (!document.querySelector('.shk_icons')) {
+      this.icons = createElement({
+        className: 'shk_icons',
+        innerHTML: IconTemplate
+      })
     }
-    this.initVariable()
+    this.initEl()
     this.initOptions(options)
   }
 
-  initVariable() {
-    this.el = document.createElement('div')
-    this.el.tabIndex = 0
-    this.el.classList.add('shk')
-    this.el.innerHTML = PlayerTemplate
+  initEl() {
+    this.el = createElement({
+      className: 'shk',
+      attrs: { tabIndex: 0 },
+      innerHTML: PlayerTemplate
+    })
     this.playBtn = this.el.querySelector('.shk_btn_toggle')
     this.fwdBtn = this.el.querySelector('.shk_btn_forward')
     this.bwdBtn = this.el.querySelector('.shk_btn_backward')
@@ -46,20 +47,22 @@ export default class Template {
 
   initOptions(options) {
     this.el.style = `--theme-color: ${options.themeColor}`
-    this.el.style.boxShadow = `2px 2px 6px 0px ${options.themeColor}21`
-    this.audioPlayed.style.color = options.themeColor + '80'
 
     options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
     if (options.download && options.audio && options.audio.src) {
-      this.downloadBtn = document.createElement('button')
-      this.downloadBtn.title = 'download'
-      this.downloadBtn.setAttribute('aria-label', 'download')
-      this.downloadBtn.classList.add('shk_btn', 'shk_btn_download')
-      this.downloadBtn.innerHTML = /* html */`
-        <svg aria-hidden="true">
-          <use xlink:href="#shk_icon_download" />
-        </svg>
-      `
+      this.downloadBtn = createElement({
+        tag: 'button',
+        className: ['shk_btn', 'shk_btn_download'],
+        attrs: {
+          title: 'download',
+          'aria-label': 'download',
+        },
+        innerHTML: /* html */`
+          <svg aria-hidden="true">
+            <use xlink:href="#shk_icon_download" />
+          </svg>
+        `
+      })
       this.extraControls.append(this.downloadBtn)
       this.downloadBtn.href = options.audio.src
     }
@@ -118,9 +121,14 @@ export default class Template {
     window.addEventListener('resize', resize)
   }
 
-  mount(container) {
+  mount(container, components) {
     container.innerHTML = ''
     container.append(this.el)
+    if (components && components.length) {
+      components.forEach(comp => {
+        this.el.append(comp)
+      })
+    }
     if (this.icons) {
       container.append(this.icons)
     }
