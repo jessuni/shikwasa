@@ -1,5 +1,8 @@
+/* hex8 does not work in css variable. have to fall back to rgba for better result since boxshadow will be using opac extensively. */
+/* do not add variables to :root, add them to .shk */
 :root {
-  --theme-color: #00869B;
+  --theme-color: #00CCB8;
+  --theme-color-opac: var(--theme-color)21;
 }
 @keyframes rotate {
   to {
@@ -18,16 +21,20 @@
   }
 }
 .shk {
-  font: 400 16px/1.42 Open Sans, Hiragino, Helvetica Neue, Pingfang SC, sans-serif;
-  height: 120px;
+  font: 400 16px/1.42 "Catamaran", "Open Sans", Helvetica Neue, Roboto, Pingfang SC, sans-serif;
   outline: none;
   cursor: auto;
   position: relative;
   border: none;
-  box-sizing: border-box;
-  box-shadow: 2px 2px 6px 0px #00869b21;
-  background-color: var(--color-mode);
   color: var(--color-font);
+}
+.shk_player {
+  height: 120px;
+  box-sizing: border-box;
+  box-shadow: 2px -2px 6px 0px var(--theme-color-opac);
+  background-color: var(--color-mode);
+  position: relative;
+  z-index: 10;
 }
 .shk.Fixed {
   position: fixed;
@@ -40,7 +47,7 @@
   top: 0;
   bottom: auto;
 }
-.shk.Seeking {
+.shk.Seeking .shk_player {
   cursor: grabbing;
 }
 .shk_body {
@@ -73,6 +80,7 @@
 }
 .shk_title-wrap.Overflow .shk_title {
   padding: 0 3%;
+  box-sizing: border-box;
 }
 .shk_artist,
 .shk_title {
@@ -95,13 +103,13 @@
   background: transparent;
   border: none;
   outline: none;
-  padding: 0;
   cursor: pointer;
   color: var(--theme-color);
-  fill: var(--theme-color);
+  fill: currentColor;
   box-sizing: content-box;
   padding: 10px;
   position: relative;
+  font-size: 1em;
 }
 .shk_btn svg {
   width: 24px;
@@ -144,7 +152,7 @@
 }
 .shk_btn_more {
   position: relative;
-  z-index: 3;
+  z-index: 11;
   transition: transform .2s .1s;
 }
 .shk_extra {
@@ -153,7 +161,7 @@
   right: 0;
   width: 0;
   bottom: 0;
-  z-index: 3;
+  z-index: 10;
   transition: width .1s .1s ease-in-out, visibility .1s ease;
 }
 .shk.Extra .shk_extra {
@@ -181,7 +189,6 @@ svg.shk_btn_mute,
 }
 .shk_bar-wrap {
   cursor: pointer;
-  z-index: 1;
 }
 .shk_bar {
   position: relative;
@@ -199,12 +206,10 @@ svg.shk_btn_mute,
   width: 0;
 }
 .shk_bar_loaded {
-  background: #b9b6b64d;
-  z-index: 1;
+  background: #b9b9b94d;
 }
 .shk_bar_played {
-  background: #00869b80;
-  z-index: 2;
+  background: var(--theme-color);
 }
 .shk_bar-handle {
   background: var(--theme-color);
@@ -259,7 +264,7 @@ svg.shk_btn_mute,
   display: none;
 }
 @media (min-width: 641px) {
-  .shk {
+  .shk_player {
     margin-top: 4px;
     padding: 20px 16px;
   }
@@ -330,7 +335,7 @@ svg.shk_btn_mute,
   }
 }
 @media (max-width: 640px) {
-  .shk {
+  .shk_player {
     padding: 5px 16px;
   }
   .shk.Auto {
@@ -426,10 +431,7 @@ svg.shk_btn_mute,
     top: -8px;
   }
   .shk_bar {
-    background: #b9b6b64d;
-  }
-  .shk_bar_loaded {
-    opacity: 0;
+    background: #b9b9b94d;
   }
   .shk_display {
     top: -16px;
