@@ -5,14 +5,14 @@
   "main": "dist/shikwasa.cjs.js",
   "dependencies": {},
   "devDependencies": {
-    "autoprefixer": "^9.6.1",
-    "eslint": "^6.1.0",
-    "gh-pages": "^2.0.1",
-    "parcel-bundler": "^1.12.3",
-    "rollup": "^1.17.0",
-    "rollup-plugin-babel-minify": "^8.0.0",
+    "autoprefixer": "^9.7.4",
+    "eslint": "^6.8.0",
+    "gh-pages": "^2.2.0",
+    "parcel-bundler": "^1.12.4",
+    "rollup": "^1.32.0",
+    "rollup-plugin-babel-minify": "^9.1.1",
     "rollup-plugin-html": "^0.2.1",
-    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-postcss": "^2.1.1",
     "rollup-plugin-replace": "^2.2.0"
   },
   "scripts": {
