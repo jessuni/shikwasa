@@ -1,0 +1,124 @@
+@keyframes stretch {
+  0%,
+  100% {
+    box-shadow: 0 0;
+  }
+  50% {
+    box-shadow: 0 -5px;
+  }
+}
+.shk_chapter {
+  position: absolute;
+  top: -340px;
+  left: 20px;
+  height: 340px;
+  width: calc(100% - 40px);
+  padding: 40px 0 20px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  box-shadow: 0px 10px 40px rgba(0, 41, 37, 0.07);
+  border: 1px solid rgba(0, 41, 37, 0.05);
+  background: var(--color-mode);
+  z-index: 0;
+  overflow: hidden;
+}
+.shk_btn_close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  fill: var(--color-secondary);
+}
+.shk_btn .shk_icon_close {
+  width: 16px;
+  height: 16px;
+}
+.shk_chapter_main {
+  overflow-y: scroll;
+  height: 100%;
+  padding: 0 40px;
+  mask-image: linear-gradient(to bottom,#202124 80%, transparent)
+}
+.shk_chapter_list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+.shk_chapter_item {
+  margin: 5px 0;
+}
+.shk_chapter .shk_btn_chapter {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+}
+.shk_chapter .shk_btn_chapter.Active span {
+  font-weight: 600;
+  color: var(--theme-color);
+  fill: currentColor;
+}
+.shk_icon_chapter {
+  width: 16px;
+  flex-shrink: 0;
+}
+.shk_btn_chapter.Active .shk_icon_playing,
+.shk_btn_chapter.Active .shk_icon_playing:before,
+.shk_btn_chapter.Active .shk_icon_playing:after {
+  display: block;
+}
+.shk_icon_playing,
+.shk_icon_playing:before,
+.shk_icon_playing:after {
+  display: none;
+  background: currentColor;
+  color: currentColor;
+  animation: stretch 1s infinite ease-in-out;
+  width: 3px;
+  height: 5px;
+}
+.shk_icon_playing {
+  position: relative;
+  animation-delay: 0.16s;
+}
+.shk_icon_playing:before,
+.shk_icon_playing:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.shk_icon_playing:before {
+  left: -4px;
+  animation-delay: -0.16s;
+}
+.shk_icon_playing:after {
+  left: 4px;
+}
+.shk_icon_triangle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+}
+.shk_btn_chapter.Active .shk_icon_triangle {
+  display: none;
+}
+.shk_icon_triangle svg {
+  width: 16px;
+  height: 18px;
+  fill: var(--color-font);
+}
+.shk_chapter_duration {
+  color: var(--color-secondary);
+  margin: 0 5%;
+  flex-shrink: 0;
+  width: 5%;
+  min-width: 30px;
+  text-align: left
+}
+.shk_chapter_title {
+  color: var(--color-font);
+  flex-grow: 1;
+  text-align: left;
+}
