@@ -1,28 +1,11 @@
 const PlayerTemplate = /* template */`
   <div class="shk_bar-wrap">
     <div class="shk_bar" aria-label="progress bar">
-      <div class="shk_bar_played" aria-label="played progress">
-        <span class="shk_bar-handle" aria-label="progress bar handle"></span>
-      </div>
-      <div class="shk_bar_loaded" aria-label="loaded progress"></div>
+    <div class="shk_bar_loaded" aria-label="loaded progress"></div>
+    <div class="shk_bar_played" aria-label="played progress">
+      <span class="shk_bar-handle" aria-label="progress bar handle"></span>
     </div>
-  </div>
-  <div class="shk_extra">
-    <span class="shk_extra_controls">
-      <button class="shk_btn shk_btn_volume" aria-label="toggle volume" title="volume">
-        <svg class="shk_btn_unmute" aria-hidden="true">
-          <use xlink:href="#shk_icon_unmute" />
-        </svg>
-        <svg class="shk_btn_mute" aria-hidden="true">
-          <use xlink:href="#shk_icon_mute" />
-        </svg>
-      </button>
-      <button class="shk_btn shk_btn_chapter" title="chapters" aria-label="view chapters">
-        <svg aria-hidden="true">
-          <use xlink:href="#shk_icon_chapter" />
-        </svg>
-      </button>
-    </span>
+    </div>
   </div>
   <div class="shk_body">
     <div class="shk_cover">
@@ -82,6 +65,18 @@ const PlayerTemplate = /* template */`
         </span>
       </div>
     </div>
+  </div>
+  <div class="shk_extra">
+    <span class="shk_extra_controls">
+      <button class="shk_btn shk_btn_volume" aria-label="toggle volume" title="volume">
+        <svg class="shk_btn_unmute" aria-hidden="true">
+          <use xlink:href="#shk_icon_unmute" />
+        </svg>
+        <svg class="shk_btn_mute" aria-hidden="true">
+          <use xlink:href="#shk_icon_mute" />
+        </svg>
+      </button>
+    </span>
   </div>
 `
 export default PlayerTemplate

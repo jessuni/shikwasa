@@ -16,7 +16,6 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 - 🐣Dependency free
 - 🏎Playback speed control
 - 🎮Skip forward/backward
-- 🎵Web Audio API
 - [ ] Podcast Chapters
 - [ ] Playlist
 
@@ -51,6 +50,8 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 
 ## Installation
 `npm install shikwasa`
+
+Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
 
 ## Usage
 1. include stylesheet and script
