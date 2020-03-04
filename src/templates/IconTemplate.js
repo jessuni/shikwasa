@@ -50,6 +50,8 @@ const IconTemplate = /* template */`
         <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
       </lineargradient>
     </symbol>
+    <symbol id="shk_icon_triangle" viewbox="0 0 64 64"><path d="M32 32L0 64V0z" /></symbol>
+    <symbol id="shk_icon_close" viewbox="0 0 16 16"><path d="M3.207 14.207a1 1 0 1 1-1.414-1.414l11-11a1 1 0 0 1 1.414 1.414zm11-1.414a1 1 0 0 1-1.414 1.414l-11-11a1 1 0 0 1 1.414-1.414z"></path></symbol>
   </svg>
 `
 export default IconTemplate
