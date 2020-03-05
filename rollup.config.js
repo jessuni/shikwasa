@@ -1,6 +1,7 @@
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
 import html from 'rollup-plugin-html'
+import babel from 'rollup-plugin-babel'
 import minify from 'rollup-plugin-babel-minify'
 import replace from 'rollup-plugin-replace'
 import pkg from './package.json'
@@ -32,7 +33,8 @@ const plugins = [
       collapseWhitespace: true,
       conservativeCollapse: true,
     },
-  })
+  }),
+  babel()
 ]
 
 if (process.env.FORMAT === 'iife') {

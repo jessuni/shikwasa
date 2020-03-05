@@ -1,11 +1,9 @@
 node_modules
 .cache
 .eslintrc
+.babelrc
 rollup.config.js
 gh.js
-dist/assets
-dist/index.html
-dist/index.js
 src
 parcel
 demo
