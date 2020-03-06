@@ -1,8 +1,0 @@
-@import url('./base.css');
-.shk {
- --color-mode: #333 !important;
- --color-mode-opaque: #33333300 !important;
- --color-secondary: #b9b6b6 !important;
- --color-font: #fff !important;
- --color-shadow: #000 !important;
-}

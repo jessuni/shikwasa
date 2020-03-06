@@ -1,5 +1,7 @@
 import config from './config'
 
+const fixedOptions = ['auto', 'static', 'fixed']
+
 export function secondToTime(time) {
   time = Math.round(time)
   let hour = Math.floor(time / 3600)
@@ -36,23 +38,19 @@ export function carousel(el, distance = 0, pause = 1000) {
 }
 
 export function handleOptions(options) {
-  options.container = document.querySelector(options.container ? options.container : config.container)
-  options.fixed = options.fixed || config.fixed
-  options.download = typeof options.download === 'boolean' ? options.download : config.download
-  const fixedOptions = ['auto', 'static', 'fixed']
-  const result = fixedOptions.find(item => item === options.fixed.type)
-  if (!result) {
+  Object.keys(config).forEach(k => {
+    options[k] = (options[k] || typeof options[k] === 'boolean') ?
+      options[k] : config[k]
+  })
+  options.container = document.querySelector(options.container)
+  const fixedType = fixedOptions.find(item => item === options.fixed.type)
+  if (!fixedType) {
     options.fixed.type = config.fixed.type
   }
-  options.themeColor = options.themeColor || config.themeColor
-  options.autoPlay = options.autoPlay || config.autoPlay
-  options.muted = options.muted || config.muted
-  options.preload = options.preload || config.preload
-  options.speedOptions = options.speedOptions || config.speedOptions
   if (!Array.isArray(options.speedOptions)) {
     options.speedOptions = [options.speedOptions]
   }
-  if (!options.speedOptions.includes(1)) {
+  if (options.speedOptions.indexOf(1) === -1) {
     options.speedOptions.push(1)
   }
   options.speedOptions = options.speedOptions

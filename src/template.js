@@ -10,7 +10,7 @@ export default class Template {
     if (!document.querySelector('.shk_icons')) {
       this.icons = createElement({
         className: 'shk_icons',
-        innerHTML: IconTemplate
+        innerHTML: IconTemplate,
       })
     }
     this.initEl()
@@ -21,7 +21,7 @@ export default class Template {
     this.el = createElement({
       className: 'shk',
       attrs: { tabIndex: 0 },
-      innerHTML: PlayerTemplate
+      innerHTML: PlayerTemplate,
     })
     this.playBtn = this.el.querySelector('.shk_btn_toggle')
     this.fwdBtn = this.el.querySelector('.shk_btn_forward')
@@ -47,6 +47,11 @@ export default class Template {
 
   initOptions(options) {
     this.el.style = `--theme-color: ${options.themeColor}`
+    if (options.theme === 'auto') {
+      this.el.classList.add('Theme-auto')
+    } else if (options.theme === 'dark') {
+      this.el.classList.add('Theme-dark')
+    }
 
     options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
     if (options.download && options.audio && options.audio.src) {
@@ -58,10 +63,10 @@ export default class Template {
           'aria-label': 'download',
         },
         innerHTML: /* html */`
-          <svg aria-hidden="true">
+          <svg aria-hidden="true" tabindex="-1">
             <use xlink:href="#shk_icon_download" />
           </svg>
-        `
+        `,
       })
       this.extraControls.append(this.downloadBtn)
       this.downloadBtn.href = options.audio.src

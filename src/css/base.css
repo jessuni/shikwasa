@@ -2,9 +2,33 @@
 /* do not add variables to :root, add them to .shk */
 .shk {
   --theme-color: #00CCB8;
-  --theme-color-opac: var(--theme-color)21;
   --font-sys: -apple-system,BlinkMacSystemFont,"avenir next", avenir, "Segoe UI", Roboto,Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue";
   --font-sans-serif: sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+
+  --color-mode: #fff;
+  --color-mode-opaque: #ffffff00;
+  --color-secondary: #767676;
+  --color-font: #333;
+  --color-handle-shadow: #b9b6b6;
+  --color-body-shadow: #b9b6b680;
+}
+.shk.Theme-dark {
+  --color-mode: #555;
+  --color-mode-opaque: #33333300;
+  --color-secondary: #b9b6b6;
+  --color-font: #fff;
+  --color-handle-shadow: #000;
+  --color-body-shadow: #141414;
+}
+@media (prefers-color-scheme: dark) {
+  .shk.Theme-auto {
+    --color-mode: #555;
+    --color-mode-opaque: #33333300;
+    --color-secondary: #b9b6b6;
+    --color-font: #fff;
+    --color-handle-shadow: #000;
+    --color-body-shadow: #141414;
+  }
 }
 @keyframes rotate {
   to {
@@ -36,7 +60,9 @@
 .shk_player {
   height: 120px;
   box-sizing: border-box;
-  box-shadow: 2px -2px 6px 0px var(--theme-color-opac);
+  border-radius: 2px;
+  border: 1px solid var(--color-shadow);
+  box-shadow: 2px 2px 8px -2px var(--color-body-shadow);
   background-color: var(--color-mode);
   position: relative;
   z-index: 10;
@@ -115,6 +141,14 @@
   padding: 10px;
   position: relative;
   font-size: 1em;
+}
+.shk_btn svg:focus {
+  outline: none;
+}
+/* keyboard-only focus style */
+.shk_btn:focus svg[tabindex],
+.shk_btn:focus > span[tabindex] {
+  box-shadow: 0 0 2px 2px #51a7e8;
 }
 .shk_btn svg {
   width: 24px;
@@ -219,7 +253,7 @@ svg.shk_btn_mute,
 }
 .shk_bar-handle {
   background: var(--theme-color);
-  box-shadow: 2px 2px 8px -2px var(--color-shadow);
+  box-shadow: 2px 2px 8px -2px var(--color-handle-shadow);
   position: absolute;
   right: -10px;
   width: 20px;
@@ -263,8 +297,8 @@ svg.shk_btn_mute,
   display: inline-block;
   vertical-align: middle;
   font-size: 0.8em;
-  font-weight: 100;
-  color: var(--color-font);
+  font-weight: 200;
+  color: var(--color-secondary);
 }
 .shk_icons {
   display: none;
