@@ -42,5 +42,10 @@
     "last 2 versions",
     "IE 10",
     "not ie <= 8"
-  ]
+  ],
+  "validators": {
+    "*.js": [
+      "@parcel/validator-eslint"
+    ]
+  }
 }

@@ -14,8 +14,8 @@
     "semi": ["error", "never"],
     "quotes": [1, "single"],
     "comma-dangle": ["error", {
-      "objects": "only-multiline",
-      "arrays": "never"
+      "objects": "always-multiline",
+      "arrays": "always-multiline"
     }],
     "object-curly-spacing": 0,
     "no-process-env": 0
