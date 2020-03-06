@@ -2,3 +2,5 @@ node_modules
 .cache
 gh.js
 parcel
+dist/index.html
+dist/assets
