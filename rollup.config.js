@@ -11,6 +11,8 @@ const CONSOLE_CODE = `console.log(\`%c🍊%c Shikwasa Podcast Player v${pkg.vers
 const output = {
   file: 'dist/shikwasa.js',
   format: process.env.FORMAT,
+  compact: true,
+  externalLiveBindings: true,
 }
 
 const plugins = [
@@ -21,9 +23,9 @@ const plugins = [
   }),
   postcss({
     extract: true,
-    minimize: true, // Use cssnano
+    minimize: true,
     plugins: [
-      autoprefixer()
+      autoprefixer(),
     ],
   }),
   html({
@@ -34,7 +36,7 @@ const plugins = [
       conservativeCollapse: true,
     },
   }),
-  babel()
+  babel(),
 ]
 
 if (process.env.FORMAT === 'iife') {
