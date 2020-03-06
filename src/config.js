@@ -6,6 +6,7 @@ const CONFIG = {
   },
   download: false,
   themeColor: '#00869B',
+  theme: 'auto',
   autoPlay: false,
   muted: false,
   preload: 'metadata',
