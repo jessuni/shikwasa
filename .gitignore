@@ -1,7 +1,4 @@
 node_modules
 .cache
 gh.js
-dist/index.js
-dist/index.html
-dist/assets
 parcel
