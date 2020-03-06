@@ -8,9 +8,9 @@ export function secondToTime(time) {
   min = min < 10 ? '0' + min : min
   sec = sec < 10 ? '0' + sec : sec
   if (hour === 0) {
-    hour = hour < 10 ? '0' + hour : hour
     return `${min}:${sec}`
   }
+  hour = hour < 10 ? '0' + hour : hour
   return `${hour}:${min}:${sec}`
 }
 
@@ -79,8 +79,8 @@ export function setMediaSession(audio, fns = {}, self) {
       title: audio.title,
       artist: audio.artist,
       artwork: [
-        { src: audio.cover }
-      ]
+        { src: audio.cover },
+      ],
     })
     if (Object.entries(fns).length && fns.constructor === Object) {
       Object.keys(fns).forEach(key => {
