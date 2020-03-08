@@ -1,6 +1,4 @@
 node_modules
+dist
 .cache
 gh.js
-parcel
-dist/index.html
-dist/assets
