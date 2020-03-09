@@ -66,7 +66,7 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 2. Specify a container for the player to be injected into. For example:
 
    ```html
-    <div class="elementOfYourChoice">
+    <div class="element-of-your-choice">
       <!-- this is where the player will be injected -->
     </div>
    ```
@@ -77,7 +77,7 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
    // an example with basic init options
 
    const player = new Shikwasa({
-     container: '.elementOfYourChoice',
+     container: '.element-of-your-choice',
      audio: {
        title: 'Hello World!',
        artist: 'Shikwasa FM',
@@ -146,7 +146,7 @@ A read-only property that indicates the current playback time. Similar to the na
 
 ## Options
 
-### Audio
+### audio
 
 (Required) The target audio to be played. If `duration` is passed in, players with `preload` option set to `none` will have a audio duration time display before the audio metadata is fetched. However, after the audio metadata is loaded, this prop will be ignored.
 
@@ -222,7 +222,7 @@ Whether audio should be muted by default. Right now this will not have any impac
 
 ### speedOptions
 
-(Optional) The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers
+(Optional) The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers. If `1` is not set in the array, it will be injected upon initiation. Audio's playback speed is always defaulted to `1`.
 
 - type: `Array`
 - default: `[0.5, 0.75, 1.25, 1.5]`
