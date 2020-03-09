@@ -22,8 +22,6 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
 
-⚠️If you are looking for the full power of Shikwasa player, but prefer customizing structures and styles of your own, check out a more flexible framework that helps you build your own player [Shisa](https://github.com/jessuni/shisa).
-
 <details>
   <summary>📖Table of Contents</summary>
 
@@ -239,10 +237,10 @@ Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/
 
 ## Roadmap
 
-Under v1.0.0:
+Under v2.0:
 - [ ] supporting audio id3 metadata --currently working on this one
-- [ ] cleaner & sleeker interface
-- [ ] dark mode
+- [x] cleaner & sleeker interface
+- [x] dark mode
 
 Others:
 - [ ] podcast playlist
