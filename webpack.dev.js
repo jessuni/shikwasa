@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const COMMON_CONFIG = require('./webpack.common')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const HtmlLinkTypePlugin = require('html-webpack-link-type-plugin').HtmlWebpackLinkTypePlugin
 
 const allFiles = fs.readdirSync('pages')
 const pages = allFiles.filter(name => {
@@ -19,12 +18,9 @@ const plugins = pages.map(filename => {
   return new HtmlWebpackPlugin({
     filename: filename,
     template: 'pages/' + filename,
-    chunks: jsfile ? [name] : undefined,
+    chunks: jsfile ? [name] : [],
   })
 })
-
-plugins.push(new HtmlLinkTypePlugin())
-
 
 const ruleOption = [{
   test: /\.css$/,
