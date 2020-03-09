@@ -1,5 +1,3 @@
-/* hex8 does not work in css variable. have to fall back to rgba for better result since boxshadow will be using opac extensively. */
-/* do not add variables to :root, add them to .shk */
 .shk {
   --theme-color: #00CCB8;
   --font-sys: -apple-system,BlinkMacSystemFont,"avenir next", avenir, "Segoe UI", Roboto,Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue";
@@ -142,7 +140,8 @@
   position: relative;
   font-size: 1em;
 }
-.shk_btn svg:focus {
+.shk_btn svg:focus,
+.shk_btn span:focus {
   outline: none;
 }
 /* keyboard-only focus style */

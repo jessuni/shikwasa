@@ -25,7 +25,7 @@ const PlayerTemplate = /* template */`
           <button class="shk_btn shk_btn_speed" aria-label="toggle playback rate" title="change playback rate"
             aria-live="polite">
             <span tabindex="-1">1.0x</span>
-            </button>
+          </button>
           <button class="shk_btn shk_btn_backward" aria-label="rewind 10 seconds" title="rewind 10 seconds">
             <svg aria-hidden="true" tabindex="-1">
               <use xlink:href="#shk_icon_backward" />
