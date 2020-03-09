@@ -2,8 +2,3 @@ node_modules
 dist
 .cache
 gh.js
-<<<<<<< HEAD
-=======
-dist
-parcel
->>>>>>> 17df19011abc92bd9c95a5fa034b6e9cc48c16e9
