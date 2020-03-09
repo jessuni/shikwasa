@@ -1,6 +1,4 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-const COMMON_CONFIG = ({ pluginOption, ruleOption, templateSrc } = {}) => {
+const COMMON_CONFIG = ({ ruleOption } = {}) => {
   const rules = [
     {
     test: /\.html$/i,
@@ -26,19 +24,11 @@ const COMMON_CONFIG = ({ pluginOption, ruleOption, templateSrc } = {}) => {
     rules.push(...ruleOption)
   }
 
-  const plugins = templateSrc ?
-    [new HtmlWebpackPlugin({ template: templateSrc })] :
-    []
-
-  if (pluginOption) {
-    plugins.push(...pluginOption)
-  }
 
   return {
     entry: {
       lib: './src/main.js',
     },
-    plugins,
     module: { rules },
   }
 }

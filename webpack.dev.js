@@ -1,9 +1,31 @@
-const COMMON_CONFIG = require('./webpack.common')
+const fs = require('fs')
 const path = require('path')
+const COMMON_CONFIG = require('./webpack.common')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlLinkTypePlugin = require('html-webpack-link-type-plugin').HtmlWebpackLinkTypePlugin
 
-const templateSrc = process.env.SITE === 'dev' ?
-  './dev/debug.html' :
-  './dev/index.html'
+const allFiles = fs.readdirSync('pages')
+const pages = allFiles.filter(name => {
+  return /\.html$/.test(name)
+})
+const entry = {}
+const plugins = pages.map(filename => {
+  const name = filename.replace(/\.html$/, '')
+  const regex = new RegExp(name + '.js')
+  const jsfile = allFiles.find(f => regex.test(f))
+  if (jsfile) {
+    entry[name] = './pages/' + name + '.js'
+  }
+  return new HtmlWebpackPlugin({
+    filename: filename,
+    template: 'pages/' + filename,
+    chunks: jsfile ? [name] : undefined,
+  })
+})
+
+plugins.push(new HtmlLinkTypePlugin())
+
+
 const ruleOption = [{
   test: /\.css$/,
   use: [
@@ -13,7 +35,7 @@ const ruleOption = [{
   ],
 }]
 module.exports = {
-  ...COMMON_CONFIG({ ruleOption, templateSrc }),
+  ...COMMON_CONFIG({ ruleOption }),
   mode: 'development',
   output: {
     pathinfo: false,
@@ -23,7 +45,6 @@ module.exports = {
     hot: true,
   },
   devtool: 'cheap-module-eval-source-map',
-  entry: {
-    index: process.env.SITE === 'dev' ? './dev/debug.js' : './dev/index.js',
-  },
+  plugins,
+  entry,
 }

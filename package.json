@@ -15,6 +15,7 @@
     "eslint-loader": "^3.0.3",
     "gh-pages": "^2.2.0",
     "html-loader": "^0.5.5",
+    "html-webpack-link-type-plugin": "^1.0.3",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.9.0",
     "postcss-loader": "^3.0.0",
@@ -26,7 +27,7 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "SITE=dev webpack-dev-server --config webpack.dev.js",
+    "dev": "webpack-dev-server --config webpack.dev.js",
     "dev:website": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "deploy": "gh-pages -d dist",
