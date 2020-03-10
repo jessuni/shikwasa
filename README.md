@@ -126,7 +126,7 @@ Toggle audio play state between play and pause.
 
 **.seek(time)**
 
-`time` is a **number** that specifies target playback time. Calling this method with `time` will seek the audio to the new time.
+Seek the audio to the new time. `time` is a **number** that specifies target playback time in seconds.
 
 **.destroy()**
 
@@ -140,7 +140,9 @@ Register an event listener. Supported events see: [Events](#events)
 
 **.currentTime**
 
-A read-only property that indicates the current playback time. Similar to the native [`htmlMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
+- type: `Number`
+
+A read-only property that indicates the current playback time **in seconds**. Similar to the native [`htmlMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
 
 ## Options
 
