@@ -49,7 +49,7 @@ export default class Template {
   initOptions(options) {
 
     // dark mode
-    this.el.style = `--theme-color: ${options.themeColor}; --color-handle-shadow: ${options.themeColor}cc`
+    this.el.style = `--color-primary: ${options.themeColor}; --color-handle-shadow: ${options.themeColor}cc`
     if (options.theme === 'auto') {
       this.el.classList.add('Theme-auto')
     } else if (options.theme === 'dark') {

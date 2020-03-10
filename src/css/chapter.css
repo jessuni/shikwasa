@@ -18,7 +18,7 @@
   box-sizing: border-box;
   box-shadow: 0px 10px 40px rgba(0, 41, 37, 0.07);
   border: 1px solid rgba(0, 41, 37, 0.05);
-  background: var(--color-mode);
+  background: var(--color-theme);
   z-index: 0;
   overflow: hidden;
 }
@@ -57,7 +57,7 @@
 }
 .shk_chapter .shk_btn_chapter.Active span {
   font-weight: 600;
-  color: var(--theme-color);
+  color: var(--color-primary);
   fill: currentColor;
 }
 .shk_icon_chapter {
