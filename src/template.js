@@ -27,6 +27,7 @@ export default class Template {
     this.fwdBtn = this.el.querySelector('.shk_btn_forward')
     this.bwdBtn = this.el.querySelector('.shk_btn_backward')
     this.speedBtn = this.el.querySelector('.shk_btn_speed')
+    this.speedBtnText = this.speedBtn.querySelector('span')
     this.moreBtn = this.el.querySelector('.shk_btn_more')
     this.muteBtn = this.el.querySelector('.shk_btn_volume')
     this.extra = this.el.querySelector('.shk_extra')
@@ -46,14 +47,16 @@ export default class Template {
   }
 
   initOptions(options) {
-    this.el.style = `--theme-color: ${options.themeColor}`
+
+    // dark mode
+    this.el.style = `--theme-color: ${options.themeColor}; --color-handle-shadow: ${options.themeColor}cc`
     if (options.theme === 'auto') {
       this.el.classList.add('Theme-auto')
     } else if (options.theme === 'dark') {
       this.el.classList.add('Theme-dark')
     }
 
-    options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
+    // download
     if (options.download && options.audio && options.audio.src) {
       this.downloadBtn = createElement({
         tag: 'button',
@@ -71,12 +74,18 @@ export default class Template {
       this.extraControls.append(this.downloadBtn)
       this.downloadBtn.href = options.audio.src
     }
+
+    // player position
     if (options.fixed.type !== 'static') {
       options.fixed.type === 'fixed' ? this.el.classList.add('Fixed') : this.el.classList.add('Auto')
       if (options.fixed.position === 'top') {
         this.el.classList.add('Top')
       }
     }
+
+    // play status ui
+    options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
+
     if (options.muted) {
       this.el.classList.add('Mute')
     }
