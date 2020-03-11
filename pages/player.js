@@ -37,7 +37,7 @@ new Shikwasa({
 })
 
 new Shikwasa({
-  preload: 'none',
+  preload: 'auto',
   container: '.container-2',
   theme: 'dark',
   themeColor: '#00CCB8',
