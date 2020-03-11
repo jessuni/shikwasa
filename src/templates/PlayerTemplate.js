@@ -2,10 +2,26 @@ const PlayerTemplate = /* template */`
   <div class="shk_player">
     <div class="shk_bar-wrap">
       <div class="shk_bar" aria-label="progress bar">
-      <div class="shk_bar_loaded" aria-label="loaded progress"></div>
-      <div class="shk_bar_played" aria-label="played progress">
-        <span class="shk_bar-handle focus-visible" tabindex="0" aria-label="seek progress"></span>
-      </div>
+        <div class="shk_bar_loaded"
+          role="progressbar"
+          aria-label="loaded progress"
+          aria-valuenow="0"
+          aria-valuemin="0"
+          aria-valuemax="1"></div>
+        <div class="shk_bar_played"
+          role="progressbar"
+          aria-label="played progress"
+          aria-valuenow="0"
+          aria-valuemin="0"
+          aria-valuemax="1">
+          <span class="shk_bar-handle"
+            tabindex="0"
+            role="range"
+            aria-label="seek progress"
+            aria-valuenow="0"
+            aria-valuemin="0"
+            aria-valuemax="1"></span>
+        </div>
       </div>
     </div>
     <div class="shk_body">

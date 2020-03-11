@@ -204,8 +204,7 @@ class Player {
     this.events.on(name, callback)
   }
 
-  setDisplayAndBarByTime(time) {
-    time = time || 0
+  setDisplayAndBarByTime(time = 0) {
     const percentage = time / this.duration || 0
     this.template.currentTime.innerHTML = secondToTime(time)
     this.bar.set('audioPlayed', percentage)

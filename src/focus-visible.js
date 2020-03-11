@@ -199,7 +199,6 @@ function applyFocusVisiblePolyfill(parent) {
   parent.addEventListener('blur', onBlur, true)
 
   parent.classList.add('js-focus-visible')
-  parent.classList.add('focus-visible')
 }
 
 export default applyFocusVisiblePolyfill
