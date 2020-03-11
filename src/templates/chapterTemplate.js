@@ -6,7 +6,7 @@ const chapterTemplate = /* template */`
           <span class="shk_icon_chapter" aria-hidden="true">
             <span class="shk_icon_playing"></span>
             <span class="shk_icon_triangle">
-              <svg tabindex="-1">
+              <svg>
                 <use xlink:href="#shk_icon_triangle" />
               </svg>
             </span>
@@ -17,7 +17,7 @@ const chapterTemplate = /* template */`
       </li>
       <li class="shk_chapter_item">
         <button class="shk_btn shk_btn_chapter">
-          <span class="shk_icon_triangle" aria-hidden="true" tabindex="-1">
+          <span class="shk_icon_triangle" aria-hidden="true">
             <svg>
               <use xlink:href="#shk_icon_triangle" />
             </svg>
@@ -29,7 +29,7 @@ const chapterTemplate = /* template */`
     </ol>
   </div>
   <button class="shk_btn shk_btn_close" aria-label="close chapter panel" title="close chapter panel">
-    <svg class="shk_icon_close" aria-hidden="true" tabindex="-1">
+    <svg class="shk_icon_close" aria-hidden="true">
       <use xlink:href="#shk_icon_close" />
     </svg>
   </button>

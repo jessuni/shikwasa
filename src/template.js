@@ -1,6 +1,7 @@
 import PlayerTemplate from './templates/PlayerTemplate'
 import IconTemplate from './templates/IconTemplate'
 import { secondToTime, carousel, createElement } from './utils'
+import applyFocusVisible from './focus-visible'
 
 let carouselTimeout, carouselInterval, resize
 
@@ -27,7 +28,6 @@ export default class Template {
     this.fwdBtn = this.el.querySelector('.shk_btn_forward')
     this.bwdBtn = this.el.querySelector('.shk_btn_backward')
     this.speedBtn = this.el.querySelector('.shk_btn_speed')
-    this.speedBtnText = this.speedBtn.querySelector('span')
     this.moreBtn = this.el.querySelector('.shk_btn_more')
     this.muteBtn = this.el.querySelector('.shk_btn_volume')
     this.extra = this.el.querySelector('.shk_extra')
@@ -66,7 +66,7 @@ export default class Template {
           'aria-label': 'download',
         },
         innerHTML: /* html */`
-          <svg aria-hidden="true" tabindex="-1">
+          <svg aria-hidden="true">
             <use xlink:href="#shk_icon_download" />
           </svg>
         `,
@@ -131,6 +131,7 @@ export default class Template {
     this.extra.addEventListener('click', () => {
       this.el.classList.remove('Extra')
     })
+    applyFocusVisible(this.el)
     resize = this.textScroll.bind(this)
     window.addEventListener('resize', resize)
   }

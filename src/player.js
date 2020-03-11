@@ -72,7 +72,7 @@ class Player {
       const index = this.options.speedOptions.indexOf(this.currentSpeed)
       const speedRange = this.options.speedOptions
       this.currentSpeed = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
-      this.template.speedBtnText.innerHTML = numToString(this.currentSpeed) + 'x'
+      this.template.speedBtn.innerHTML = numToString(this.currentSpeed) + 'x'
       if (this.audio) {
         this.audio.playbackRate = this.currentSpeed
       }

@@ -39,7 +39,7 @@ class Chapter {
         <svg aria-hidden="true">
           <use xlink:href="#shk_icon_chapter" />
         </svg>
-      `
+      `,
     })
     template.extraControls.append(this.triggerEl)
     template.chapterBtn = this.triggerEl

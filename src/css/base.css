@@ -8,7 +8,7 @@
   --color-secondary: #767676;
   --color-font: #333;
   --color-handle-shadow-mobile: #b9b6b6;
-  --color-handle-shadow: var(--color-theme-opac);
+  --color-handle-shadow: var(--color-theme-opaque);
   --color-body-shadow: #b9b6b680;
 }
 .shk.Theme-dark {
@@ -17,8 +17,8 @@
   --color-secondary: #b9b6b6;
   --color-font: #fff;
   --color-handle-shadow-mobile: #000;
-  --color-handle-shadow: var(--color-theme-opac);
-  --color-body-shadow: #141414;
+  --color-handle-shadow: var(--color-theme-opaque);
+  --color-body-shadow: #14141480;
 }
 @media (prefers-color-scheme: dark) {
   .shk.Theme-auto {
@@ -27,7 +27,7 @@
     --color-secondary: #b9b6b6;
     --color-font: #fff;
     --color-handle-shadow-mobile: #000;
-    --color-handle-shadow: var(--color-theme-opac);
+    --color-handle-shadow: var(--color-theme-opaque);
     --color-body-shadow: #141414;
   }
 }
@@ -52,11 +52,14 @@
   font-size: 16px;
   font-family: var(--font-sys), var(--font-sans-serif);
   line-height: 1.42;
-  outline: none;
   cursor: auto;
   position: relative;
   border: none;
   color: var(--color-font);
+}
+.js-focus-visible:focus:not(.focus-visible),
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
 }
 .shk_player {
   height: 120px;
@@ -134,7 +137,6 @@
   appearance: none;
   background: transparent;
   border: none;
-  outline: none;
   cursor: pointer;
   color: var(--color-primary);
   fill: currentColor;
@@ -143,14 +145,26 @@
   position: relative;
   font-size: 1em;
 }
-.shk_btn svg:focus,
-.shk_btn span:focus {
-  outline: none;
+.shk_btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #b9b9b94d;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: width .3s cubic-bezier(0,0,0.2,1), height .3s cubic-bezier(0,0,0.2,1), transform .1s cubic-bezier(0,0,0.2,1),opacity .2s cubic-bezier(0,0,0.2,1)
 }
-/* keyboard-only focus style */
-.shk_btn:focus svg[tabindex],
-.shk_btn:focus > span[tabindex] {
-  box-shadow: 0 0 2px 2px #51a7e8;
+.shk_btn:active::after {
+  opacity: 1;
+  visibility: visible;
+  width: 100%;
 }
 .shk_btn svg {
   width: 24px;

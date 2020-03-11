@@ -4,7 +4,7 @@ const PlayerTemplate = /* template */`
       <div class="shk_bar" aria-label="progress bar">
       <div class="shk_bar_loaded" aria-label="loaded progress"></div>
       <div class="shk_bar_played" aria-label="played progress">
-        <span class="shk_bar-handle" aria-label="progress bar handle"></span>
+        <span class="shk_bar-handle focus-visible" tabindex="0" aria-label="seek progress"></span>
       </div>
       </div>
     </div>
@@ -22,30 +22,32 @@ const PlayerTemplate = /* template */`
           </div>
         </div>
         <div class="shk_controls">
-          <button class="shk_btn shk_btn_speed" aria-label="toggle playback rate" title="change playback rate"
-            aria-live="polite">
-            <span tabindex="-1">1.0x</span>
-          </button>
-          <button class="shk_btn shk_btn_backward" aria-label="rewind 10 seconds" title="rewind 10 seconds">
-            <svg aria-hidden="true" tabindex="-1">
+          <button class="shk_btn shk_btn_speed"
+            aria-label="toggle playback rate"
+            title="change playback rate"
+            aria-live="polite">1.0x</button>
+          <button class="shk_btn shk_btn_backward"
+            aria-label="rewind 10 seconds"
+            title="rewind 10 seconds">
+            <svg aria-hidden="true">
               <use xlink:href="#shk_icon_backward" />
             </svg>
           </button>
           <button class="shk_btn shk_btn_toggle" aria-label="toggle play and pause">
-            <svg class="shk_btn_play" aria-hidden="true" tabindex="-1">
+            <svg class="shk_btn_play" aria-hidden="true">
               <use xlink:href="#shk_icon_play" />
             </svg>
-            <svg class="shk_btn_pause" aria-hidden="true" tabindex="-1">
+            <svg class="shk_btn_pause" aria-hidden="true">
               <use xlink:href="#shk_icon_pause" />
             </svg>
           </button>
           <button class="shk_btn shk_btn_forward" aria-label="forward 10 seconds" title="forward 10 seconds">
-            <svg aria-hidden="true" tabindex="-1">
+            <svg aria-hidden="true">
               <use xlink:href="#shk_icon_forward" />
             </svg>
           </button>
           <button class="shk_btn shk_btn_more">
-            <svg aria-hidden="true" tabindex="-1">
+            <svg aria-hidden="true">
               <use xlink:href="#shk_icon_more" />
             </svg>
           </button>
@@ -72,10 +74,10 @@ const PlayerTemplate = /* template */`
     <div class="shk_extra">
       <span class="shk_extra_controls">
         <button class="shk_btn shk_btn_volume" aria-label="toggle volume" title="volume">
-          <svg class="shk_btn_unmute" aria-hidden="true" tabindex="-1">
+          <svg class="shk_btn_unmute" aria-hidden="true">
             <use xlink:href="#shk_icon_unmute" />
           </svg>
-          <svg class="shk_btn_mute" aria-hidden="true" tabindex="-1">
+          <svg class="shk_btn_mute" aria-hidden="true">
             <use xlink:href="#shk_icon_mute" />
           </svg>
         </button>
