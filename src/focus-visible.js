@@ -1,6 +1,7 @@
 /**
- * button related focus-within polyfill from
+ * focus-visible polyfill for button and progress handle from
  * https://github.com/WICG/focus-visible/blob/master/src/focus-visible.js
+ * stripped only relevent section and replace manipulating the whole document to only a certain element, i.e. shikwasa player to prevent changing document behavior
  */
 function applyFocusVisiblePolyfill(parent) {
   var hadKeyboardEvent = true
