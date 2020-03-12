@@ -25,19 +25,19 @@ class Chapter {
 
   initUI(template) {
     this.el = createElement({
-      className: 'shk_chapter',
+      className: 'shk-chapter',
       innerHTML: chapterTemplate,
     })
     this.triggerEl = createElement({
       tag: 'button',
-      className: ['shk_btn', 'shk_btn_chapter'],
+      className: ['shk-btn', 'shk-btn_chapter'],
       attrs: {
         title: 'chapters',
         'aria-label': 'view chapters',
       },
       innerHTML: /* html */`
         <svg aria-hidden="true">
-          <use xlink:href="#shk_icon_chapter" />
+          <use xlink:href="#shk-icon_chapter" />
         </svg>
       `,
     })

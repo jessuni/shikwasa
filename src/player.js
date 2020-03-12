@@ -115,7 +115,7 @@ class Player {
     const pressSpace = (e) => {
       if (e.keyCode === 32) {
         const activeEl = document.activeElement
-        if (!activeEl.classList.contains('shk_btn_toggle')) {
+        if (!activeEl.classList.contains('shk-btn_toggle')) {
           this.toggle()
         }
       }

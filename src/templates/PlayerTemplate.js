@@ -1,20 +1,20 @@
 const PlayerTemplate = /* template */`
-  <div class="shk_player">
-    <div class="shk_bar-wrap">
-      <div class="shk_bar" aria-label="progress bar">
-        <div class="shk_bar_loaded"
+  <div class="shk-player">
+    <div class="shk-bar_wrap">
+      <div class="shk-bar" aria-label="progress bar">
+        <div class="shk-bar_loaded"
           role="progressbar"
           aria-label="loaded progress"
           aria-valuenow="0"
           aria-valuemin="0"
           aria-valuemax="1"></div>
-        <div class="shk_bar_played"
+        <div class="shk-bar_played"
           role="progressbar"
           aria-label="played progress"
           aria-valuenow="0"
           aria-valuemin="0"
           aria-valuemax="1">
-          <span class="shk_bar-handle"
+          <span class="shk-bar-handle"
             tabindex="0"
             role="range"
             aria-label="seek progress"
@@ -24,80 +24,80 @@ const PlayerTemplate = /* template */`
         </div>
       </div>
     </div>
-    <div class="shk_body">
-      <div class="shk_cover">
-        <div class="shk_img"></div>
+    <div class="shk-body">
+      <div class="shk-cover">
+        <div class="shk-img"></div>
       </div>
-      <div class="shk_main">
-        <div class="shk_text">
-          <div class="shk_artist-wrap">
-            <span class="shk_artist"></span>
+      <div class="shk-main">
+        <div class="shk-text">
+          <div class="shk-artist_wrap">
+            <span class="shk-artist"></span>
           </div>
-          <div class="shk_title-wrap">
-            <div class="shk_title-inner">
-              <div class="shk_title"></div>
-              <div class="shk_title" aria-hidden="true"></div>
+          <div class="shk-title_wrap">
+            <div class="shk-title_inner">
+              <div class="shk-title"></div>
+              <div class="shk-title" aria-hidden="true"></div>
             </div>
           </div>
         </div>
-        <div class="shk_controls">
-          <div class="shk_controls_basic">
-            <button class="shk_btn shk_btn_speed"
+        <div class="shk-controls">
+          <div class="shk-controls_basic">
+            <button class="shk-btn shk-btn_speed"
               aria-label="toggle playback rate"
               title="change playback rate"
               aria-live="polite">1.0x</button>
-            <button class="shk_btn shk_btn_backward"
+            <button class="shk-btn shk-btn_backward"
               aria-label="rewind 10 seconds"
               title="rewind 10 seconds">
               <svg aria-hidden="true">
-                <use xlink:href="#shk_icon_backward" />
+                <use xlink:href="#shk-icon_backward" />
               </svg>
             </button>
-            <button class="shk_btn shk_btn_toggle" aria-label="toggle play and pause">
-              <svg class="shk_btn_play" aria-hidden="true">
-                <use xlink:href="#shk_icon_play" />
+            <button class="shk-btn shk-btn_toggle" aria-label="toggle play and pause">
+              <svg class="shk-btn_play" aria-hidden="true">
+                <use xlink:href="#shk-icon_play" />
               </svg>
-              <svg class="shk_btn_pause" aria-hidden="true">
-                <use xlink:href="#shk_icon_pause" />
+              <svg class="shk-btn_pause" aria-hidden="true">
+                <use xlink:href="#shk-icon_pause" />
               </svg>
             </button>
-            <button class="shk_btn shk_btn_forward" aria-label="forward 10 seconds" title="forward 10 seconds">
+            <button class="shk-btn shk-btn_forward" aria-label="forward 10 seconds" title="forward 10 seconds">
               <svg aria-hidden="true">
-                <use xlink:href="#shk_icon_forward" />
+                <use xlink:href="#shk-icon_forward" />
               </svg>
             </button>
-            <button class="shk_btn shk_btn_more">
+            <button class="shk-btn shk-btn_more">
               <svg aria-hidden="true">
-                <use xlink:href="#shk_icon_more" />
+                <use xlink:href="#shk-icon_more" />
               </svg>
             </button>
           </div>
-          <div class="shk_controls_extra">
-            <button class="shk_btn shk_btn_volume" aria-label="toggle volume" title="volume">
-              <svg class="shk_btn_unmute" aria-hidden="true">
-                <use xlink:href="#shk_icon_unmute" />
+          <div class="shk-controls_extra">
+            <button class="shk-btn shk-btn_volume" aria-label="toggle volume" title="volume">
+              <svg class="shk-btn_unmute" aria-hidden="true">
+                <use xlink:href="#shk-icon_unmute" />
               </svg>
-              <svg class="shk_btn_mute" aria-hidden="true">
-                <use xlink:href="#shk_icon_mute" />
+              <svg class="shk-btn_mute" aria-hidden="true">
+                <use xlink:href="#shk-icon_mute" />
               </svg>
             </button>
           </div>
         </div>
-        <div class="shk_display">
-          <span class="shk_loader" aria-live="polite">
-            <span class="shk_visuallyhidden" tabindex="-1">loading</span>
+        <div class="shk-display">
+          <span class="shk-loader" aria-live="polite">
+            <span class="shk-visuallyhidden" tabindex="-1">loading</span>
             <svg aria-hidden="true" aria-label="loading" aria-live="polite" viewbox="0 0 66 66">
-              <circle cx="33" cy="33" r="30" fill="transparent" stroke="url(#shk_gradient)" stroke-dasharray="170"
+              <circle cx="33" cy="33" r="30" fill="transparent" stroke="url(#shk-gradient)" stroke-dasharray="170"
                 stroke-dashoffset="20" stroke-width="6" />
-              <lineargradient id="shk_gradient">
+              <lineargradient id="shk-gradient">
                 <stop offset="50%" stop-color="currentColor" />
                 <stop offset="65%" stop-color="currentColor" stop-opacity=".5" />
                 <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
               </lineargradient>
             </svg>
           </span>
-          <span class="shk_time">
-            <span class="shk_time_now">--:--</span><span class="shk_time_duration">--:--</span>
+          <span class="shk-time">
+            <span class="shk-time_now">--:--</span><span class="shk-time_duration">--:--</span>
           </span>
         </div>
       </div>

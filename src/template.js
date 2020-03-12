@@ -8,9 +8,9 @@ let resize, duration, cooldown = true
 export default class Template {
   constructor(options) {
     this.mounted = false
-    if (!document.querySelector('.shk_icons')) {
+    if (!document.querySelector('.shk-icons')) {
       this.icons = createElement({
-        className: 'shk_icons',
+        className: 'shk-icons',
         innerHTML: IconTemplate,
       })
     }
@@ -24,28 +24,28 @@ export default class Template {
       attrs: { tabIndex: 0 },
       innerHTML: PlayerTemplate,
     })
-    this.playBtn = this.el.querySelector('.shk_btn_toggle')
-    this.fwdBtn = this.el.querySelector('.shk_btn_forward')
-    this.bwdBtn = this.el.querySelector('.shk_btn_backward')
-    this.speedBtn = this.el.querySelector('.shk_btn_speed')
-    this.moreBtn = this.el.querySelector('.shk_btn_more')
-    this.muteBtn = this.el.querySelector('.shk_btn_volume')
-    this.extraControls = this.el.querySelector('.shk_controls_extra')
-    this.texts = this.el.querySelector('.shk_text')
-    this.artist = this.el.querySelector('.shk_artist')
-    this.artistWrap = this.el.querySelector('.shk_artist-wrap')
-    this.titleWrap = this.el.querySelector('.shk_title-wrap')
-    this.titleInner = this.el.querySelector('.shk_title-inner')
-    this.title = this.el.querySelector('.shk_title:not([aria-hidden])')
-    this.titleHidden = this.el.querySelector('.shk_title[aria-hidden]')
-    this.currentTime = this.el.querySelector('.shk_time_now')
-    this.duration = this.el.querySelector('.shk_time_duration')
-    this.bar = this.el.querySelector('.shk_bar')
-    this.barWrap = this.el.querySelector('.shk_bar-wrap')
-    this.audioPlayed = this.el.querySelector('.shk_bar_played')
-    this.audioLoaded = this.el.querySelector('.shk_bar_loaded')
-    this.handle = this.el.querySelector('.shk_bar-handle')
-    this.cover = this.el.querySelector('.shk_cover')
+    this.playBtn = this.el.querySelector('.shk-btn_toggle')
+    this.fwdBtn = this.el.querySelector('.shk-btn_forward')
+    this.bwdBtn = this.el.querySelector('.shk-btn_backward')
+    this.speedBtn = this.el.querySelector('.shk-btn_speed')
+    this.moreBtn = this.el.querySelector('.shk-btn_more')
+    this.muteBtn = this.el.querySelector('.shk-btn_volume')
+    this.extraControls = this.el.querySelector('.shk-controls_extra')
+    this.texts = this.el.querySelector('.shk-text')
+    this.artist = this.el.querySelector('.shk-artist')
+    this.artistWrap = this.el.querySelector('.shk-artist_wrap')
+    this.titleWrap = this.el.querySelector('.shk-title_wrap')
+    this.titleInner = this.el.querySelector('.shk-title_inner')
+    this.title = this.el.querySelector('.shk-title:not([aria-hidden])')
+    this.titleHidden = this.el.querySelector('.shk-title[aria-hidden]')
+    this.currentTime = this.el.querySelector('.shk-time_now')
+    this.duration = this.el.querySelector('.shk-time_duration')
+    this.bar = this.el.querySelector('.shk-bar')
+    this.barWrap = this.el.querySelector('.shk-bar_wrap')
+    this.audioPlayed = this.el.querySelector('.shk-bar_played')
+    this.audioLoaded = this.el.querySelector('.shk-bar_loaded')
+    this.handle = this.el.querySelector('.shk-bar-handle')
+    this.cover = this.el.querySelector('.shk-cover')
   }
 
   initOptions(options) {
@@ -62,14 +62,14 @@ export default class Template {
     if (options.download && options.audio && options.audio.src) {
       this.downloadBtn = createElement({
         tag: 'button',
-        className: ['shk_btn', 'shk_btn_download'],
+        className: ['shk-btn', 'shk-btn_download'],
         attrs: {
           title: 'download',
           'aria-label': 'download',
         },
         innerHTML: /* html */`
           <svg aria-hidden="true">
-            <use xlink:href="#shk_icon_download" />
+            <use xlink:href="#shk-icon_download" />
           </svg>
         `,
       })
