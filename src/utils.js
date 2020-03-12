@@ -21,22 +21,6 @@ export function numToString(num) {
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
 
-export function carousel(el, distance = 0, pause = 1000) {
-  let carouselTimeout, carouselInterval
-  const duration = distance * 50
-  const interval = duration + pause
-  function transform() {
-    el.style.transitionDuration = `${duration / 1000}s`
-    el.style.transform = `translateX(-${distance}px)`
-    carouselTimeout = setTimeout(() => {
-      el.style.transform = 'translateX(0px)'
-    }, interval)
-  }
-  transform()
-  carouselInterval = setInterval(() => transform(), interval * 2)
-  return [carouselTimeout, carouselInterval]
-}
-
 export function handleOptions(options) {
   Object.keys(config).forEach(k => {
     options[k] = (options[k] || typeof options[k] === 'boolean') ?

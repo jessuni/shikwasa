@@ -1,9 +1,9 @@
 import PlayerTemplate from './templates/PlayerTemplate'
 import IconTemplate from './templates/IconTemplate'
-import { secondToTime, carousel, createElement } from './utils'
+import { secondToTime, createElement } from './utils'
 import applyFocusVisible from './focus-visible'
 
-let carouselTimeout, carouselInterval, resize
+let resize, duration, cooldown = true
 
 export default class Template {
   constructor(options) {
@@ -35,7 +35,10 @@ export default class Template {
     this.texts = this.el.querySelector('.shk_text')
     this.artist = this.el.querySelector('.shk_artist')
     this.artistWrap = this.el.querySelector('.shk_artist-wrap')
-    this.title = this.el.querySelector('.shk_title')
+    this.titleWrap = this.el.querySelector('.shk_title-wrap')
+    this.titleInner = this.el.querySelector('.shk_title-inner')
+    this.title = this.el.querySelector('.shk_title:not([aria-hidden])')
+    this.titleHidden = this.el.querySelector('.shk_title[aria-hidden]')
     this.currentTime = this.el.querySelector('.shk_time_now')
     this.duration = this.el.querySelector('.shk_time_duration')
     this.bar = this.el.querySelector('.shk_bar')
@@ -97,8 +100,9 @@ export default class Template {
   update(audio) {
     this.cover.style.backgroundImage = `url(${audio.cover})`
     this.title.innerHTML = audio.title
+    this.titleHidden.innerHTML = audio.title
     if (this.mounted) {
-      this.textScroll()
+      this.marquee()
     }
     this.artist.innerHTML = audio.artist
     this.currentTime.innerHTML = '00:00'
@@ -108,19 +112,15 @@ export default class Template {
     }
   }
 
-  textScroll() {
-    if (carouselInterval) {
-      clearInterval(carouselInterval)
-      clearTimeout(carouselTimeout)
-    }
-    const titleOverflow = this.title.offsetWidth - this.texts.offsetWidth
-    if (titleOverflow > 0) {
-      [carouselTimeout, carouselInterval] = carousel(this.title, titleOverflow)
-      this.title.parentNode.classList.add('Overflow')
+  marquee() {
+    const overflow = this.title.offsetWidth - this.texts.offsetWidth
+    if (overflow > 0) {
+      this.titleWrap.classList.add('Overflow')
+      duration = duration || 10000 / (400 + overflow)
+      this.title.style.animationDuration = `${duration}s`
+      this.titleHidden.style.animationDuration = `${duration}s`
     } else {
-      this.title.parentNode.classList.remove('Overflow')
-      this.title.style.transform = 'none'
-      this.title.style.transitionDuration = '0s'
+      this.titleWrap.classList.remove('Overflow')
     }
   }
 
@@ -132,7 +132,12 @@ export default class Template {
       this.el.classList.remove('Extra')
     })
     applyFocusVisible(this.el)
-    resize = this.textScroll.bind(this)
+    resize = () => {
+      if (!cooldown) return
+      cooldown = false
+      setTimeout(() => cooldown = true, 100)
+      this.marquee.bind(this)()
+    }
     window.addEventListener('resize', resize)
   }
 
@@ -149,14 +154,10 @@ export default class Template {
     }
     this.mounted = true
     this.initEvents()
-    this.textScroll()
+    this.marquee()
   }
 
   destroy() {
-    if (clearInterval) {
-      clearInterval(carouselInterval)
-      clearTimeout(carouselTimeout)
-    }
     window.removeEventListener('resize', resize)
   }
 }

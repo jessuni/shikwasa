@@ -34,7 +34,10 @@ const PlayerTemplate = /* template */`
             <span class="shk_artist"></span>
           </div>
           <div class="shk_title-wrap">
-            <span class="shk_title"></span>
+            <div class="shk_title-inner">
+              <div class="shk_title"></div>
+              <div class="shk_title" aria-hidden="true"></div>
+            </div>
           </div>
         </div>
         <div class="shk_controls">
