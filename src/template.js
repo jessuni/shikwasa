@@ -30,8 +30,7 @@ export default class Template {
     this.speedBtn = this.el.querySelector('.shk_btn_speed')
     this.moreBtn = this.el.querySelector('.shk_btn_more')
     this.muteBtn = this.el.querySelector('.shk_btn_volume')
-    this.extra = this.el.querySelector('.shk_extra')
-    this.extraControls = this.el.querySelector('.shk_extra_controls')
+    this.extraControls = this.el.querySelector('.shk_controls_extra')
     this.texts = this.el.querySelector('.shk_text')
     this.artist = this.el.querySelector('.shk_artist')
     this.artistWrap = this.el.querySelector('.shk_artist-wrap')
@@ -127,9 +126,6 @@ export default class Template {
   initEvents() {
     this.moreBtn.addEventListener('click', () => {
       this.el.classList.toggle('Extra')
-    })
-    this.extra.addEventListener('click', () => {
-      this.el.classList.remove('Extra')
     })
     applyFocusVisible(this.el)
     resize = () => {
