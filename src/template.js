@@ -21,7 +21,6 @@ export default class Template {
   initEl() {
     this.el = createElement({
       className: 'shk',
-      attrs: { tabIndex: 0 },
       innerHTML: PlayerTemplate,
     })
     this.playBtn = this.el.querySelector('.shk-btn_toggle')

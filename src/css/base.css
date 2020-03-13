@@ -168,9 +168,6 @@
   visibility: hidden;
   transition: opacity 1s cubic-bezier(0,0,0.2,1), visibility linear 1s;
 }
-.shk-btn:active {
-  background-color: var(--color-seondary);
-}
 .shk-btn:active::after {
   opacity: 1;
   visibility: visible;
