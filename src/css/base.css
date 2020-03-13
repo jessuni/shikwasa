@@ -280,6 +280,7 @@ svg.shk-btn_mute,
 }
 .shk-bar_loaded {
   background: #b9b9b94d;
+  transition: width ease-in .1s;
 }
 .shk-bar_played {
   background: var(--color-primary);

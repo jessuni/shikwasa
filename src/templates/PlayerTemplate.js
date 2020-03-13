@@ -15,7 +15,6 @@ const PlayerTemplate = /* template */`
           aria-valuemin="0"
           aria-valuemax="1">
           <span class="shk-bar-handle"
-            tabindex="0"
             role="range"
             aria-label="seek progress"
             aria-valuenow="0"

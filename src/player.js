@@ -81,34 +81,39 @@ class Player {
 
   initBarEvents() {
     let seekingTime = 0
-    const dragStartHandler = () => {
+
+    const getTargetTime = (e) => {
+      const offset = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0
+      let percentage = (offset - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
+      percentage = Math.min(percentage, 1)
+      percentage = Math.max(0, percentage)
+      return percentage * this.duration
+    }
+    const dragStartHandler = (e) => {
+      e.preventDefault()
       this.el.classList.add('Seeking')
       this.dragging = true
       document.addEventListener(dragMove, dragMoveHandler)
       document.addEventListener(dragEnd, dragEndHandler)
     }
     const dragMoveHandler = (e) => {
-      const offset = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0
-      let percentage = (offset - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
-      percentage = Math.min(percentage, 1)
-      percentage = Math.max(0, percentage)
-      seekingTime = percentage * this.duration
+      e.preventDefault()
+      document.addEventListener(dragEnd, dragEndHandler)
+      seekingTime = getTargetTime(e)
       this.setDisplayAndBarByTime(seekingTime)
     }
-    const dragEndHandler = () => {
+    const dragEndHandler = (e) => {
+      e.preventDefault()
       this.dragging = false
-      this.el.classList.remove('Seeking')
-      this.seek(seekingTime)
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
-    }
-    const instantSeek = (e) => {
-      if (this.dragging) return
-      dragMoveHandler(e)
+      this.el.classList.remove('Seeking')
+
+      seekingTime = getTargetTime(e)
+
       this.seek(seekingTime)
     }
-    this.template.barWrap.addEventListener(dragEnd, instantSeek)
-    this.template.handle.addEventListener(dragStart, dragStartHandler)
+    this.template.barWrap.addEventListener(dragStart, dragStartHandler)
   }
 
   initKeyEvents() {
@@ -205,7 +210,7 @@ class Player {
   }
 
   setDisplayAndBarByTime(time = 0) {
-    const percentage = time / this.duration || 0
+    const percentage = this.duration ? time / this.duration : 0
     this.template.currentTime.innerHTML = secondToTime(time)
     this.bar.set('audioPlayed', percentage)
   }
@@ -270,8 +275,7 @@ class Player {
   seek(time) {
     let _time = parseInt(time)
     if (isNaN(_time)) {
-      console.error('seeking time is NaN')
-      return
+      throw new Error('seeking time is NaN')
     }
     _time = Math.min(_time, this.duration)
     _time = Math.max(_time, 0)
