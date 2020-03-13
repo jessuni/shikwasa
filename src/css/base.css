@@ -3,32 +3,29 @@
   --font-sys: -apple-system,BlinkMacSystemFont,"avenir next", avenir, "Segoe UI", Roboto,Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue";
   --font-sans-serif: sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 
-  --color-theme: #fff;
-  --color-theme-opaque: #ffffff00;
+  --color-theme: #f8f9fa;
   --color-secondary: #767676;
-  --color-font: #333;
+  --color-text: #333;
+  --color-handle-shadow: #ffffff00;
   --color-handle-shadow-mobile: #b9b6b6;
-  --color-handle-shadow: var(--color-theme-opaque);
   --color-body-shadow: #b9b6b680;
 }
 .shk.Theme-dark {
   --color-theme: #555;
-  --color-theme-opaque: #33333300;
   --color-secondary: #b9b6b6;
-  --color-font: #fff;
-  --color-handle-shadow-mobile: #000;
-  --color-handle-shadow: var(--color-theme-opaque);
+  --color-text: #f8f9fa;
+  --color-handle-shadow: #ffffff00;
+  --color-handle-shadow-mobile: #141414;
   --color-body-shadow: #14141480;
 }
 @media (prefers-color-scheme: dark) {
   .shk.Theme-auto {
     --color-theme: #555;
-    --color-theme-opaque: #33333300;
     --color-secondary: #b9b6b6;
-    --color-font: #fff;
-    --color-handle-shadow-mobile: #000;
-    --color-handle-shadow: var(--color-theme-opaque);
-    --color-body-shadow: #141414;
+    --color-text: #fff;
+    --color-handle-shadow: #ffffff00;
+    --color-handle-shadow-mobile: #141414;
+    --color-body-shadow: #14141480;
   }
 }
 @keyframes rotate {
@@ -52,7 +49,7 @@
   cursor: auto;
   position: relative;
   border: none;
-  color: var(--color-font);
+  color: var(--color-text);
 }
 .js-focus-visible:focus:not(.focus-visible),
 .js-focus-visible :focus:not(.focus-visible) {
@@ -62,7 +59,6 @@
   height: 120px;
   box-sizing: border-box;
   border-radius: 2px;
-  border: 1px solid var(--color-shadow);
   box-shadow: 2px 2px 8px -2px var(--color-body-shadow);
   background-color: var(--color-theme);
   position: relative;
@@ -88,7 +84,9 @@
   flex-flow: row nowrap;
   align-items: stretch;
   user-select: none;
+  position: relative;
 }
+/* shrink text height to 28px */
 .shk-cover {
   width: 80px;
   height: 80px;
@@ -120,7 +118,6 @@
 }
 .shk-artist,
 .shk-title {
-  display: inline-block;
   white-space: nowrap;
 }
 .shk-artist {
@@ -131,7 +128,7 @@
 .shk-title {
   font-weight: 300;
   font-size: 1.33em;
-  color: var(--color-font);
+  color: var(--color-text);
 }
 .shk-title_wrap.Overflow .shk-title {
   animation: marquee 10s linear infinite;
@@ -169,7 +166,7 @@
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transition: width .3s cubic-bezier(0,0,0.2,1), height .3s cubic-bezier(0,0,0.2,1), transform .1s cubic-bezier(0,0,0.2,1),opacity .2s cubic-bezier(0,0,0.2,1)
+  transition: opacity 1s cubic-bezier(0,0,0.2,1), visibility linear 1s;
 }
 .shk-btn:active {
   background-color: var(--color-seondary);
@@ -177,7 +174,6 @@
 .shk-btn:active::after {
   opacity: 1;
   visibility: visible;
-  width: 100%;
 }
 .shk-btn svg {
   width: 24px;
@@ -241,9 +237,9 @@
 .shk-btn_speed {
   font-size: 0.86em;
   font-weight: 400;
-  width: 52px;
-  height: 52px;
-  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
+  padding: 0;
 }
 .shk-btn_more {
   position: relative;
@@ -264,6 +260,8 @@ svg.shk-btn_mute,
 }
 .shk-bar_wrap {
   cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
 .shk-bar {
   position: relative;
@@ -431,6 +429,10 @@ svg.shk-btn_mute,
     font-size: 1em;
     line-height: 1;
   }
+  .shk-controls {
+    position: relative;
+    top: -5px;
+  }
   .shk-bar_wrap {
     padding: 8px 0;
     margin: 0 60px;
@@ -456,6 +458,7 @@ svg.shk-btn_mute,
   .shk-time {
     margin: 0 5px;
     font-size: 0.7em;
+    font-weight: 300;
     line-height: 1;
     display: flex;
     justify-content: space-between;

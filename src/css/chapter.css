@@ -107,7 +107,7 @@
 .shk-icon_triangle svg {
   width: 16px;
   height: 18px;
-  fill: var(--color-font);
+  fill: var(--color-text);
 }
 .shk-chapter_duration {
   color: var(--color-secondary);
@@ -118,7 +118,7 @@
   text-align: left
 }
 .shk-chapter_title {
-  color: var(--color-font);
+  color: var(--color-text);
   flex-grow: 1;
   text-align: left;
 }
