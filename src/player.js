@@ -108,9 +108,7 @@ class Player {
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
       this.el.classList.remove('Seeking')
-
       seekingTime = getTargetTime(e)
-
       this.seek(seekingTime)
     }
     this.template.barWrap.addEventListener(dragStart, dragStartHandler)
