@@ -1,11 +1,11 @@
 import PlayerTemplate from './templates/PlayerTemplate'
 import IconTemplate from './templates/IconTemplate'
-import { secondToTime, createElement } from './utils'
+import { secondToTime, numToString,createElement } from './utils'
 import applyFocusVisible from './focus-visible'
 
 let resize, duration, cooldown = true
 
-export default class Template {
+export default class UI {
   constructor(options) {
     this.mounted = false
     if (!document.querySelector('.shk-icons')) {
@@ -48,7 +48,6 @@ export default class Template {
   }
 
   initOptions(options) {
-
     // dark mode
     this.el.style = `--color-primary: ${options.themeColor}; --color-handle-shadow: ${options.themeColor}cc`
     if (options.theme === 'auto') {
@@ -56,7 +55,6 @@ export default class Template {
     } else if (options.theme === 'dark') {
       this.el.classList.add('Theme-dark')
     }
-
     // download
     if (options.download && options.audio && options.audio.src) {
       this.downloadBtn = createElement({
@@ -65,6 +63,7 @@ export default class Template {
         attrs: {
           title: 'download',
           'aria-label': 'download',
+          href: 'options.audio.src',
         },
         innerHTML: /* html */`
           <svg aria-hidden="true">
@@ -73,9 +72,7 @@ export default class Template {
         `,
       })
       this.extraControls.append(this.downloadBtn)
-      this.downloadBtn.href = options.audio.src
     }
-
     // player position
     if (options.fixed.type !== 'static') {
       options.fixed.type === 'fixed' ? this.el.classList.add('Fixed') : this.el.classList.add('Auto')
@@ -83,19 +80,34 @@ export default class Template {
         this.el.classList.add('Top')
       }
     }
-
-    // play status ui
+    // play status display
     options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
-
+    // mute status display
     if (options.muted) {
       this.el.classList.add('Mute')
     }
+    //audio info display
     if (options.audio) {
-      this.update(options.audio)
+      this.setAudioInfo(options.audio)
     }
   }
 
-  update(audio) {
+
+  initEvents() {
+    this.moreBtn.addEventListener('click', () => {
+      this.el.classList.toggle('Extra')
+    })
+    applyFocusVisible(this.el)
+    resize = () => {
+      if (!cooldown) return
+      cooldown = false
+      setTimeout(() => cooldown = true, 100)
+      this.marquee.bind(this)()
+    }
+    window.addEventListener('resize', resize)
+  }
+
+  setAudioInfo(audio) {
     this.cover.style.backgroundImage = `url(${audio.cover})`
     this.title.innerHTML = audio.title
     this.titleHidden.innerHTML = audio.title
@@ -110,30 +122,65 @@ export default class Template {
     }
   }
 
+  setPlaying() {
+    this.el.classList.add('Play')
+    this.el.classList.remove('Pause')
+  }
+
+  setPaused() {
+    this.el.classList.add('Pause')
+    this.el.classList.remove('Play')
+    this.el.classList.remove('Loading')
+  }
+
+  setTime(type, time) {
+    this[type].innerHTML = secondToTime(time)
+  }
+
+  setBar(type, percentage) {
+    const typeName = 'audio' + type.charAt(0).toUpperCase() + type.substr(1)
+    percentage = Math.min(percentage, 1)
+    percentage = Math.max(percentage, 0)
+    this[typeName].style.width = percentage * 100 + '%'
+    const ariaNow = percentage.toFixed(2)
+    this[typeName].setAttribute('aria-value-now', ariaNow)
+    this.handle.setAttribute('aria-value-now', ariaNow)
+  }
+
+  setProgress(time = 0, percentage = 0, duration = 0) {
+    if (time && !percentage) {
+      percentage = duration ? time / duration : 0
+    } else {
+      time = percentage * duration
+    }
+    this.setTime('currentTime', time)
+    this.setBar('played', percentage)
+  }
+
+  setSpeed(speed) {
+    this.speedBtn.innerHTML = numToString(speed) + 'x'
+  }
+
+  getPercentByPos(e) {
+    const handlePos = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0
+    const initPos = this.barWrap.getBoundingClientRect().left
+    const barLength = this.barWrap.clientWidth
+    let percentage = (handlePos - initPos) / barLength
+    percentage = Math.min(percentage, 1)
+    percentage = Math.max(0, percentage)
+    return percentage
+  }
+
   marquee() {
     const overflow = this.title.offsetWidth - this.texts.offsetWidth
     if (overflow > 0) {
       this.titleWrap.classList.add('Overflow')
-      duration = duration || 10000 / (400 + overflow)
+      duration = duration || 8000 / (100 + overflow)
       this.title.style.animationDuration = `${duration}s`
       this.titleHidden.style.animationDuration = `${duration}s`
     } else {
       this.titleWrap.classList.remove('Overflow')
     }
-  }
-
-  initEvents() {
-    this.moreBtn.addEventListener('click', () => {
-      this.el.classList.toggle('Extra')
-    })
-    applyFocusVisible(this.el)
-    resize = () => {
-      if (!cooldown) return
-      cooldown = false
-      setTimeout(() => cooldown = true, 100)
-      this.marquee.bind(this)()
-    }
-    window.addEventListener('resize', resize)
   }
 
   mount(container, components) {

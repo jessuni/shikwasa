@@ -1,7 +1,6 @@
-import Template from './template'
-import Bar from './bar'
+import UI from './ui'
 import Events from './events'
-import { secondToTime, numToString, handleOptions, setMediaSession } from './utils'
+import { handleOptions, setMediaSession } from './utils'
 
 const playerArr = []
 const REGISTERED_COMPS = {}
@@ -15,20 +14,19 @@ class Player {
   constructor(options) {
     this.id = playerArr.length
     playerArr.push(this)
-    this.comps = {}
     this.inited = false
+    this.comps = {}
+    this.events = new Events()
     this.canplay = false
     this.dragging = false
+    this.currentSpeed = 1
     this.options = handleOptions(options)
     this.muted = this.options.muted
     this.initUI()
-    this.initKeyEvents()
-    this.currentSpeed = 1
-    this.events = new Events()
     this.initAudio()
     this._renderComponents()
     const componentEls = Object.keys(this.comps).map(name => this.comps[name].el)
-    this.template.mount(this.options.container, componentEls)
+    this.ui.mount(this.options.container, componentEls)
   }
 
   get duration() {
@@ -44,35 +42,35 @@ class Player {
   }
 
   initUI() {
-    this.template = new Template(this.options)
-    this.el = this.template.el
-    this.bar = new Bar(this.template)
-    this.initButtonEvents()
+    this.ui = new UI(this.options)
+    this.el = this.ui.el
+    this.initControlEvents()
     this.initBarEvents()
+    this.initKeyEvents()
   }
 
-  initButtonEvents() {
-    this.template.playBtn.addEventListener('click', () => {
+  initControlEvents() {
+    this.ui.playBtn.addEventListener('click', () => {
       this.toggle()
     })
-    this.template.muteBtn.addEventListener('click', () => {
+    this.ui.muteBtn.addEventListener('click', () => {
       this.muted = !this.muted
       this.el.classList.toggle('Mute')
       if (this.audio) {
         this.audio.muted = this.muted
       }
     })
-    this.template.fwdBtn.addEventListener('click', () => {
+    this.ui.fwdBtn.addEventListener('click', () => {
       this.seekForward()
     })
-    this.template.bwdBtn.addEventListener('click', () => {
+    this.ui.bwdBtn.addEventListener('click', () => {
       this.seekBackward()
     })
-    this.template.speedBtn.addEventListener('click', () => {
+    this.ui.speedBtn.addEventListener('click', () => {
       const index = this.options.speedOptions.indexOf(this.currentSpeed)
       const speedRange = this.options.speedOptions
       this.currentSpeed = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
-      this.template.speedBtn.innerHTML = numToString(this.currentSpeed) + 'x'
+      this.ui.setSpeed(this.currentSpeed)
       if (this.audio) {
         this.audio.playbackRate = this.currentSpeed
       }
@@ -80,15 +78,7 @@ class Player {
   }
 
   initBarEvents() {
-    let seekingTime = 0
-
-    const getTargetTime = (e) => {
-      const offset = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0
-      let percentage = (offset - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
-      percentage = Math.min(percentage, 1)
-      percentage = Math.max(0, percentage)
-      return percentage * this.duration
-    }
+    let targetTime = 0
     const dragStartHandler = (e) => {
       e.preventDefault()
       this.el.classList.add('Seeking')
@@ -98,20 +88,18 @@ class Player {
     }
     const dragMoveHandler = (e) => {
       e.preventDefault()
-      document.addEventListener(dragEnd, dragEndHandler)
-      seekingTime = getTargetTime(e)
-      this.setDisplayAndBarByTime(seekingTime)
+      this.ui.setProgress(null, this.ui.getPercentByPos(e), this.duration)
     }
     const dragEndHandler = (e) => {
       e.preventDefault()
-      this.dragging = false
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
+      targetTime = this.ui.getPercentByPos(e) * this.duration
+      this.seek(targetTime)
+      this.dragging = false
       this.el.classList.remove('Seeking')
-      seekingTime = getTargetTime(e)
-      this.seek(seekingTime)
     }
-    this.template.barWrap.addEventListener(dragStart, dragStartHandler)
+    this.ui.barWrap.addEventListener(dragStart, dragStartHandler)
   }
 
   initKeyEvents() {
@@ -130,7 +118,6 @@ class Player {
     if (this.options.audio.src) {
       this.audio = new Audio()
       this.audio.title = this.options.audio.title
-      this.initLoadingEvents()
       this.initAudioEvents()
       this.events.audioEvents.forEach(name => {
         this.audio.addEventListener(name, (e) => {
@@ -147,7 +134,7 @@ class Player {
   initAudioEvents() {
     this.on('play', () => {
       if (this.el.classList.contains('Pause')) {
-        this.setUIPlaying()
+        this.ui.setPlaying()
       }
       playerArr.forEach(player => {
         if (player.id !== this.id && player.audio && !player.audio.paused) {
@@ -157,32 +144,29 @@ class Player {
     })
     this.on('pause', () => {
       if (this.el.classList.contains('Play')) {
-        this.setUIPaused()
+        this.ui.setPaused()
       }
     })
     this.on('ended', () => {
-      this.setUIPaused()
+      this.ui.setPaused()
       this.seek(0)
     })
     this.on('durationchange', () => {
       if (this.duration !== 1) {
-        this.template.duration.innerHTML = secondToTime(this.duration)
+        this.ui.setTime('duration', this.duration)
       }
     })
     this.on('progress', () => {
       if (this.audio.buffered.length) {
         const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
-        this.bar.set('audioLoaded', percentage)
+        this.ui.setBar('loaded', percentage)
       }
     })
     this.on('timeupdate', () => {
       if (!this.dragging) {
-        this.setDisplayAndBarByTime(this.audio.currentTime)
+        this.ui.setProgress(this.audio.currentTime, null, this.duration)
       }
     })
-  }
-
-  initLoadingEvents() {
     this.on('canplaythrough', () => {
       if (this.el.classList.contains('Loading')) {
         this.el.classList.remove('Loading')
@@ -207,30 +191,13 @@ class Player {
     this.events.on(name, callback)
   }
 
-  setDisplayAndBarByTime(time = 0) {
-    const percentage = this.duration ? time / this.duration : 0
-    this.template.currentTime.innerHTML = secondToTime(time)
-    this.bar.set('audioPlayed', percentage)
-  }
-
-  setUIPlaying() {
-    this.el.classList.add('Play')
-    this.el.classList.remove('Pause')
-  }
-
-  setUIPaused() {
-    this.el.classList.add('Pause')
-    this.el.classList.remove('Play')
-    this.el.classList.remove('Loading')
-  }
-
   play(audio) {
     if (!this.inited) {
       this.audio.src = this.options.audio.src
       this.inited = true
     }
     if (audio && audio.src) {
-      this.template.update(audio)
+      this.ui.setAudioInfo(audio)
       this.updateAudio(audio.src)
     }
     if (!this.audio.paused) return
@@ -271,28 +238,28 @@ class Player {
   }
 
   seek(time) {
-    let _time = parseInt(time)
-    if (isNaN(_time)) {
+    time = parseInt(time)
+    if (isNaN(time)) {
       throw new Error('seeking time is NaN')
     }
-    _time = Math.min(_time, this.duration)
-    _time = Math.max(_time, 0)
-    this.setDisplayAndBarByTime(_time)
+    time = Math.min(time, this.duration)
+    time = Math.max(time, 0)
+    this.ui.setProgress(time, null, this.duration)
     if (!this.canplay) {
       initSeek = time
     } else if (this.audio) {
-      this.audio.currentTime = _time
+      this.audio.currentTime = time
     }
   }
 
   seekForward(time = 10) {
-    const seekingTime = Math.min(this.duration, this.audio.currentTime + time)
-    this.seek(seekingTime)
+    const targetTime = Math.min(this.duration, this.audio.currentTime + time)
+    this.seek(targetTime)
   }
 
   seekBackward(time = 10) {
-    const seekingTime = Math.max(0, this.audio.currentTime - time)
-    this.seek(seekingTime)
+    const targetTime = Math.max(0, this.audio.currentTime - time)
+    this.seek(targetTime)
   }
 
   updateAudio(src) {
@@ -314,7 +281,7 @@ class Player {
 
   destroy() {
     this.destroyAudio()
-    this.template.destroy()
+    this.ui.destroy()
     this.options.container.innerHTML = ''
   }
 

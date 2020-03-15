@@ -54,6 +54,9 @@ export function handleOptions(options) {
   return options
 }
 
+/**
+ * set MediaMetadata for Android devices
+ */
 export function setMediaSession(audio, fns = {}, self) {
   if ('mediaSession' in navigator) {
     /* global MediaMetadata */

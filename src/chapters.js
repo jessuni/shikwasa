@@ -17,13 +17,13 @@ class Chapter {
       throw new Error('You need to either import a library to decode audio chapter information, or pass in chapter info. See docs https://github.com/jessuni/shikwasa')
     }
     this.audio = player.audio
-    this.initUI(player.template)
+    this.initUI(player.ui)
     // add li
     this.initEvents(player)
 
   }
 
-  initUI(template) {
+  initUI(ui) {
     this.el = createElement({
       className: 'shk-chapter',
       innerHTML: chapterTemplate,
@@ -41,8 +41,8 @@ class Chapter {
         </svg>
       `,
     })
-    template.extraControls.append(this.triggerEl)
-    template.chapterBtn = this.triggerEl
+    ui.extraControls.append(this.triggerEl)
+    ui.chapterBtn = this.triggerEl
   }
 
   initEvents(player) {
