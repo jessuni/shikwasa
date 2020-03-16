@@ -230,10 +230,19 @@ Whether audio should be muted by default. Right now this will not have any impac
 
 ### download
 
-(Optional) Whether the current audio file is download-able. When set to `true`, a download button shows up on the player.
+(Optional) Whether the current audio source is download-able. When set to `true`, the player will provide an anchor with `downlaod` attribute and `href` set to `audio.src`. Cross-origin `href` will not prompt download due to anchor's nature, but you can offer an alternative `blob:`, `data:` url or a same-origin direct download link(DDL).
 
-- type: `Boolean`
+- type: `Boolean|String`
 - default: `false`
+- alternatives:
+
+```javascript
+download: true
+// or with a url
+download: 'data:audio/mp3;base64,...'
+```
+
+
 
 ## Events
 Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) native events.
