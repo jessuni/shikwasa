@@ -15,10 +15,12 @@ const PlayerTemplate = /* template */`
           aria-valuemin="0"
           aria-valuemax="1">
           <span class="shk-bar-handle"
-            role="range"
+            tabindex="0"
+            role="slider"
             aria-label="seek progress"
             aria-valuenow="0"
             aria-valuemin="0"
+            aria-orientation="horizontal"
             aria-valuemax="1"></span>
         </div>
       </div>

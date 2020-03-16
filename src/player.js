@@ -61,10 +61,10 @@ class Player {
       }
     })
     this.ui.fwdBtn.addEventListener('click', () => {
-      this.seekForward()
+      this.seekBySpan()
     })
     this.ui.bwdBtn.addEventListener('click', () => {
-      this.seekBackward()
+      this.seekBySpan({ forward: false })
     })
     this.ui.speedBtn.addEventListener('click', () => {
       const index = this.options.speedOptions.indexOf(this.currentSpeed)
@@ -99,7 +99,35 @@ class Player {
       this.dragging = false
       this.el.classList.remove('Seeking')
     }
+    const keydownHandler = (e) => {
+      // for early browser compatibility
+      const key = e.key.replace('Arrow', '')
+
+      const backwardKeys = ['Left', 'Down']
+      const forwardKeys = ['Right', 'Up']
+      const largeStepKeys = ['pageDown', 'pageUp']
+      const edgeKeys = ['Home', 'End']
+      const isBack = backwardKeys.indexOf(key) !== -1
+      const isFwd = forwardKeys.indexOf(key) !== -1
+      const isWayBack = key === largeStepKeys[0]
+      const isWayFwd = key === largeStepKeys[1]
+      const isStart = key === edgeKeys[0]
+      const isEnd = key === edgeKeys[1]
+      if (!isBack && !isFwd && largeStepKeys.indexOf(key) === -1 && edgeKeys.indexOf(key) === -1) {
+        return
+      }
+      if (isStart) {
+        this.seek(0)
+      }
+      if (isEnd) {
+        this.seek(this.duration)
+      }
+      const step = (isWayFwd || isWayBack ? 0.1 : 0.01) * (isFwd || isWayFwd ? 1 : -1)
+      const time = step * this.duration + this.currentTime
+      this.seek(time)
+    }
     this.ui.barWrap.addEventListener(dragStart, dragStartHandler)
+    this.ui.handle.addEventListener('keydown', keydownHandler)
   }
 
   initKeyEvents() {
@@ -207,8 +235,8 @@ class Player {
     const controls = {
       play: this.play,
       pause: this.pause,
-      seekforward: this.seekForward,
-      seekbackward: this.seekBackward,
+      seekforward: this.seekBySpan,
+      seekbackward: () => this.seekBySpan({ forward: false }),
     }
     if (promise instanceof Promise) {
       promise.then(() => {
@@ -251,14 +279,8 @@ class Player {
       this.audio.currentTime = time
     }
   }
-
-  seekForward(time = 10) {
-    const targetTime = Math.min(this.duration, this.audio.currentTime + time)
-    this.seek(targetTime)
-  }
-
-  seekBackward(time = 10) {
-    const targetTime = Math.max(0, this.audio.currentTime - time)
+  seekBySpan({ time = 10, forward = true } = {}) {
+    const targetTime = this.audio.currentTime + time * (forward ? 1 : -1)
     this.seek(targetTime)
   }
 

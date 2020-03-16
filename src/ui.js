@@ -58,12 +58,15 @@ export default class UI {
     // download
     if (options.download && options.audio && options.audio.src) {
       this.downloadBtn = createElement({
-        tag: 'button',
+        tag: 'a',
         className: ['shk-btn', 'shk-btn_download'],
         attrs: {
           title: 'download',
           'aria-label': 'download',
-          href: 'options.audio.src',
+          href: typeof options.download === 'string' ? options.download : options.audio.src,
+          download: '',
+          target: '_blank',
+          rel: 'noopener noreferrer',
         },
         innerHTML: /* html */`
           <svg aria-hidden="true">
@@ -143,8 +146,8 @@ export default class UI {
     percentage = Math.max(percentage, 0)
     this[typeName].style.width = percentage * 100 + '%'
     const ariaNow = percentage.toFixed(2)
-    this[typeName].setAttribute('aria-value-now', ariaNow)
-    this.handle.setAttribute('aria-value-now', ariaNow)
+    this[typeName].setAttribute('aria-valuenow', ariaNow)
+    this.handle.setAttribute('aria-valuenow', ariaNow)
   }
 
   setProgress(time = 0, percentage = 0, duration = 0) {
