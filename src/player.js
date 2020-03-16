@@ -31,10 +31,9 @@ class Player {
 
   get duration() {
     if (!this.audio || !this.audio.src) {
-      return this.options.audio.duration
-    } else {
-      return isNaN(this.audio.duration) ? this.options.audio.duration : this.audio.duration
+      return this.options.audio.duration || NaN
     }
+    return this.audio.duration
   }
 
   get currentTime() {
