@@ -245,6 +245,7 @@ Under v2.0:
 - [x] dark mode
 
 Others:
+- [ ] rewrittern with Typescript
 - [ ] podcast playlist
 
 ## What about the weird name of this project?
