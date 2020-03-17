@@ -259,7 +259,7 @@ Love it, name after it.
 
 [npm]: https://img.shields.io/npm/v/shikwasa.svg?style=flat-square
 [npm-url]: https://npmjs.com/package/shikwasa
-[size]:https://badge-size.herokuapp.com/jessuni/shikwasa/master/dist/shikwasa.min.js?compression=gzip&style=flat-square
+[size]:https://badge-size.herokuapp.com/jessuni/shikwasa/gh-pages/shikwasa.min.js?compression=gzip&style=flat-square
 [size-url]:https://github.com/jessuni/shikwasa/tree/master/dist
 [license]:https://img.shields.io/github/license/jessuni/shikwasa?style=flat-square
 [license-url]:https://github.com/jessuni/shikwasa/blob/master/LICENSE.md
