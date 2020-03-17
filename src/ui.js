@@ -45,6 +45,11 @@ export default class UI {
     this.audioLoaded = this.el.querySelector('.shk-bar_loaded')
     this.handle = this.el.querySelector('.shk-bar-handle')
     this.cover = this.el.querySelector('.shk-cover')
+    this.seekControls = [
+      this.fwdBtn,
+      this.bwdBtn,
+      this.handle,
+    ]
   }
 
   initOptions(options) {
@@ -55,6 +60,7 @@ export default class UI {
     } else if (options.theme === 'dark') {
       this.el.classList.add('Theme-dark')
     }
+
     // download
     if (options.download && options.audio && options.audio.src) {
       this.downloadBtn = createElement({
@@ -76,6 +82,7 @@ export default class UI {
       })
       this.extraControls.append(this.downloadBtn)
     }
+
     // player position
     if (options.fixed.type !== 'static') {
       options.fixed.type === 'fixed' ? this.el.classList.add('Fixed') : this.el.classList.add('Auto')
@@ -83,12 +90,20 @@ export default class UI {
         this.el.classList.add('Top')
       }
     }
-    // play status display
+
+    // player status display
     options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
+
+    // player control display
+    if (options.preload === 'none' && !options.audio.duration) {
+      this.seekControls.forEach(el => el.setAttribute('disabled', ''))
+    }
+
     // mute status display
     if (options.muted) {
       this.el.classList.add('Mute')
     }
+
     //audio info display
     if (options.audio) {
       this.setAudioInfo(options.audio)
@@ -100,7 +115,10 @@ export default class UI {
     this.moreBtn.addEventListener('click', () => {
       this.el.classList.toggle('Extra')
     })
+
+    // add keyboard focus style
     applyFocusVisible(this.el)
+
     resize = () => {
       if (!cooldown) return
       cooldown = false

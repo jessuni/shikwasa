@@ -4,7 +4,6 @@ import { handleOptions, setMediaSession } from './utils'
 
 const playerArr = []
 const REGISTERED_COMPS = {}
-let initSeek
 const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.userAgent) : false
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -14,12 +13,12 @@ class Player {
   constructor(options) {
     this.id = playerArr.length
     playerArr.push(this)
-    this.inited = false
+    this._inited = false
+    this._initSeek = 0
     this.comps = {}
     this.events = new Events()
-    this.canplay = false
-    this.dragging = false
-    this.currentSpeed = 1
+    this._canplay = false
+    this._dragging = false
     this.options = handleOptions(options)
     this.muted = this.options.muted
     this.initUI()
@@ -36,8 +35,34 @@ class Player {
     return this.audio.duration
   }
 
+  get seekable() {
+    return Boolean(this.duration)
+  }
+
+  set seekable(v) {
+    if (v !== true) return
+    this.ui.seekControls.forEach(el => {
+      el.removeAttribute('disabled')
+    })
+  }
+
   get currentTime() {
     return this.audio ? this.audio.currentTime : undefined
+  }
+
+  get playbackRate() {
+    return this.audio ? this.audio.playbackRate : undefined
+  }
+
+  set playbackRate(val) {
+    if (this.audio) {
+      this.audio.playbackRate = val
+      this.audio.defaultPlaybackRate = val
+      console.log('audio.defaultPlaybackRate', this.audio.defaultPlaybackRate)
+      console.log('audio.PlaybackRate', this.audio.playbackRate)
+      return val
+    }
+    return false
   }
 
   initUI() {
@@ -45,7 +70,6 @@ class Player {
     this.el = this.ui.el
     this.initControlEvents()
     this.initBarEvents()
-    this.initKeyEvents()
   }
 
   initControlEvents() {
@@ -66,22 +90,20 @@ class Player {
       this.seekBySpan({ forward: false })
     })
     this.ui.speedBtn.addEventListener('click', () => {
-      const index = this.options.speedOptions.indexOf(this.currentSpeed)
+      const index = this.options.speedOptions.indexOf(this.playbackRate)
       const speedRange = this.options.speedOptions
-      this.currentSpeed = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
-      this.ui.setSpeed(this.currentSpeed)
-      if (this.audio) {
-        this.audio.playbackRate = this.currentSpeed
-      }
+      this.playbackRate = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
+      this.ui.setSpeed(this.playbackRate)
     })
   }
 
   initBarEvents() {
     let targetTime = 0
     const dragStartHandler = (e) => {
+      if (!this.seekable) return
       e.preventDefault()
       this.el.classList.add('Seeking')
-      this.dragging = true
+      this._dragging = true
       document.addEventListener(dragMove, dragMoveHandler)
       document.addEventListener(dragEnd, dragEndHandler)
     }
@@ -95,10 +117,12 @@ class Player {
       document.removeEventListener(dragEnd, dragEndHandler)
       targetTime = this.ui.getPercentByPos(e) * this.duration
       this.seek(targetTime)
-      this.dragging = false
+      this._dragging = false
       this.el.classList.remove('Seeking')
     }
     const keydownHandler = (e) => {
+      if (!this.seekable) return
+
       // for early browser compatibility
       const key = e.key.replace('Arrow', '')
 
@@ -129,18 +153,6 @@ class Player {
     this.ui.handle.addEventListener('keydown', keydownHandler)
   }
 
-  initKeyEvents() {
-    const pressSpace = (e) => {
-      if (e.keyCode === 32) {
-        const activeEl = document.activeElement
-        if (!activeEl.classList.contains('shk-btn_toggle')) {
-          this.toggle()
-        }
-      }
-    }
-    this.el.addEventListener('keyup', pressSpace)
-  }
-
   initAudio() {
     if (this.options.audio.src) {
       this.audio = new Audio()
@@ -153,7 +165,7 @@ class Player {
       })
       if (this.options.preload !== 'none') {
         this.updateAudio(this.options.audio.src)
-        this.inited = true
+        this._inited = true
       }
     }
   }
@@ -179,7 +191,8 @@ class Player {
       this.seek(0)
     })
     this.on('durationchange', () => {
-      if (this.duration !== 1) {
+      if (this.duration && this.duration !== 1) {
+        this.seekable = true
         this.ui.setTime('duration', this.duration)
       }
     })
@@ -190,7 +203,7 @@ class Player {
       }
     })
     this.on('timeupdate', () => {
-      if (!this.dragging) {
+      if (!this._dragging) {
         this.ui.setProgress(this.audio.currentTime, null, this.duration)
       }
     })
@@ -205,10 +218,10 @@ class Player {
       }
     })
     this.on('canplay', () => {
-      if (!this.canplay) {
-        this.canplay = true
-        if (initSeek) {
-          this.seek(initSeek)
+      if (!this._canplay) {
+        this._canplay = true
+        if (this._initSeek) {
+          this.seek(this._initSeek)
         }
       }
     })
@@ -219,9 +232,9 @@ class Player {
   }
 
   play(audio) {
-    if (!this.inited) {
+    if (!this._inited) {
       this.audio.src = this.options.audio.src
-      this.inited = true
+      this._inited = true
     }
     if (audio && audio.src) {
       this.ui.setAudioInfo(audio)
@@ -257,14 +270,15 @@ class Player {
   }
 
   toggle() {
-    if (!this.inited) {
+    if (!this._inited) {
       this.audio.src = this.options.audio.src
-      this.inited = true
+      this._inited = true
     }
     this.audio.paused ? this.play() : this.pause()
   }
 
   seek(time) {
+    if (!this.seekable) return
     time = parseInt(time)
     if (isNaN(time)) {
       throw new Error('seeking time is NaN')
@@ -272,14 +286,16 @@ class Player {
     time = Math.min(time, this.duration)
     time = Math.max(time, 0)
     this.ui.setProgress(time, null, this.duration)
-    if (!this.canplay) {
-      initSeek = time
+    if (!this._canplay) {
+      this._initSeek = time
     } else if (this.audio) {
       this.audio.currentTime = time
     }
   }
+
   seekBySpan({ time = 10, forward = true } = {}) {
-    const targetTime = this.audio.currentTime + time * (forward ? 1 : -1)
+    const currentTime = this._canplay ? this.audio.currentTime : this._initSeek
+    const targetTime = currentTime + time * (forward ? 1 : -1)
     this.seek(targetTime)
   }
 
@@ -290,7 +306,6 @@ class Player {
     if (this.options.autoplay && this.muted) {
       this.audio.autoplay = this.options.autoPlay
     }
-    this.audio.playbackRate = this.currentSpeed
   }
 
   destroyAudio() {
