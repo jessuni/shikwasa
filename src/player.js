@@ -58,8 +58,6 @@ class Player {
     if (this.audio) {
       this.audio.playbackRate = val
       this.audio.defaultPlaybackRate = val
-      console.log('audio.defaultPlaybackRate', this.audio.defaultPlaybackRate)
-      console.log('audio.PlaybackRate', this.audio.playbackRate)
       return val
     }
     return false
