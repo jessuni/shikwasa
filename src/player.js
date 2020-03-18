@@ -143,7 +143,8 @@ class Player {
         this.seek(this.duration)
       }
       const step = (isWayFwd || isWayBack ? 0.1 : 0.01) * (isFwd || isWayFwd ? 1 : -1)
-      const time = step * this.duration + this.currentTime
+      const currentTime = this._canplay ? this.currentTime : this._initSeek
+      const time = step * this.duration + currentTime
       this.seek(time)
     }
     this.ui.barWrap.addEventListener(dragStart, dragStartHandler)
