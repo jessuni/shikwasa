@@ -106,7 +106,6 @@ class Player {
       document.addEventListener(dragEnd, dragEndHandler)
     }
     const dragMoveHandler = (e) => {
-      e.preventDefault()
       this.ui.setProgress(null, this.ui.getPercentByPos(e), this.duration)
     }
     const dragEndHandler = (e) => {
