@@ -1,12 +1,14 @@
 .shk {
   --color-primary: #00CCB8;
+  --color-opac: #b9b9b94d;
+  --color-handle-disabled: #b9b9b9;
+  --color-handle-shadow: #ffffff00;
   --font-sys: -apple-system,BlinkMacSystemFont,"avenir next", avenir, "Segoe UI", Roboto,Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue";
   --font-sans-serif: sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 
   --color-theme: #f8f9fa;
   --color-secondary: #767676;
   --color-text: #333;
-  --color-handle-shadow: #ffffff00;
   --color-handle-shadow-mobile: #b9b6b6;
   --color-body-shadow: #b9b6b680;
 }
@@ -14,7 +16,6 @@
   --color-theme: #555;
   --color-secondary: #b9b6b6;
   --color-text: #f8f9fa;
-  --color-handle-shadow: #ffffff00;
   --color-handle-shadow-mobile: #141414;
   --color-body-shadow: #14141480;
 }
@@ -23,7 +24,6 @@
     --color-theme: #555;
     --color-secondary: #b9b6b6;
     --color-text: #fff;
-    --color-handle-shadow: #ffffff00;
     --color-handle-shadow-mobile: #141414;
     --color-body-shadow: #14141480;
   }
@@ -59,7 +59,6 @@
   height: 120px;
   box-sizing: border-box;
   border-radius: 2px;
-  box-shadow: 2px 2px 8px -2px var(--color-body-shadow);
   background-color: var(--color-theme);
   position: relative;
   z-index: 10;
@@ -153,7 +152,7 @@
   font-size: 1em;
 }
 .shk-btn:disabled {
-  color: #b9b9b94d;
+  color: var(--color-opac);
   cursor: not-allowed;
 }
 .shk-btn::after {
@@ -165,7 +164,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #b9b9b94d;
+  background: var(--color-opac);
   z-index: -1;
   pointer-events: none;
   opacity: 0;
@@ -280,7 +279,7 @@ svg.shk-btn_mute,
   width: 0;
 }
 .shk-bar_loaded {
-  background: #b9b9b94d;
+  background: var(--color-opac);
   transition: width ease-in .1s;
 }
 .shk-bar_played {
@@ -299,8 +298,9 @@ svg.shk-btn_mute,
   border-radius: 20px;
 }
 .shk-bar-handle:disabled {
-  background-color: #b9b9b94d;
   cursor: not-allowed;
+  box-shadow: none;
+  background-color: var(--color-handle-disabled);
 }
 .shk-bar-handle:active {
   cursor: grabbing;
@@ -348,6 +348,7 @@ svg.shk-btn_mute,
   .shk-player {
     margin-top: 4px;
     padding: 20px 16px;
+    box-shadow: 2px 2px 8px -2px var(--color-body-shadow);
   }
   .shk-main {
     align-items: flex-end;
@@ -379,9 +380,6 @@ svg.shk-btn_mute,
     transform: scale(.001);
     transition: all .1s .05s ease-in, visibility .05s linear;
   }
-  .shk-bar-handle:disabled {
-    box-shadow: none;
-  }
   .shk-bar_wrap:hover .shk-bar-handle:not(:disabled) {
     visibility: visible;
     border-color: #fff;
@@ -402,6 +400,7 @@ svg.shk-btn_mute,
 @media (max-width: 640px) {
   .shk-player {
     padding: 5px 16px;
+    box-shadow: 0 -2px 6px -2px var(--color-body-shadow);
   }
   .shk.Auto {
     position: fixed;
@@ -432,7 +431,7 @@ svg.shk-btn_mute,
   }
   .shk-artist_wrap {
     font-size: 0.8em;
-    line-height: 1;
+    line-height: 1.1;
   }
   .shk-artist {
     display: inline-block;
@@ -449,13 +448,14 @@ svg.shk-btn_mute,
     padding: 8px 0;
     margin: 0 60px;
   }
-  .shk-bar_wrap .shk-bar-handle {
+  .shk-bar-handle {
     display: inline-block;
     top: -8px;
     box-shadow: 2px 2px 8px -2px var(--color-handle-shadow-mobile);
   }
   .shk-bar {
-    background: #b9b9b94d;
+    background: var(--color-opac);
+    border-radius: 2px;
   }
   .shk-display {
     top: -16px;
