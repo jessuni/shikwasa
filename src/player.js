@@ -1,6 +1,6 @@
 import UI from './ui'
 import Events from './events'
-import { handleOptions, setMediaSession } from './utils'
+import { handleOptions } from './utils'
 
 const playerArr = []
 const REGISTERED_COMPS = {}
@@ -13,12 +13,13 @@ class Player {
   constructor(options) {
     this.id = playerArr.length
     playerArr.push(this)
-    this._inited = false
-    this._initSeek = 0
     this.comps = {}
-    this.events = new Events()
+    this._inited = false
+    this._hasMediaSession = false
+    this._initSeek = 0
     this._canplay = false
     this._dragging = false
+    this.events = new Events()
     this.options = handleOptions(options)
     this.muted = this.options.muted
     this.initUI()
@@ -162,7 +163,7 @@ class Player {
         })
       })
       if (this.options.preload !== 'none') {
-        this.updateAudio(this.options.audio.src)
+        this.update(this.options.audio.src)
         this._inited = true
       }
     }
@@ -170,9 +171,7 @@ class Player {
 
   initAudioEvents() {
     this.on('play', () => {
-      if (this.el.classList.contains('Pause')) {
-        this.ui.setPlaying()
-      }
+      this.ui.setPlaying()
       playerArr.forEach(player => {
         if (player.id !== this.id && player.audio && !player.audio.paused) {
           player.pause()
@@ -180,9 +179,7 @@ class Player {
       })
     })
     this.on('pause', () => {
-      if (this.el.classList.contains('Play')) {
-        this.ui.setPaused()
-      }
+      this.ui.setPaused()
     })
     this.on('ended', () => {
       this.ui.setPaused()
@@ -204,16 +201,16 @@ class Player {
       if (!this._dragging) {
         this.ui.setProgress(this.audio.currentTime, null, this.duration)
       }
+      // sync ui when audio source change fires timeupdate
+      if (this.audio.paused) {
+        this.ui.setPaused()
+      }
     })
     this.on('canplaythrough', () => {
-      if (this.el.classList.contains('Loading')) {
-        this.el.classList.remove('Loading')
-      }
+      this.el.classList.remove('Loading')
     })
     this.on('waiting', () => {
-      if (!this.el.classList.contains('Loading')) {
-        this.el.classList.add('Loading')
-      }
+      this.el.classList.add('Loading')
     })
     this.on('canplay', () => {
       if (!this._canplay) {
@@ -225,32 +222,48 @@ class Player {
     })
   }
 
+  initMediaSession() {
+    if ('mediaSession' in navigator) {
+      this._hasMediaSession = true
+      this.setMediaMetadata(this.options.audio)
+      const controls = {
+        play: this.play,
+        pause: this.pause,
+        seekforward: this.seekBySpan,
+        seekbackward: () => this.seekBySpan({ forward: false }),
+      }
+      Object.keys(controls).forEach(key => {
+        navigator.mediaSession.setActionHandler(key, () => {
+          controls[key]()
+        })
+      })
+    }
+  }
+
+  setMediaMetadata(audio) {
+    /* global MediaMetadata */
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: audio.title,
+      artist: audio.artist,
+      artwork: [{ src: audio.cover }],
+    })
+  }
+
   on(name, callback) {
     this.events.on(name, callback)
   }
 
-  play(audio) {
+  play() {
     if (!this._inited) {
-      this.audio.src = this.options.audio.src
+      this.update(this.options.audio)
       this._inited = true
     }
-    if (audio && audio.src) {
-      this.ui.setAudioInfo(audio)
-      this.updateAudio(audio.src)
-    }
+
     if (!this.audio.paused) return
     const promise = this.audio.play()
-    const self = this
-    const targetAudio = audio || this.options.audio
-    const controls = {
-      play: this.play,
-      pause: this.pause,
-      seekforward: this.seekBySpan,
-      seekbackward: () => this.seekBySpan({ forward: false }),
-    }
     if (promise instanceof Promise) {
       promise.then(() => {
-        setMediaSession(targetAudio, controls, self)
+        this.initMediaSession()
       })
       promise.catch((e) => {
         if (e.name === 'NotAllowedError' || e.name === 'NotSupportedError') {
@@ -258,7 +271,7 @@ class Player {
         }
       })
     } else {
-      setMediaSession(targetAudio, controls, self)
+      this.initMediaSession()
     }
   }
 
@@ -268,10 +281,6 @@ class Player {
   }
 
   toggle() {
-    if (!this._inited) {
-      this.audio.src = this.options.audio.src
-      this._inited = true
-    }
     this.audio.paused ? this.play() : this.pause()
   }
 
@@ -279,7 +288,7 @@ class Player {
     if (!this.seekable) return
     time = parseInt(time)
     if (isNaN(time)) {
-      throw new Error('seeking time is NaN')
+      throw new Error('Shikwasa: seeking time is NaN')
     }
     time = Math.min(time, this.duration)
     time = Math.max(time, 0)
@@ -297,12 +306,14 @@ class Player {
     this.seek(targetTime)
   }
 
-  updateAudio(src) {
-    this.audio.src = src
-    this.audio.preload = this.options.preload
-    this.audio.muted = this.muted
-    if (this.options.autoplay && this.muted) {
-      this.audio.autoplay = this.options.autoPlay
+  update(audio) {
+    this.audio.src = audio.src
+    // prevent setting audio info twice on initiation
+    if (this._inited) {
+      this.ui.setAudioInfo(audio)
+    }
+    if (this._hasMediaSession) {
+      this.setMediaMetadata(audio)
     }
   }
 

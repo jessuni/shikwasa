@@ -44,7 +44,7 @@ export function handleOptions(options) {
     options.speedOptions.sort((a, b) => a - b)
   }
   if (!options.audio) {
-    console.error('audio is not specified')
+    throw new Error('Shikwasa: audio is not specified')
   } else {
     options.audio.title = options.audio.title || 'Unknown Title'
     options.audio.artist = options.audio.artist || 'Unknown Artist'
@@ -52,27 +52,6 @@ export function handleOptions(options) {
     options.audio.duration = options.audio.duration || 0
   }
   return options
-}
-
-/**
- * set MediaMetadata for Android devices
- */
-export function setMediaSession(audio, fns = {}, self) {
-  if ('mediaSession' in navigator) {
-    /* global MediaMetadata */
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: audio.title,
-      artist: audio.artist,
-      artwork: [
-        { src: audio.cover },
-      ],
-    })
-    if (Object.entries(fns).length && fns.constructor === Object) {
-      Object.keys(fns).forEach(key => {
-        navigator.mediaSession.setActionHandler(key, fns[key].bind(self))
-      })
-    }
-  }
 }
 
 export function createElement(options) {

@@ -172,7 +172,7 @@ export default class UI {
     if (time && !percentage) {
       percentage = duration ? time / duration : 0
     } else {
-      time = percentage * duration
+      time = percentage * (duration || 0)
     }
     this.setTime('currentTime', time)
     this.setBar('played', percentage)
