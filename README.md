@@ -103,22 +103,10 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
 
 ### Methods
 
-**.play(audio)**
+**.play()**
 
-If no parameter supplied, calling it will play the current audio. Passing an [`audio` object](#audio) in will replace the previous audio source, and play the new one immediately.
+Start playing the current audio. Updating audio via this method is deprecated, please use `update(audio)` instead.
 
-```javascript
-// play with the current audio source
-player.play()
-
-// pass an audio object to play with the new audio source immediately
-player.play({
-  title: 'Embrace the universe with a cup of shikwasa juice',
-  artist: 'Shikwasa',
-  cover: 'image.png',
-  src: 'sourceAudio.mp3'
-})
-```
 **.pause()**
 
 Pause the current audio.
@@ -130,6 +118,19 @@ Toggle audio play state between play and pause.
 **.seek(time)**
 
 `time` is a **number** that specifies target playback time. Calling this method with `time` will seek the audio to the new time.
+
+**.update(audio)**
+
+Passing an [`audio` object](#audio) in will replace the current audio source.
+
+```javascript
+player.update({
+  title: 'Embrace the universe with a cup of shikwasa juice',
+  artist: 'Shikwasa',
+  cover: 'image.png',
+  src: 'sourceAudio.mp3'
+})
+```
 
 **.destroy()**
 
@@ -143,7 +144,7 @@ Register an event listener. Supported events see: [Events](#events)
 
 **.currentTime**
 
-A read-only property that indicates the current playback time. Similar to the native [`htmlMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
+A read-only property that indicates the current playback time. Similar to the native [`HTMLMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
 
 ## Options
 
