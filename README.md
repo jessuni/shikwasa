@@ -144,7 +144,25 @@ Register an event listener. Supported events see: [Events](#events)
 
 **.currentTime**
 
-A read-only property that indicates the current playback time. Similar to the native [`HTMLMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
+- Read-only
+- type: `Number`
+- default: `0`
+
+The current playback time. Similar to the native [`HTMLMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
+
+**.muted**
+
+- type: `Boolean`
+- default: `options.muted`
+
+The current mute state of the player. Similar to the native [`HTMLMediaElement.muted`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted), except that`muted`'s value will not be affected when audio source is updated.
+
+**.playbackRate**
+
+- type: `Number`
+- default: `1`
+
+The current playbackRate of the player. Similar to the native [`HTMLMediaElement.playbackRate`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate), except that`playbackRate`'s value will not be affected when audio source is updated.
 
 ## Options
 
@@ -210,7 +228,7 @@ fixed: {
 
 ### muted
 
-Whether audio should be muted by default. Right now this will not have any impact on `audio` object's `defaultMuted` property.
+Whether audio should be muted by default. Similar to HTMLMediaElement's `defaultMuted`.
 
 - type: `Boolean`
 - default: `false`
@@ -219,13 +237,14 @@ Whether audio should be muted by default. Right now this will not have any impac
 
 (Optional) Choose from `auto`, `metadata` and `none`. For details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload).
 
+When set to `none`, Shikwasa's behavior will be slightly different from that of the native `<audio>` element in Webkit browsers: unlike the native one that will request audio source even when `preload = none`, Shikwasa will not trigger any request until the audio is played – to prevent uneccessary requests and ensure the same behavior across all browsers.
+
 - type: `String`
 - default: `metadata`
 
 ### speedOptions
 
-(Optional) The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers
-
+(Optional) The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers.
 - type: `Array`
 - default: `[0.5, 0.75, 1.25, 1.5]`
 
@@ -242,8 +261,6 @@ download: true
 // or with a url
 download: 'data:audio/mp3;base64,...'
 ```
-
-
 
 ## Events
 Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) native events.
