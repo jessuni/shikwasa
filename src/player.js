@@ -201,10 +201,6 @@ class Player {
       if (!this._dragging) {
         this.ui.setProgress(this.audio.currentTime, null, this.duration)
       }
-      // sync ui when audio source change fires timeupdate
-      if (this.audio.paused) {
-        this.ui.setPaused()
-      }
     })
     this.on('canplaythrough', () => {
       this.el.classList.remove('Loading')
@@ -219,6 +215,9 @@ class Player {
           this.seek(this._initSeek)
         }
       }
+    })
+    this.on('abort', () => {
+      this.ui.setPaused()
     })
   }
 
