@@ -66,7 +66,7 @@ const PlayerTemplate = /* template */`
                 <use xlink:href="#shk-icon_forward" />
               </svg>
             </button>
-            <button class="shk-btn shk-btn_more">
+            <button class="shk-btn shk-btn_more" aria-label="more controls" title="more controls">
               <svg aria-hidden="true">
                 <use xlink:href="#shk-icon_more" />
               </svg>
