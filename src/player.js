@@ -21,7 +21,6 @@ class Player {
     this._dragging = false
     this.events = new Events()
     this.options = handleOptions(options)
-    this.muted = this.options.muted
     this.initUI()
     this.initAudio()
     this._renderComponents()
@@ -55,11 +54,23 @@ class Player {
     return this.audio ? this.audio.playbackRate : undefined
   }
 
-  set playbackRate(val) {
+  set playbackRate(v) {
     if (this.audio) {
-      this.audio.playbackRate = val
-      this.audio.defaultPlaybackRate = val
-      return val
+      this.audio.playbackRate = v
+      this.audio.defaultPlaybackRate = v
+      return v
+    }
+    return false
+  }
+
+  get muted() {
+    return this.audio ? this.audio.muted : undefined
+  }
+
+  set muted(v) {
+    if (this.audio) {
+      this.audio.muted = v
+      this.audio.defaultMuted = v
     }
     return false
   }
@@ -78,9 +89,6 @@ class Player {
     this.ui.muteBtn.addEventListener('click', () => {
       this.muted = !this.muted
       this.el.classList.toggle('Mute')
-      if (this.audio) {
-        this.audio.muted = this.muted
-      }
     })
     this.ui.fwdBtn.addEventListener('click', () => {
       this.seekBySpan()
@@ -162,6 +170,7 @@ class Player {
           this.events.trigger(name, e)
         })
       })
+      this.muted = this.options.muted
       if (this.options.preload !== 'none') {
         this.update(this.options.audio.src)
         this._inited = true
