@@ -2,3 +2,6 @@ node_modules
 dist
 .cache
 gh.js
+pages
+!pages/index.html
+!pages/index.js

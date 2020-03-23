@@ -11,6 +11,7 @@ const COMMON_CONFIG = ({ ruleOption } = {}) => {
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-env'],
+          plugins: ['@babel/plugin-transform-async-to-generator'],
         },
       },
     },
