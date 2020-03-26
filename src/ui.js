@@ -204,14 +204,9 @@ export default class UI {
     }
   }
 
-  mount(container, components) {
+  mount(container) {
     container.innerHTML = ''
     container.append(this.el)
-    if (components && components.length) {
-      components.forEach(comp => {
-        this.el.append(comp)
-      })
-    }
     if (this.icons) {
       container.append(this.icons)
     }

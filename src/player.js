@@ -14,6 +14,7 @@ class Player {
     this.id = playerArr.length
     playerArr.push(this)
     this.comps = {}
+    this.afterCanplayHooks = []
     this._inited = false
     this._hasMediaSession = false
     this._initSeek = 0
@@ -22,10 +23,10 @@ class Player {
     this.events = new Events()
     this.options = handleOptions(options)
     this.initUI()
-    this.initAudio()
+    this.initHooks()
     this._renderComponents()
-    const componentEls = Object.keys(this.comps).map(name => this.comps[name].el)
-    this.ui.mount(this.options.container, componentEls)
+    this.initAudio()
+    this.ui.mount(this.options.container)
   }
 
   get duration() {
@@ -104,6 +105,17 @@ class Player {
     })
   }
 
+  initHooks() {
+    this.on('inited', () => {
+      this._inited = true
+      if (this.afterCanplayHooks.length) {
+        this.afterCanplayHooks.forEach(function(instance) {
+          instance.afterCanplay()
+        })
+      }
+    })
+  }
+
   initBarEvents() {
     let targetTime = 0
     const dragStartHandler = (e) => {
@@ -172,8 +184,7 @@ class Player {
       })
       this.muted = this.options.muted
       if (this.options.preload !== 'none') {
-        this.update(this.options.audio.src)
-        this._inited = true
+        this.update(this.options.audio)
       }
     }
   }
@@ -264,7 +275,6 @@ class Player {
   play() {
     if (!this._inited) {
       this.update(this.options.audio)
-      this._inited = true
     }
 
     if (!this.audio.paused) return
@@ -296,7 +306,7 @@ class Player {
     if (!this.seekable) return
     time = parseInt(time)
     if (isNaN(time)) {
-      throw new Error('Shikwasa: seeking time is NaN')
+      console.error('Shikwasa: seeking time is NaN')
     }
     time = Math.min(time, this.duration)
     time = Math.max(time, 0)
@@ -316,9 +326,16 @@ class Player {
 
   update(audio) {
     this.audio.src = audio.src
+    // TODO: bug: condition used to be:
+    // if (!this._inited)
+    // however this will not trigger ui.setAudioInfo when user manually updates
+    // audio.
+    // condition should be fixed!
+    if (this.options.preload === 'none')
+    this.ui.setAudioInfo(audio)
     // prevent setting audio info twice on initiation
-    if (this._inited) {
-      this.ui.setAudioInfo(audio)
+    if (!this._inited) {
+      this.events.trigger('inited')
     }
     if (this._hasMediaSession) {
       this.setMediaMetadata(audio)
@@ -341,9 +358,12 @@ class Player {
   _renderComponents() {
     const keys = Object.keys(REGISTERED_COMPS)
     if (!keys.length) return
-    for (let i = 0; i < keys.length; i++) {
-      this.comps[keys[i]] = new REGISTERED_COMPS[keys[i]].comp(this, REGISTERED_COMPS[keys[i]].options)
-    }
+    keys.forEach(k => {
+      this.comps[k] = new REGISTERED_COMPS[k].comp(this, REGISTERED_COMPS[k].options)
+      if (this.comps[k].afterCanplay && typeof this.comps[k].afterCanplay === 'function') {
+        this.afterCanplayHooks.push(this.comps[k])
+      }
+    })
   }
 }
 
