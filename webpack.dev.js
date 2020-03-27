@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const COMMON_CONFIG = require('./webpack.common')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const HtmlLinkTypePlugin = require('html-webpack-link-type-plugin').HtmlWebpackLinkTypePlugin
 
 const allFiles = fs.readdirSync('pages')
 const pages = allFiles.filter(name => {
@@ -23,9 +22,6 @@ const plugins = pages.map(filename => {
   })
 })
 
-plugins.push(new HtmlLinkTypePlugin())
-
-
 const ruleOption = [{
   test: /\.css$/,
   use: [
@@ -43,6 +39,9 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     hot: true,
+    host: '192.168.1.133',
+    port: '8080',
+    disableHostCheck: true,
   },
   devtool: 'cheap-module-eval-source-map',
   plugins,
