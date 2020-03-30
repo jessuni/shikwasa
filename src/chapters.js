@@ -63,7 +63,6 @@ class Chapter {
   onTimechange() {
     if (this.current === null) {
       this.setCurrent(this.list[0])
-      return
     }
     if (this.beyondRange(this.player.currentTime, this.current)) {
       const index = this.list.indexOf(this.current)
