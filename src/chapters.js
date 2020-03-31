@@ -103,7 +103,6 @@ class Chapter {
 
   parseChapters(info) {
     if (info && info.tags && info.tags.CHAP.length) {
-      console.log(info.tags)
       return info.tags.CHAP
         .filter(ch => ch.id === 'CHAP')
         .map(ch => {
@@ -235,10 +234,8 @@ class ChapterUI {
     if (outOfView) {
       // if scoll-behavior is supported, use native css behavior
       if ('scrollBehavior' in document.documentElement.style) {
-        console.log('css')
         el.scrollIntoView()
       } else {
-        console.log('js')
         animateScroll(performance.now())
       }
     }
