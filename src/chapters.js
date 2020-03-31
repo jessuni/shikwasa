@@ -1,8 +1,6 @@
 import chapterTemplate from './templates/chapterTemplate'
 import { createElement, secondToTime } from './utils'
 
-let _oldCurrentTime = 0
-
 class Chapter {
   constructor(ctx, options) {
     this.player = ctx
@@ -61,24 +59,21 @@ class Chapter {
   }
 
   onTimechange() {
-    if (this.current === null) {
-      this.setCurrent(this.list[0])
-    }
-    if (this.beyondRange(this.player.currentTime, this.current)) {
+    const direction = this.searchDirection(this.player.currentTime, this.current)
+    if (direction) {
+      let searchPool
       const index = this.list.indexOf(this.current)
       if (index === -1) {
-        console.error('Shikwasa: could not find the current chapter.')
+        searchPool = this.list
       } else {
-        const searchPool = this.player.currentTime > _oldCurrentTime ?
-            this.list.slice(index) :
-            this.list.slice(0, index + 1)
-        const currentChapter = searchPool.find(ch => {
-          return !this.beyondRange(this.player.currentTime, ch)
-        })
-        this.setCurrent(currentChapter)
-
-        _oldCurrentTime = this.player.currentTime
+        searchPool = direction === 1 ?
+          this.list.slice(index) :
+          this.list.slice(0, index + 1)
       }
+      const currentChapter = searchPool.find(ch => {
+        return !this.searchDirection(this.player.currentTime, ch)
+      })
+      this.setCurrent(currentChapter)
     }
   }
 
@@ -91,12 +86,14 @@ class Chapter {
     })
   }
 
-  beyondRange(time, chapter) {
+  searchDirection(time, chapter) {
+    if (!chapter ||
+      typeof chapter !== 'object' ||
+      chapter.endTime <= time) {
+      return 1
+    }
     if (chapter.startTime > time) {
       return -1
-    }
-    if (chapter.endTime <= time) {
-      return 1
     }
     return 0
   }
@@ -189,7 +186,7 @@ class ChapterUI {
   renderChapterItem(chapter) {
     const startTime = secondToTime(chapter.startTime)
     const innerHTML = /* html */`
-      <button class="shk-btn shk-btn_chapter">
+      <button class="shk-btn shk-btn_chapter" title="seek chapter: ${chapter.title}" aria-label="seek chapter: ${chapter.title}">
         <span class="shk-icon_chapter" aria-hidden="true">
           <span class="shk-icon_playing"></span>
           <span class="shk-icon_triangle">
@@ -232,7 +229,7 @@ class ChapterUI {
     const startTime = performance.now()
     const duration = 0.2
     if (outOfView) {
-      // if scoll-behavior is supported, use native css behavior
+      // if supported use native css scroll behavior, otherwise simulate it
       if ('scrollBehavior' in document.documentElement.style) {
         el.scrollIntoView()
       } else {
