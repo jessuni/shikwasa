@@ -163,6 +163,7 @@ class ChapterUI {
     player.ui.extraControls.append(this.chapterBtn)
     this.closeBtn = this.el.querySelector('.shk-btn_close')
     this.chapterList = this.el.querySelector('.shk-chapter_list')
+    this.overflowLayer = this.el.querySelector('.shk-chapter_main')
   }
 
   initEvents(player) {
@@ -174,7 +175,7 @@ class ChapterUI {
     })
     player.on('chapterchange', (data) => {
       const id = data && data.newVal ? data.newVal.id : null
-        this.setChapterActive(id)
+      this.setChapterActive(id)
     })
   }
 
@@ -215,11 +216,43 @@ class ChapterUI {
       .forEach(chEl => {
         if (chEl.getAttribute('data-id') === id) {
           chEl.classList.add('Active')
+          this.scrollIntoView(chEl)
         } else {
           chEl.classList.remove('Active')
         }
       })
   }
+
+  scrollIntoView(el) {
+    const layerMargin = window.getComputedStyle(this.overflowLayer).marginTop
+    const listMargin = window.getComputedStyle(this.chapterList).marginTop
+    const offsetTop = parseInt(layerMargin) + parseInt(listMargin)
+    const outOfView = (this.overflowLayer.scrollTop + offsetTop - el.offsetTop > 0) || (el.offsetTop - this.overflowLayer.scrollTop - this.overflowLayer.offsetHeight > 0)
+    const startPos = this.overflowLayer.scrollTop
+    const distance = el.offsetTop - startPos - offsetTop
+    const startTime = performance.now()
+    const duration = 0.2
+    if (outOfView) {
+      // if scoll-behavior is supported, use native css behavior
+      if ('scrollBehavior' in document.documentElement.style) {
+        console.log('css')
+        el.scrollIntoView()
+      } else {
+        console.log('js')
+        animateScroll(performance.now())
+      }
+    }
+    function animateScroll(timestamp) {
+      const elapsed = (timestamp - startTime) / 1000
+      const t = elapsed / duration
+      // easing in a linear fashion
+      parent.scrollTop = startPos + distance * t
+      if (t < 1) {
+        window.requestAnimationFrame(ts => animateScroll(ts))
+      }
+    }
+  }
 }
 
 export default Chapter
+

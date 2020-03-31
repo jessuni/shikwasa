@@ -40,12 +40,14 @@
   height: 16px;
 }
 .shk-chapter_main {
+  overflow-x: hidden;
   overflow-y: scroll;
   height: calc(100% - 60px);
   margin: 40px 0 20px;
   box-sizing: border-box;
   padding: 0 40px;
   mask-image: linear-gradient(to bottom,transparent,#202124 5%,#202124 95%,transparent);
+  scroll-behavior: smooth;
 }
 .shk-chapter_list {
   padding: 0;
