@@ -233,20 +233,36 @@ class ChapterUI {
       if ('scrollBehavior' in document.documentElement.style) {
         el.scrollIntoView()
       } else {
-        animateScroll(performance.now())
-      }
-    }
-    function animateScroll(timestamp) {
-      const elapsed = (timestamp - startTime) / 1000
-      const t = elapsed / duration
-      // easing in a linear fashion
-      parent.scrollTop = startPos + distance * t
-      if (t < 1) {
-        window.requestAnimationFrame(ts => animateScroll(ts))
+        animateScroll(
+          startTime,
+          startTime,
+          duration,
+          startPos,
+          distance,
+          this.overflowLayer)
       }
     }
   }
 }
 
 export default Chapter
+
+function animateScroll(
+  timestamp,
+  startTime,
+  duration,
+  startPos,
+  distance,
+  scrollEl) {
+  const elapsed = (timestamp - startTime) / 1000
+  const t = elapsed / duration
+  // easing in a linear fashion
+  console.log(startPos + distance * t)
+  scrollEl.scrollTop = startPos + distance * t
+  if (t < 1) {
+    window.requestAnimationFrame(ts => {
+      animateScroll(ts, startTime, duration, startPos, distance, scrollEl)
+    })
+  }
+}
 
