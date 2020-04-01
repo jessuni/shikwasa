@@ -21,6 +21,17 @@ export function numToString(num) {
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
 
+export function marquee(textWrap, textEl) {
+  const overflow = textEl.offsetWidth - textWrap.offsetWidth
+  if (overflow > 0) {
+    textWrap.classList.add('Overflow')
+    const duration = textEl.offsetWidth / 60
+    textWrap.style.animationDuration = `${duration}s`
+  } else {
+    textWrap.classList.remove('Overflow')
+  }
+}
+
 export function handleOptions(options) {
   Object.keys(config).forEach(k => {
     options[k] = (options[k] || typeof options[k] === 'boolean') ?

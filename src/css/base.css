@@ -104,17 +104,6 @@
 .shk-text {
   overflow: hidden;
 }
-.shk-title_wrap.Overflow {
-  mask-image: linear-gradient(to right,transparent,#202124 5%,#202124 95%,transparent);
-}
-.shk-title_inner {
-  display: inline-flex;
-  overflow: visible;
-}
-.shk-title_wrap.Overflow .shk-title_inner {
-  padding: 0 3%;
-  box-sizing: border-box;
-}
 .shk-artist,
 .shk-title {
   white-space: nowrap;
@@ -124,20 +113,34 @@
   font-weight: 500;
   color: var(--color-secondary);
 }
+.shk-title_wrap.Overflow {
+  mask-image: linear-gradient(to right,transparent,#202124 5%,#202124 95%,transparent);
+}
+.shk-title_inner {
+  display: flex;
+  overflow: visible;
+}
+.shk-title_wrap.Overflow .shk-title_inner {
+  padding: 0 3%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  animation-duration: inherit;
+}
+.shk-title_wrap.Overflow .shk-title_inner::after {
+  display: block;
+  content: attr(data-title);
+}
+.shk-title_wrap.Overflow .shk-title_inner::after,
 .shk-title {
   font-weight: 300;
   font-size: 1.33em;
   color: var(--color-text);
 }
+.shk-title_wrap.Overflow .shk-title_inner::after,
 .shk-title_wrap.Overflow .shk-title {
-  animation: marquee 10s linear infinite;
+  animation: marquee linear infinite;
+  animation-duration: inherit;
   padding-right: 60px;
-}
-.shk-title_wrap.Overflow .shk-title[aria-hidden] {
-  display: block;
-}
-.shk-title[aria-hidden] {
-  display: none;
 }
 .shk-btn {
   appearance: none;
@@ -437,6 +440,7 @@ svg.shk-btn_mute,
   .shk-artist {
     display: inline-block;
   }
+  .shk-title_wrap.Overflow .shk-title_inner::after,
   .shk-title {
     font-size: 1em;
     line-height: 1;

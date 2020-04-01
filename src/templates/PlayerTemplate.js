@@ -36,7 +36,6 @@ const PlayerTemplate = /* template */`
           <div class="shk-title_wrap">
             <div class="shk-title_inner">
               <div class="shk-title"></div>
-              <div class="shk-title" aria-hidden="true"></div>
             </div>
           </div>
         </div>

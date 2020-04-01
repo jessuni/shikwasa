@@ -1,9 +1,9 @@
 import PlayerTemplate from './templates/PlayerTemplate'
 import IconTemplate from './templates/IconTemplate'
-import { secondToTime, numToString,createElement } from './utils'
+import { secondToTime, numToString, marquee, createElement } from './utils'
 import applyFocusVisible from './focus-visible'
 
-let resize, duration, cooldown = true
+let resize, cooldown = true
 
 export default class UI {
   constructor(options) {
@@ -35,8 +35,7 @@ export default class UI {
     this.artistWrap = this.el.querySelector('.shk-artist_wrap')
     this.titleWrap = this.el.querySelector('.shk-title_wrap')
     this.titleInner = this.el.querySelector('.shk-title_inner')
-    this.title = this.el.querySelector('.shk-title:not([aria-hidden])')
-    this.titleHidden = this.el.querySelector('.shk-title[aria-hidden]')
+    this.title = this.el.querySelector('.shk-title')
     this.currentTime = this.el.querySelector('.shk-time_now')
     this.duration = this.el.querySelector('.shk-time_duration')
     this.bar = this.el.querySelector('.shk-bar')
@@ -123,7 +122,7 @@ export default class UI {
       if (!cooldown) return
       cooldown = false
       setTimeout(() => cooldown = true, 100)
-      this.marquee.bind(this)()
+      marquee.call(this, this.titleWrap, this.title)
     }
     window.addEventListener('resize', resize)
   }
@@ -131,10 +130,7 @@ export default class UI {
   setAudioInfo(audio) {
     this.cover.style.backgroundImage = `url(${audio.cover})`
     this.title.innerHTML = audio.title
-    this.titleHidden.innerHTML = audio.title
-    if (this.mounted) {
-      this.marquee()
-    }
+    this.titleInner.setAttribute('data-title', audio.title)
     this.artist.innerHTML = audio.artist
     this.currentTime.innerHTML = '00:00'
     this.duration.innerHTML = audio.duration ? secondToTime(audio.duration) : '00:00'
@@ -192,18 +188,6 @@ export default class UI {
     return percentage
   }
 
-  marquee() {
-    const overflow = this.title.offsetWidth - this.texts.offsetWidth
-    if (overflow > 0) {
-      this.titleWrap.classList.add('Overflow')
-      duration = duration || 8000 / (100 + overflow)
-      this.title.style.animationDuration = `${duration}s`
-      this.titleHidden.style.animationDuration = `${duration}s`
-    } else {
-      this.titleWrap.classList.remove('Overflow')
-    }
-  }
-
   mount(container) {
     container.innerHTML = ''
     container.append(this.el)
@@ -212,7 +196,7 @@ export default class UI {
     }
     this.mounted = true
     this.initEvents()
-    this.marquee()
+    marquee(this.titleWrap, this.title)
   }
 
   destroy() {
