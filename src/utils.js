@@ -21,11 +21,11 @@ export function numToString(num) {
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
 
-export function marquee(textWrap, textEl) {
+export function marquee(textWrap, textEl, speed = 60) {
   const overflow = textEl.offsetWidth - textWrap.offsetWidth
   if (overflow > 0) {
     textWrap.classList.add('Overflow')
-    const duration = textEl.offsetWidth / 60
+    const duration = textEl.offsetWidth / speed
     textWrap.style.animationDuration = `${duration}s`
   } else {
     textWrap.classList.remove('Overflow')

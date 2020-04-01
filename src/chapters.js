@@ -1,5 +1,7 @@
 import chapterTemplate from './templates/chapterTemplate'
-import { createElement, secondToTime } from './utils'
+import { createElement, secondToTime, marquee } from './utils'
+
+let resize
 
 class Chapter {
   constructor(ctx, options) {
@@ -9,7 +11,7 @@ class Chapter {
     this.current = null
   }
 
-  async afterCanplay() {
+  async inited() {
     this.audio = this.player.audio
     if (!this.options.jsmediatags) {
       console.error('Shikwasa: could not find audio reader.')
@@ -128,6 +130,10 @@ class Chapter {
       })
     })
   }
+
+  destroy() {
+    this.ui.destroy()
+  }
 }
 
 class ChapterUI {
@@ -136,6 +142,7 @@ class ChapterUI {
     this.initEvents(player)
     this.renderChapterList(player.chapters)
     player.ui.el.append(this.el)
+    this.activeChapterEl = null
   }
 
   initEl(player) {
@@ -173,6 +180,14 @@ class ChapterUI {
       const id = data && data.newVal ? data.newVal.id : null
       this.setChapterActive(id)
     })
+
+    resize = () => {
+      if (!this.activeChapterEl) return
+      const textWrap = this.activeChapterEl.querySelector('.shk-chapter_title_wrap')
+      const text = this.activeChapterEl.querySelector('.shk-chapter_title')
+      marquee.call(this, textWrap, text)
+    }
+    window.addEventListener('resize', resize)
   }
 
   renderChapterList(chapters) {
@@ -187,16 +202,20 @@ class ChapterUI {
     const startTime = secondToTime(chapter.startTime)
     const innerHTML = /* html */`
       <button class="shk-btn shk-btn_chapter" title="seek chapter: ${chapter.title}" aria-label="seek chapter: ${chapter.title}">
-        <span class="shk-icon_chapter" aria-hidden="true">
+        <div class="shk-icon_chapter" aria-hidden="true">
           <span class="shk-icon_playing"></span>
           <span class="shk-icon_triangle">
             <svg>
               <use xlink:href="#shk-icon_triangle" />
             </svg>
           </span>
-        </span>
-        <span class="shk-chapter_duration">${startTime}</span>
-        <span class="shk-chapter_title">${chapter.title}</span>
+        </div>
+        <div class="shk-chapter_duration">${startTime}</div>
+        <div class="shk-chapter_title_wrap">
+          <div class="shk-chapter_title_inner" data-chapter="${chapter.title}">
+            <div class="shk-chapter_title">${chapter.title}</div>
+          </div>
+        </div>
       </button>
     `
     return createElement({
@@ -213,6 +232,10 @@ class ChapterUI {
         if (chEl.getAttribute('data-id') === id) {
           chEl.classList.add('Active')
           this.scrollIntoView(chEl)
+          this.activeChapterEl = chEl
+          const titleEl = chEl.querySelector('.shk-chapter_title')
+          const titleWrap = chEl.querySelector('.shk-chapter_title_wrap')
+          marquee(titleWrap, titleEl)
         } else {
           chEl.classList.remove('Active')
         }
@@ -239,9 +262,14 @@ class ChapterUI {
           duration,
           startPos,
           distance,
-          this.overflowLayer)
+          this.overflowLayer
+        )
       }
     }
+  }
+
+  destroy() {
+    window.removeEventListener('resize', resize)
   }
 }
 

@@ -107,6 +107,7 @@
 .shk-artist,
 .shk-title {
   white-space: nowrap;
+  margin: auto;
 }
 .shk-artist {
   text-overflow: clip;
@@ -444,10 +445,6 @@ svg.shk-btn_mute,
   .shk-title {
     font-size: 1em;
     line-height: 1;
-  }
-  .shk-controls {
-    position: relative;
-    top: -5px;
   }
   .shk-bar_wrap {
     padding: 8px 0;
