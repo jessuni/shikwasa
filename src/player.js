@@ -14,7 +14,7 @@ class Player {
     this.id = playerArr.length
     playerArr.push(this)
     this.comps = {}
-    this.afterCanplayHooks = []
+    this.initedHooks = []
     this._inited = false
     this._hasMediaSession = false
     this._initSeek = 0
@@ -108,10 +108,8 @@ class Player {
   initHooks() {
     this.on('inited', () => {
       this._inited = true
-      if (this.afterCanplayHooks.length) {
-        this.afterCanplayHooks.forEach(function(instance) {
-          instance.afterCanplay()
-        })
+      if (this.initedHooks.length) {
+        this.initedHooks.forEach(fn => fn())
       }
     })
   }
@@ -352,6 +350,13 @@ class Player {
   destroy() {
     this.destroyAudio()
     this.ui.destroy()
+    Object.keys(this.comps).forEach(k => {
+      if (this.comps[k].destroy &&
+        typeof this.comps[k].destroy === 'function') {
+        this.comps[k].destroy()
+      }
+    })
+    this.comps = null
     this.options.container.innerHTML = ''
   }
 
@@ -360,8 +365,8 @@ class Player {
     if (!keys.length) return
     keys.forEach(k => {
       this.comps[k] = new REGISTERED_COMPS[k].comp(this, REGISTERED_COMPS[k].options)
-      if (this.comps[k].afterCanplay && typeof this.comps[k].afterCanplay === 'function') {
-        this.afterCanplayHooks.push(this.comps[k])
+      if (this.comps[k].inited && typeof this.comps[k].inited === 'function') {
+        this.initedHooks.push(this.comps[k].inited.bind(this.comps[k]))
       }
     })
   }
