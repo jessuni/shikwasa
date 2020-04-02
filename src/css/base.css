@@ -118,7 +118,7 @@
   mask-image: linear-gradient(to right,transparent,#202124 5%,#202124 95%,transparent);
 }
 .shk-title_inner {
-  display: flex;
+  display: inline-flex;
   overflow: visible;
 }
 .shk-title_wrap.Overflow .shk-title_inner {
@@ -128,7 +128,7 @@
   animation-duration: inherit;
 }
 .shk-title_wrap.Overflow .shk-title_inner::after {
-  display: block;
+  display: inline-block;
   content: attr(data-title);
 }
 .shk-title_wrap.Overflow .shk-title_inner::after,

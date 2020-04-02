@@ -35,7 +35,7 @@ const PlayerTemplate = /* template */`
           </div>
           <div class="shk-title_wrap">
             <div class="shk-title_inner">
-              <div class="shk-title"></div>
+              <span class="shk-title"></span>
             </div>
           </div>
         </div>
