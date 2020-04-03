@@ -134,8 +134,11 @@ class Player {
       targetTime = this.ui.getPercentByPos(e) * this.duration
       this.seek(targetTime)
       this._dragging = false
-      this.el.classList.remove('Seeking')
+      // disable barPlayed transition on drag
+      setTimeout(() => this.el.classList.remove('Seeking'), 50)
     }
+
+    // seeking with keyboard
     const keydownHandler = (e) => {
       if (!this.seekable) return
 

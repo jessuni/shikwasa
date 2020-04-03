@@ -283,13 +283,16 @@ svg.shk-btn_mute,
   left: 0;
   bottom: 0;
   width: 0;
+  transition: width ease-in .1s;
 }
 .shk-bar_loaded {
   background: var(--color-opac);
-  transition: width ease-in .1s;
 }
 .shk-bar_played {
   background: var(--color-primary);
+}
+.shk.Seeking .shk-bar_played {
+  transition: none;
 }
 .shk-bar-handle {
   background: var(--color-primary);
