@@ -324,14 +324,10 @@ class Player {
 
   update(audio) {
     this.audio.src = audio.src
-    // TODO: bug: condition used to be:
-    // if (!this._inited)
-    // however this will not trigger ui.setAudioInfo when user manually updates
-    // audio.
-    // condition should be fixed!
-    if (this.options.preload === 'none')
-    this.ui.setAudioInfo(audio)
-    // prevent setting audio info twice on initiation
+    if (this.inited) {
+      // invoke only when audio is updated after the initiation
+      this.ui.setAudioInfo(audio)
+    }
     if (!this._inited) {
       this.events.trigger('inited')
     }
