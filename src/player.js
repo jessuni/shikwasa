@@ -13,24 +13,40 @@ class Player {
   constructor(options) {
     this.id = playerArr.length
     playerArr.push(this)
+    // TODO
     this.comps = {}
     this.initedHooks = []
+
     this._inited = false
     this._hasMediaSession = false
     this._initSeek = 0
     this._canplay = false
     this._dragging = false
     this.events = new Events()
-    this.options = handleOptions(options)
+    this.created(options)
+  }
+
+  async created(options) {
+    this.options = await handleOptions(options)
+    console.log(this.options.audio)
     this.initUI()
     this.initHooks()
-    this._renderComponents()
+
+    // TODO
+    // this._renderComponents()
+
     this.initAudio()
+    if (this.options.parser) {
+      this.events.trigger('inited')
+    }
     this.ui.mount(this.options.container)
   }
 
   get duration() {
     if (!this.audio || !this.audio.src) {
+      // TODO: options.audio.duration is NaN if user did not provide it
+      // but there is an interval between new Shikwasa() and handleOptions()
+      // what to do here? should we guarantee that it is always normal?
       return this.options.audio.duration || NaN
     }
     return this.audio.duration
@@ -359,16 +375,16 @@ class Player {
     this.options.container.innerHTML = ''
   }
 
-  _renderComponents() {
-    const keys = Object.keys(REGISTERED_COMPS)
-    if (!keys.length) return
-    keys.forEach(k => {
-      this.comps[k] = new REGISTERED_COMPS[k].comp(this, REGISTERED_COMPS[k].options)
-      if (this.comps[k].inited && typeof this.comps[k].inited === 'function') {
-        this.initedHooks.push(this.comps[k].inited.bind(this.comps[k]))
-      }
-    })
-  }
+  // _renderComponents() {
+  //   const keys = Object.keys(REGISTERED_COMPS)
+  //   if (!keys.length) return
+  //   keys.forEach(k => {
+  //     this.comps[k] = new REGISTERED_COMPS[k].comp(this, REGISTERED_COMPS[k].options)
+  //     if (this.comps[k].inited && typeof this.comps[k].inited === 'function') {
+  //       this.initedHooks.push(this.comps[k].inited.bind(this.comps[k]))
+  //     }
+  //   })
+  // }
 }
 
 Player.use = function (name, comp, options) {

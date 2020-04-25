@@ -1,9 +1,9 @@
-import PlayerTemplate from './templates/PlayerTemplate'
-import IconTemplate from './templates/IconTemplate'
+import PlayerComp from './templates/Player'
+import IconComp from './templates/Icon'
 import { secondToTime, numToString, marquee, createElement } from './utils'
 import applyFocusVisible from './focus-visible'
 
-let resize, cooldown = true
+let resize, coverUrl = null, cooldown = true
 
 export default class UI {
   constructor(options) {
@@ -11,17 +11,17 @@ export default class UI {
     if (!document.querySelector('.shk-icons')) {
       this.icons = createElement({
         className: 'shk-icons',
-        innerHTML: IconTemplate,
+        innerHTML: IconComp,
       })
     }
-    this.initEl()
+    this.initEl(options.audio.chapters.length)
     this.initOptions(options)
   }
 
-  initEl() {
+  async initEl(hasChapter = false) {
     this.el = createElement({
       className: 'shk',
-      innerHTML: PlayerTemplate,
+      innerHTML: PlayerComp,
     })
     this.playBtn = this.el.querySelector('.shk-btn_toggle')
     this.fwdBtn = this.el.querySelector('.shk-btn_forward')
@@ -49,6 +49,32 @@ export default class UI {
       this.bwdBtn,
       this.handle,
     ]
+
+    if (hasChapter) {
+      const resp = await import('./templates/Chapter')
+      if (!resp.default) return
+      this.chapters = createElement({
+        className: 'shk-chapter',
+        innerHTML: resp.default,
+      })
+      this.chapterBtn = createElement({
+        tag: 'button',
+        className: ['shk-btn', 'shk-btn_chapter'],
+        attrs: {
+          title: 'view chapters',
+          'aria-label': 'view chapters',
+        },
+        innerHTML: /* html */`
+        <svg aria-hidden="true">
+          <use xlink:href="#shk-icon_chapter" />
+        </svg>
+      `,
+      })
+      player.ui.extraControls.append(this.chapterBtn)
+      this.closeBtn = this.el.querySelector('.shk-btn_close')
+      this.chapterList = this.el.querySelector('.shk-chapter_list')
+      this.overflowLayer = this.el.querySelector('.shk-chapter_main')
+    }
   }
 
   initOptions(options) {
@@ -127,7 +153,14 @@ export default class UI {
     window.addEventListener('resize', resize)
   }
 
-  setAudioInfo(audio) {
+  setAudioInfo(audio = {}) {
+    if (coverUrl) {
+      URL.revokeObjectURL(coverUrl)
+      coverUrl = null
+    }
+    if (/blob/.test(audio.cover)) {
+      coverUrl = audio.cover
+    }
     this.cover.style.backgroundImage = `url(${audio.cover})`
     this.title.innerHTML = audio.title
     this.titleInner.setAttribute('data-title', audio.title)
@@ -201,5 +234,8 @@ export default class UI {
 
   destroy() {
     window.removeEventListener('resize', resize)
+    if (coverUrl) {
+      URL.revokeObjectURL(coverUrl)
+    }
   }
 }

@@ -1,4 +1,4 @@
-import chapterTemplate from './templates/chapterTemplate'
+import chapterTemplate from './templates/Chapter'
 import { createElement, secondToTime, marquee } from './utils'
 
 let resize

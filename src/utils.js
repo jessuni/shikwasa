@@ -1,7 +1,5 @@
 import config from './config'
 
-const fixedOptions = ['auto', 'static', 'fixed']
-
 export function secondToTime(time) {
   time = Math.round(time)
   let hour = Math.floor(time / 3600)
@@ -32,13 +30,13 @@ export function marquee(textWrap, textEl, speed = 60) {
   }
 }
 
-export function handleOptions(options) {
+export async function handleOptions(options) {
   Object.keys(config).forEach(k => {
     options[k] = (options[k] || typeof options[k] === 'boolean') ?
       options[k] : config[k]
   })
   options.container = document.querySelector(options.container)
-  const fixedType = fixedOptions.find(item => item === options.fixed.type)
+  const fixedType = config.fixedOptions.find(item => item === options.fixed.type)
   if (!fixedType) {
     options.fixed.type = config.fixed.type
   }
@@ -54,15 +52,61 @@ export function handleOptions(options) {
   if (options.speedOptions.length > 1) {
     options.speedOptions.sort((a, b) => a - b)
   }
-  if (!options.audio) {
-    throw new Error('Shikwasa: audio is not specified')
+
+  if (options.audio && options.audio.src) {
+    let audioInfo = {}
+    if (options.parser && (!options.audio.title || !options.audio.artist || !options.audio.cover)) {
+      const { tags } = await parseAudio(options.audio.src, options.parser)
+      audioInfo = handleParsedTags(tags)
+    }
+    options.audio.title = options.audio.title || audioInfo.title || config.audioTitle
+    options.audio.artist = options.audio.artist || audioInfo.artist || config.audioArtist
+    options.audio.cover = options.audio.cover || audioInfo.cover || config.audioCover
+    options.audio.duration = options.audio.duration || audioInfo.duration || config.audioDuration
+    options.audio.chapters = options.audio.chapters || audioInfo.chapters || config.audioChapters
   } else {
-    options.audio.title = options.audio.title || 'Unknown Title'
-    options.audio.artist = options.audio.artist || 'Unknown Artist'
-    options.audio.cover = options.audio.cover || null
-    options.audio.duration = options.audio.duration || 0
+    throw new Error('Shikwasa: audio is not specified')
   }
   return options
+}
+
+export function parseAudio(src, parser) {
+  return new Promise((resolve, reject) => {
+    parser.read(src, {
+      onSuccess: resolve,
+      onError: reject,
+    })
+  })
+}
+
+export function handleParsedTags(tags) {
+  let cover, chapters, duration
+  const { title, artist } = tags
+  if (tags.picture && tags.picture.data && tags.picture.format) {
+    const byteArray = new Uint8Array(tags.picture.data)
+    const blob = new Blob([byteArray], { type: tags.picture.format })
+    cover = URL.createObjectURL(blob)
+  }
+  if (tags.TLEN && tags.TLEN.data) {
+    duration = +tags.TLEN.data / 1000
+  }
+  if (tags.CHAP && tags.CHAP.length) {
+    chapters = tags.CHAP
+      .filter(ch => ch.id === 'CHAP')
+      .map(ch => {
+        if (ch.data && ch.data.subFrames && ch.data.subFrames.TIT2) {
+          return {
+            id: ch.data.id,
+            startTime: ch.data.startTime / 1000,
+            endTime: ch.data.endTime / 1000,
+            title: ch.data.subFrames.TIT2.data,
+          }
+        }
+        return false
+      })
+      .sort((a, b) => a.id - b.id)
+  }
+  return { title, artist, cover, duration, chapters }
 }
 
 export function createElement(options) {
