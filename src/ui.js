@@ -14,13 +14,16 @@ export default class UI {
         innerHTML: IconComp,
       })
     }
-    this.initEl(options.audio.chapters.length)
+    this.initEl()
     this.initOptions(options)
   }
 
-  async initEl(hasChapter = false) {
+  async initEl() {
     this.el = createElement({
-      className: 'shk',
+      className: ['shk', 'shikwasa'],
+      attrs: {
+        'data-name': 'shikwasa',
+      },
       innerHTML: PlayerComp,
     })
     this.playBtn = this.el.querySelector('.shk-btn_toggle')
@@ -49,32 +52,6 @@ export default class UI {
       this.bwdBtn,
       this.handle,
     ]
-
-    if (hasChapter) {
-      const resp = await import('./templates/Chapter')
-      if (!resp.default) return
-      this.chapters = createElement({
-        className: 'shk-chapter',
-        innerHTML: resp.default,
-      })
-      this.chapterBtn = createElement({
-        tag: 'button',
-        className: ['shk-btn', 'shk-btn_chapter'],
-        attrs: {
-          title: 'view chapters',
-          'aria-label': 'view chapters',
-        },
-        innerHTML: /* html */`
-        <svg aria-hidden="true">
-          <use xlink:href="#shk-icon_chapter" />
-        </svg>
-      `,
-      })
-      player.ui.extraControls.append(this.chapterBtn)
-      this.closeBtn = this.el.querySelector('.shk-btn_close')
-      this.chapterList = this.el.querySelector('.shk-chapter_list')
-      this.overflowLayer = this.el.querySelector('.shk-chapter_main')
-    }
   }
 
   initOptions(options) {
@@ -128,11 +105,6 @@ export default class UI {
     if (options.muted) {
       this.el.classList.add('Mute')
     }
-
-    //audio info display
-    if (options.audio) {
-      this.setAudioInfo(options.audio)
-    }
   }
 
 
@@ -161,7 +133,11 @@ export default class UI {
     if (/blob/.test(audio.cover)) {
       coverUrl = audio.cover
     }
-    this.cover.style.backgroundImage = `url(${audio.cover})`
+    if (audio.cover) {
+      this.cover.style.backgroundImage = `url(${audio.cover})`
+    } else {
+      this.cover.style.backgroundImage = 'none'
+    }
     this.title.innerHTML = audio.title
     this.titleInner.setAttribute('data-title', audio.title)
     this.artist.innerHTML = audio.artist

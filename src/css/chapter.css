@@ -7,7 +7,12 @@
     box-shadow: 0 -5px;
   }
 }
-
+.shk .shk-controls_extra .shk-btn.shk-btn_chapter {
+  display: none;
+}
+.shk.has-chapter .shk-controls_extra .shk-btn.shk-btn_chapter {
+  display: inline-block;
+}
 .shk-chapter {
   position: absolute;
   height: 0;
@@ -59,7 +64,7 @@
 .shk-chapter_item {
   margin: 5px 0;
 }
-.shk-chapter .shk-btn_chapter {
+.shk-chapter .shk-chapter_btn {
   width: 100%;
   display: flex;
   flex-flow: row nowrap;
@@ -69,14 +74,14 @@
   color: var(--color-text);
   overflow: hidden;
 }
-.shk-chapter .shk-btn_chapter:after {
+.shk-chapter .shk-chapter_btn:after {
   border-radius: 2px;
 }
-.shk-btn_chapter div {
+.shk-chapter_btn div {
   color: currentColor;
   fill: currentColor;
 }
-.shk-chapter_item.Active .shk-btn_chapter div {
+.shk-chapter_item.Active .shk-chapter_btn div {
   color: var(--color-primary);
   font-weight: 600;
 }

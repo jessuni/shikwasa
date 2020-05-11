@@ -47,27 +47,35 @@ export async function handleOptions(options) {
     options.speedOptions.push(1)
   }
   options.speedOptions = options.speedOptions
-  .map(sp => parseFloat(sp))
-  .filter(sp => !isNaN(sp))
+    .map(sp => parseFloat(sp))
+    .filter(sp => !isNaN(sp))
   if (options.speedOptions.length > 1) {
     options.speedOptions.sort((a, b) => a - b)
   }
-
   if (options.audio && options.audio.src) {
-    let audioInfo = {}
-    if (options.parser && (!options.audio.title || !options.audio.artist || !options.audio.cover)) {
-      const { tags } = await parseAudio(options.audio.src, options.parser)
-      audioInfo = handleParsedTags(tags)
-    }
-    options.audio.title = options.audio.title || audioInfo.title || config.audioTitle
-    options.audio.artist = options.audio.artist || audioInfo.artist || config.audioArtist
-    options.audio.cover = options.audio.cover || audioInfo.cover || config.audioCover
-    options.audio.duration = options.audio.duration || audioInfo.duration || config.audioDuration
-    options.audio.chapters = options.audio.chapters || audioInfo.chapters || config.audioChapters
+    options.audio = await handleAudio(options.audio, options.parser)
   } else {
-    throw new Error('Shikwasa: audio is not specified')
+    throw new Error('Shikwasa: audio source is not specified')
   }
   return options
+}
+
+export async function handleAudio(audio = {}, parser = null) {
+  let audioInfo = {}
+  if (parser && (!audio.title || !audio.artist || !audio.cover)) {
+    try {
+      const { tags } = await parseAudio(audio.src, parser)
+      audioInfo = handleParsedTags(tags)
+      console.log('audioInfo', audioInfo)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  Object.keys(config.audioOptions).forEach(k => {
+    audioInfo[k] = audio[k] || audioInfo[k] || config.audioOptions[k]
+  })
+  audioInfo.src = audio.src
+  return audioInfo
 }
 
 export function parseAudio(src, parser) {

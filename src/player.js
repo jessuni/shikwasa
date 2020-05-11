@@ -1,9 +1,8 @@
 import UI from './ui'
 import Events from './events'
-import { handleOptions } from './utils'
+import { handleOptions, handleAudio } from './utils'
 
 const playerArr = []
-const REGISTERED_COMPS = {}
 const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.userAgent) : false
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -13,33 +12,35 @@ class Player {
   constructor(options) {
     this.id = playerArr.length
     playerArr.push(this)
-    // TODO
     this.comps = {}
-    this.initedHooks = []
 
     this._inited = false
     this._hasMediaSession = false
     this._initSeek = 0
     this._canplay = false
     this._dragging = false
+    this._chapterPatched = false
     this.events = new Events()
     this.created(options)
   }
 
   async created(options) {
     this.options = await handleOptions(options)
-    console.log(this.options.audio)
-    this.initUI()
-    this.initHooks()
-
-    // TODO
-    // this._renderComponents()
-
+    this.on('audioupdate', (audio) => {
+      if (audio.chapters.length && !this._chapterPatched) {
+        import('./chapters').then(module => {
+          if (module.default) {
+            this.comps.chapter = new module.default(this, audio)
+            this._chapterPatched = true
+            console.log('task: patch chapter')
+          }
+        })
+      }
+    })
+    this.initUI(options)
     this.initAudio()
-    if (this.options.parser) {
-      this.events.trigger('inited')
-    }
     this.ui.mount(this.options.container)
+    this._inited = true
   }
 
   get duration() {
@@ -93,6 +94,7 @@ class Player {
   }
 
   initUI() {
+    console.log('task: init ui')
     this.ui = new UI(this.options)
     this.el = this.ui.el
     this.initControlEvents()
@@ -118,15 +120,6 @@ class Player {
       const speedRange = this.options.speedOptions
       this.playbackRate = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
       this.ui.setSpeed(this.playbackRate)
-    })
-  }
-
-  initHooks() {
-    this.on('inited', () => {
-      this._inited = true
-      if (this.initedHooks.length) {
-        this.initedHooks.forEach(fn => fn())
-      }
     })
   }
 
@@ -190,19 +183,18 @@ class Player {
   }
 
   initAudio() {
+    console.log('task: init audio')
     if (this.options.audio.src) {
       this.audio = new Audio()
-      this.audio.title = this.options.audio.title
       this.initAudioEvents()
       this.events.audioEvents.forEach(name => {
         this.audio.addEventListener(name, (e) => {
           this.events.trigger(name, e)
         })
       })
+      this.audio.preload = this.options.preload
       this.muted = this.options.muted
-      if (this.options.preload !== 'none') {
-        this.update(this.options.audio)
-      }
+      this.update(this.options.audio)
     }
   }
 
@@ -290,10 +282,6 @@ class Player {
   }
 
   play() {
-    if (!this._inited) {
-      this.update(this.options.audio)
-    }
-
     if (!this.audio.paused) return
     const promise = this.audio.play()
     if (promise instanceof Promise) {
@@ -323,7 +311,7 @@ class Player {
     if (!this.seekable) return
     time = parseInt(time)
     if (isNaN(time)) {
-      console.error('Shikwasa: seeking time is NaN')
+      console.error('TypeError: seeking time is NaN')
     }
     time = Math.min(time, this.duration)
     time = Math.max(time, 0)
@@ -341,15 +329,20 @@ class Player {
     this.seek(targetTime)
   }
 
-  update(audio) {
+  async update(audio) {
+    if (this._inited) {
+      audio = await handleAudio(audio, this.options.parser)
+    }
     this.audio.src = audio.src
-    if (this.inited) {
-      // invoke only when audio is updated after the initiation
-      this.ui.setAudioInfo(audio)
-    }
-    if (!this._inited) {
-      this.events.trigger('inited')
-    }
+    this.audio.title = audio.title
+    // TODO
+    // this.audio.chapters = audio.chapters
+    audio.chapters.length ?
+      this.el.classList.add('has-chapter') :
+      this.el.classList.remove('has-chapter')
+    console.log('task: update audio')
+    this.events.trigger('audioupdate', audio)
+    this.ui.setAudioInfo(audio)
     if (this._hasMediaSession) {
       this.setMediaMetadata(audio)
     }
@@ -374,21 +367,6 @@ class Player {
     this.comps = null
     this.options.container.innerHTML = ''
   }
-
-  // _renderComponents() {
-  //   const keys = Object.keys(REGISTERED_COMPS)
-  //   if (!keys.length) return
-  //   keys.forEach(k => {
-  //     this.comps[k] = new REGISTERED_COMPS[k].comp(this, REGISTERED_COMPS[k].options)
-  //     if (this.comps[k].inited && typeof this.comps[k].inited === 'function') {
-  //       this.initedHooks.push(this.comps[k].inited.bind(this.comps[k]))
-  //     }
-  //   })
-  // }
-}
-
-Player.use = function (name, comp, options) {
-  REGISTERED_COMPS[name] = { comp, options }
 }
 
 export default Player
