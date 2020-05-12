@@ -8,30 +8,27 @@ class Chapter {
     this.ctx = ctx
     this.list = []
     this.current = null
+    this._currentSrc = this.ctx.audio.src
     this.patchPlayer()
     this.ui = new ChapterUI(this.ctx)
     this.updateList(audio)
-    this.ctx.on('timeupdate', this.onTimechange.bind(this))
+    this.ctx.on('timeupdate', this.onTimeupdate.bind(this))
     this.ctx.on('chapterchange', (data) => {
       const id = data && data.newVal ? data.newVal.id : null
       this.ui.setChapterActive(id)
     })
     this.ctx.on('audioupdate', (audio) => {
+      this.clearList()
       if (audio.chapters.length) {
         this.updateList(audio)
-      } else {
-        this.clearList()
       }
     })
-    this.onClickChapter()
   }
 
   updateList(audio) {
-    if (this.list.length) {
-      this.clearList()
-    }
     this.list = audio.chapters
     this.ui.renderChapterList(this.ctx.chapters)
+    this.clickChapterHandler()
   }
 
   patchPlayer() {
@@ -67,7 +64,12 @@ class Chapter {
     })
   }
 
-  onTimechange() {
+  onTimeupdate(e) {
+    // ignore handling when audio src changes
+    if (this._currentSrc !== e.currentTarget.src) {
+      this._currentSrc = e.currentTarget.src
+      return
+    }
     const direction = this.searchDirection(this.ctx.currentTime, this.current)
     if (direction) {
       let searchPool
@@ -98,7 +100,7 @@ class Chapter {
     return 0
   }
 
-  onClickChapter() {
+  clickChapterHandler() {
     Array.from(this.ui.chapterList.children).forEach(chEl => {
       chEl.addEventListener('click', () => {
         let id = chEl.getAttribute('data-id').match(/\d+$/)
@@ -110,10 +112,9 @@ class Chapter {
   }
 
   clearList() {
-    console.log('task: clear chapters')
-    this.list = []
     this.ui.chapterList.innerHTML = ''
-    this.ctx.el.classList.remove('show-chapter')
+    this.list = []
+    this.current = null
   }
 
   destroy() {
@@ -125,7 +126,6 @@ class ChapterUI {
   constructor(player) {
     this.initEl(player)
     this.initEvents(player)
-    // 记住这里 init 的时候可能不是初始，而是某一首音频 update 以后
     this.renderChapterList(player.chapters)
     player.ui.el.append(this.el)
     this.activeChapterEl = null

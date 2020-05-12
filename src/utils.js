@@ -66,7 +66,6 @@ export async function handleAudio(audio = {}, parser = null) {
     try {
       const { tags } = await parseAudio(audio.src, parser)
       audioInfo = handleParsedTags(tags)
-      console.log('audioInfo', audioInfo)
     } catch (e) {
       console.error(e)
     }

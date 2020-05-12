@@ -335,13 +335,14 @@ class Player {
     }
     this.audio.src = audio.src
     this.audio.title = audio.title
-    // TODO
-    // this.audio.chapters = audio.chapters
-    audio.chapters.length ?
-      this.el.classList.add('has-chapter') :
-      this.el.classList.remove('has-chapter')
-    console.log('task: update audio')
     this.events.trigger('audioupdate', audio)
+    if (audio.chapters.length) {
+      this.el.classList.add('has-chapter')
+    } else {
+      this.el.classList.remove('has-chapter')
+      this.el.classList.remove('show-chapter')
+    }
+    console.log('task: update audio')
     this.ui.setAudioInfo(audio)
     if (this._hasMediaSession) {
       this.setMediaMetadata(audio)
