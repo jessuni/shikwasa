@@ -55,6 +55,7 @@ export default class UI {
   }
 
   initOptions(options) {
+
     // dark mode
     this.el.style = `--color-primary: ${options.themeColor}; --color-handle-shadow: ${options.themeColor}cc`
     if (options.theme === 'auto') {
@@ -96,17 +97,11 @@ export default class UI {
     // player status display
     options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
 
-    // player control display
-    if (options.preload === 'none' && !options.audio.duration) {
-      this.seekControls.forEach(el => el.setAttribute('disabled', ''))
-    }
-
     // mute status display
     if (options.muted) {
       this.el.classList.add('Mute')
     }
   }
-
 
   initEvents() {
     this.moreBtn.addEventListener('click', () => {
@@ -146,6 +141,12 @@ export default class UI {
     if (this.downloadBtn) {
       this.downloadBtn.href= audio.src
     }
+    if (!audio.duration) {
+      this.seekControls.forEach(el => el.setAttribute('disabled', ''))
+    } else {
+      this.seekControls.forEach(el => el.removeAttribute('disabled'))
+    }
+    this.setBar('loaded', 0)
   }
 
   setPlaying() {

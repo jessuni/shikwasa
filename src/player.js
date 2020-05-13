@@ -13,7 +13,7 @@ class Player {
     this.id = playerArr.length
     playerArr.push(this)
     this.comps = {}
-
+    this._audio = {}
     this._inited = false
     this._hasMediaSession = false
     this._initSeek = 0
@@ -22,6 +22,7 @@ class Player {
     this._chapterPatched = false
     this.events = new Events()
     this.created(options)
+    this._inited = true
   }
 
   async created(options) {
@@ -32,7 +33,6 @@ class Player {
           if (module.default) {
             this.comps.chapter = new module.default(this, audio)
             this._chapterPatched = true
-            console.log('task: patch chapter')
           }
         })
       }
@@ -40,15 +40,11 @@ class Player {
     this.initUI(options)
     this.initAudio()
     this.ui.mount(this.options.container)
-    this._inited = true
   }
 
   get duration() {
-    if (!this.audio || !this.audio.src) {
-      // TODO: options.audio.duration is NaN if user did not provide it
-      // but there is an interval between new Shikwasa() and handleOptions()
-      // what to do here? should we guarantee that it is always normal?
-      return this.options.audio.duration || NaN
+    if (!this.audio.duration) {
+      return this.options.audio.duration || this._audio.duration || NaN
     }
     return this.audio.duration
   }
@@ -143,6 +139,7 @@ class Player {
       targetTime = this.ui.getPercentByPos(e) * this.duration
       this.seek(targetTime)
       this._dragging = false
+
       // disable barPlayed transition on drag
       setTimeout(() => this.el.classList.remove('Seeking'), 50)
     }
@@ -214,14 +211,29 @@ class Player {
       this.ui.setPaused()
       this.seek(0)
     })
+    this.on('waiting', () => {
+      this.el.classList.add('Loading')
+    })
     this.on('durationchange', () => {
       if (this.duration && this.duration !== 1) {
         this.seekable = true
         this.ui.setTime('duration', this.duration)
       }
     })
+    this.on('canplay', () => {
+      if (!this._canplay) {
+        this._canplay = true
+        if (this._initSeek) {
+          this.seek(this._initSeek)
+          this._initSeek = 0
+        }
+      }
+    })
+    this.on('canplaythrough', () => {
+      this.el.classList.remove('Loading')
+    })
     this.on('progress', () => {
-      if (this.audio.buffered.length) {
+      if (this.duration) {
         const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
         this.ui.setBar('loaded', percentage)
       }
@@ -229,20 +241,6 @@ class Player {
     this.on('timeupdate', () => {
       if (!this._dragging) {
         this.ui.setProgress(this.audio.currentTime, null, this.duration)
-      }
-    })
-    this.on('canplaythrough', () => {
-      this.el.classList.remove('Loading')
-    })
-    this.on('waiting', () => {
-      this.el.classList.add('Loading')
-    })
-    this.on('canplay', () => {
-      if (!this._canplay) {
-        this._canplay = true
-        if (this._initSeek) {
-          this.seek(this._initSeek)
-        }
       }
     })
     this.on('abort', () => {
@@ -313,12 +311,12 @@ class Player {
     if (isNaN(time)) {
       console.error('TypeError: seeking time is NaN')
     }
-    time = Math.min(time, this.duration)
-    time = Math.max(time, 0)
     this.ui.setProgress(time, null, this.duration)
     if (!this._canplay) {
       this._initSeek = time
     } else if (this.audio) {
+      time = Math.min(time, this.duration)
+      time = Math.max(time, 0)
       this.audio.currentTime = time
     }
   }
@@ -331,21 +329,15 @@ class Player {
 
   async update(audio) {
     if (this._inited) {
-      audio = await handleAudio(audio, this.options.parser)
+      this._audio = await handleAudio(audio, this.options.parser)
     }
-    this.audio.src = audio.src
-    this.audio.title = audio.title
-    this.events.trigger('audioupdate', audio)
-    if (audio.chapters.length) {
-      this.el.classList.add('has-chapter')
-    } else {
-      this.el.classList.remove('has-chapter')
-      this.el.classList.remove('show-chapter')
-    }
-    console.log('task: update audio')
-    this.ui.setAudioInfo(audio)
+    this._canplay = false
+    this.audio.src = this._audio.src
+    this.audio.title = this._audio.title
+    this.events.trigger('audioupdate', this._audio)
+    this.ui.setAudioInfo(this._audio)
     if (this._hasMediaSession) {
-      this.setMediaMetadata(audio)
+      this.setMediaMetadata(this._audio)
     }
   }
 

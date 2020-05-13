@@ -10,7 +10,7 @@ class Chapter {
     this.current = null
     this._currentSrc = this.ctx.audio.src
     this.patchPlayer()
-    this.ui = new ChapterUI(this.ctx)
+    this.ui = new ChapterUI(this.ctx, audio)
     this.updateList(audio)
     this.ctx.on('timeupdate', this.onTimeupdate.bind(this))
     this.ctx.on('chapterchange', (data) => {
@@ -22,7 +22,14 @@ class Chapter {
       if (audio.chapters.length) {
         this.updateList(audio)
       }
+      this.ui.handleChapterPanel(this.ctx, audio)
     })
+  }
+
+  clearList() {
+    this.ui.chapterList.innerHTML = ''
+    this.list = []
+    this.current = null
   }
 
   updateList(audio) {
@@ -65,6 +72,7 @@ class Chapter {
   }
 
   onTimeupdate(e) {
+
     // ignore handling when audio src changes
     if (this._currentSrc !== e.currentTarget.src) {
       this._currentSrc = e.currentTarget.src
@@ -103,6 +111,7 @@ class Chapter {
   clickChapterHandler() {
     Array.from(this.ui.chapterList.children).forEach(chEl => {
       chEl.addEventListener('click', () => {
+        if (!this.ctx.seekable) return
         let id = chEl.getAttribute('data-id').match(/\d+$/)
         if (id) {
           this.ctx.updateChapter(+id[0])
@@ -111,21 +120,15 @@ class Chapter {
     })
   }
 
-  clearList() {
-    this.ui.chapterList.innerHTML = ''
-    this.list = []
-    this.current = null
-  }
-
   destroy() {
     this.ui.destroy()
   }
 }
 
 class ChapterUI {
-  constructor(player) {
+  constructor(player, audio) {
     this.initEl(player)
-    this.initEvents(player)
+    this.initEvents(player, audio)
     this.renderChapterList(player.chapters)
     player.ui.el.append(this.el)
     this.activeChapterEl = null
@@ -136,33 +139,38 @@ class ChapterUI {
       className: 'shk-chapter',
       innerHTML: chapterTemplate,
     })
+    const attrs = {
+      title: 'view chapters',
+      'aria-label': 'view chapters',
+    }
+    if (!player.seekable) {
+      attrs.disabled = ''
+    }
     this.chapterBtn = createElement({
       tag: 'button',
       className: ['shk-btn', 'shk-btn_chapter'],
-      attrs: {
-        title: 'view chapters',
-        'aria-label': 'view chapters',
-      },
+      attrs,
       innerHTML: /* html */`
         <svg aria-hidden="true">
           <use xlink:href="#shk-icon_chapter" />
         </svg>
       `,
     })
+    player.ui.seekControls.push(this.chapterBtn)
     player.ui.extraControls.append(this.chapterBtn)
     this.closeBtn = this.el.querySelector('.shk-btn_close')
     this.chapterList = this.el.querySelector('.shk-chapter_list')
     this.overflowLayer = this.el.querySelector('.shk-chapter_main')
   }
 
-  initEvents(player) {
+  initEvents(player, audio) {
     this.chapterBtn.addEventListener('click', () => {
       player.el.classList.toggle('show-chapter')
     })
     this.closeBtn.addEventListener('click', () => {
       player.el.classList.remove('show-chapter')
     })
-
+    this.handleChapterPanel(player, audio)
     resize = () => {
       if (!this.activeChapterEl) return
       const textWrap = this.activeChapterEl.querySelector('.shk-chapter_title_wrap')
@@ -170,6 +178,17 @@ class ChapterUI {
       marquee.call(this, textWrap, text)
     }
     window.addEventListener('resize', resize)
+  }
+
+  handleChapterPanel(player, audio) {
+    if (audio.chapters.length) {
+      player.el.classList.add('has-chapter')
+    } else {
+      player.el.classList.remove('has-chapter')
+    }
+    if (audio.chapters.length || !player.seekable) {
+      player.el.classList.remove('show-chapter')
+    }
   }
 
   renderChapterList(chapters) {
@@ -234,6 +253,7 @@ class ChapterUI {
     const startTime = performance.now()
     const duration = 0.2
     if (outOfView) {
+
       // if supported use native css scroll behavior, otherwise simulate it
       if ('scrollBehavior' in document.documentElement.style) {
         el.scrollIntoView()
@@ -266,8 +286,8 @@ function animateScroll(
   scrollEl) {
   const elapsed = (timestamp - startTime) / 1000
   const t = elapsed / duration
+
   // easing in a linear fashion
-  console.log(startPos + distance * t)
   scrollEl.scrollTop = startPos + distance * t
   if (t < 1) {
     window.requestAnimationFrame(ts => {
