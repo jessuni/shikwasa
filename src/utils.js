@@ -69,6 +69,10 @@ export async function handleAudio(audio = {}, parser = null) {
     } catch (e) {
       console.error(e)
     }
+  } else if (audio.chapters) {
+    audio.chapters.forEach((chap, i) => {
+      chap.id = `ch${i}`
+    })
   }
   Object.keys(config.audioOptions).forEach(k => {
     audioInfo[k] = audio[k] || audioInfo[k] || config.audioOptions[k]
