@@ -22,11 +22,11 @@ export function numToString(num) {
 export function marquee(textWrap, textEl, speed = 60) {
   const overflow = textEl.offsetWidth - textWrap.offsetWidth
   if (overflow > 0) {
-    textWrap.classList.add('Overflow')
+    textWrap.setAttribute('data-overflow', '')
     const duration = textEl.offsetWidth / speed
     textWrap.style.animationDuration = `${duration}s`
   } else {
-    textWrap.classList.remove('Overflow')
+    textWrap.removeAttribute('data-overflow')
   }
 }
 
@@ -141,4 +141,12 @@ export function createElement(options) {
     el.innerHTML = options.innerHTML
   }
   return el
+}
+
+export function toggleAttribute(el, name) {
+  if (el.getAttribute(name) === '') {
+    el.removeAttribute(name)
+  } else {
+    el.setAttribute(name, '')
+  }
 }

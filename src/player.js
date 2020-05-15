@@ -1,6 +1,6 @@
 import UI from './ui'
 import Events from './events'
-import { handleOptions, handleAudio } from './utils'
+import { toggleAttribute, handleOptions, handleAudio } from './utils'
 
 const playerArr = []
 const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.userAgent) : false
@@ -103,7 +103,7 @@ class Player {
     })
     this.ui.muteBtn.addEventListener('click', () => {
       this.muted = !this.muted
-      this.el.classList.toggle('Mute')
+      toggleAttribute(this.el, 'data-mute')
     })
     this.ui.fwdBtn.addEventListener('click', () => {
       this.seekBySpan()
@@ -124,7 +124,7 @@ class Player {
     const dragStartHandler = (e) => {
       if (!this.seekable) return
       e.preventDefault()
-      this.el.classList.add('Seeking')
+      this.el.setAttribute('data-seeking', '')
       this._dragging = true
       document.addEventListener(dragMove, dragMoveHandler)
       document.addEventListener(dragEnd, dragEndHandler)
@@ -141,7 +141,7 @@ class Player {
       this._dragging = false
 
       // disable barPlayed transition on drag
-      setTimeout(() => this.el.classList.remove('Seeking'), 50)
+      setTimeout(() => this.el.removeAttribute('data-seeking'), 50)
     }
 
     // seeking with keyboard
@@ -212,7 +212,7 @@ class Player {
       this.seek(0)
     })
     this.on('waiting', () => {
-      this.el.classList.add('Loading')
+      this.el.setAttribute('data-loading', '')
     })
     this.on('durationchange', () => {
       if (this.duration && this.duration !== 1) {
@@ -230,7 +230,7 @@ class Player {
       }
     })
     this.on('canplaythrough', () => {
-      this.el.classList.remove('Loading')
+      this.el.removeAttribute('data-loading')
     })
     this.on('progress', () => {
       if (this.duration) {

@@ -12,7 +12,7 @@
   --color-handle-shadow-mobile: #b9b6b6;
   --color-body-shadow: #b9b6b680;
 }
-.shk.Theme-dark {
+.shk[data-theme="dark"] {
   --color-theme: #555;
   --color-secondary: #b9b6b6;
   --color-text: #f8f9fa;
@@ -20,7 +20,7 @@
   --color-body-shadow: #14141480;
 }
 @media (prefers-color-scheme: dark) {
-  .shk.Theme-auto {
+  .shk[data-theme="auto"] {
     --color-theme: #555;
     --color-secondary: #b9b6b6;
     --color-text: #fff;
@@ -63,18 +63,18 @@
   position: relative;
   z-index: 10;
 }
-.shk.Fixed {
+.shk[data-fixed-type='fixed'] {
   position: fixed;
   bottom: 0;
   left: 0;
   margin: 0;
   width: 100%;
 }
-.shk.Fixed.Top {
+.shk[data-fixed-type="fixed"][data-fixed-pos="top"] {
   top: 0;
   bottom: auto;
 }
-.shk.Seeking .shk-player {
+.shk[data-seeking] .shk-player {
   cursor: grabbing;
 }
 .shk-body {
@@ -114,31 +114,31 @@
   font-weight: 500;
   color: var(--color-secondary);
 }
-.shk-title_wrap.Overflow {
+.shk-title_wrap[data-overflow] {
   mask-image: linear-gradient(to right,transparent,#202124 5%,#202124 95%,transparent);
 }
 .shk-title_inner {
   display: inline-flex;
   overflow: visible;
 }
-.shk-title_wrap.Overflow .shk-title_inner {
+.shk-title_wrap[data-overflow] .shk-title_inner {
   padding: 0 3%;
   box-sizing: border-box;
   white-space: nowrap;
   animation-duration: inherit;
 }
-.shk-title_wrap.Overflow .shk-title_inner::after {
+.shk-title_wrap[data-overflow] .shk-title_inner::after {
   display: inline-block;
   content: attr(data-title);
 }
-.shk-title_wrap.Overflow .shk-title_inner::after,
+.shk-title_wrap[data-overflow] .shk-title_inner::after,
 .shk-title {
   font-weight: 300;
   font-size: 1.33em;
   color: var(--color-text);
 }
-.shk-title_wrap.Overflow .shk-title_inner::after,
-.shk-title_wrap.Overflow .shk-title {
+.shk-title_wrap[data-overflow] .shk-title_inner::after,
+.shk-title_wrap[data-overflow] .shk-title {
   animation: marquee linear infinite;
   animation-duration: inherit;
   padding-right: 60px;
@@ -219,25 +219,25 @@
   background: var(--color-theme);
   transition: width .2s ease-in-out, opacity .1s .1s linear, visibility .2s;
 }
-.shk.Extra .shk-controls_extra {
+.shk[data-extra] .shk-controls_extra {
   opacity: 1;
   visibility: visible;
   width: calc(100% - 44px);
   transition: width .2s ease-in-out, opacity .1s linear;
 }
-.shk.Extra .shk-controls_extra .shk-btn {
+.shk[data-extra] .shk-controls_extra .shk-btn {
   display: inline-block;
 }
 .shk-btn_toggle svg {
   width: 32px;
   height: 32px;
 }
-.shk.Pause .shk-btn_play,
-.shk.Play .shk-btn_pause {
+.shk[data-play="paused"] .shk-btn_play,
+.shk[data-play="playing"] .shk-btn_pause {
   display: inline;
 }
-.shk.Pause .shk-btn_pause,
-.shk.Play .shk-btn_play {
+.shk[data-play="paused"] .shk-btn_pause,
+.shk[data-play="playing"] .shk-btn_play {
   display: none;
 }
 .shk-btn_speed {
@@ -253,15 +253,15 @@
   transform: none;
   transition: transform .2s .1s;
 }
-.shk.Extra .shk-btn_more {
+.shk[data-extra] .shk-btn_more {
   transform: rotate(90deg);
 }
 svg.shk-btn_unmute,
-.shk.Mute svg.shk-btn_mute {
+.shk[data-mute] svg.shk-btn_mute {
   display: inline-block;
 }
 svg.shk-btn_mute,
-.shk.Mute svg.shk-btn_unmute {
+.shk[data-mute] svg.shk-btn_unmute {
   display: none;
 }
 .shk-bar_wrap {
@@ -291,7 +291,7 @@ svg.shk-btn_mute,
 .shk-bar_played {
   background: var(--color-primary);
 }
-.shk.Seeking .shk-bar_played {
+.shk[data-seeking] .shk-bar_played {
   transition: none;
 }
 .shk-bar-handle {
@@ -322,7 +322,7 @@ svg.shk-btn_mute,
   vertical-align: middle;
   color: var(--color-primary);
 }
-.shk.Loading .shk-loader {
+.shk[data-loading] .shk-loader {
   display: inline-block;
 }
 .shk-loader svg {
@@ -410,13 +410,13 @@ svg.shk-btn_mute,
     padding: 5px 16px;
     box-shadow: 0 -2px 6px -2px var(--color-body-shadow);
   }
-  .shk.Auto {
+  .shk[data-fixed-type="auto"] {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
   }
-  .shk.Auto.Top {
+  .shk[data-fixed-type="auto"][data-fixed-pos="top"] {
     top: 0;
     bottom: auto;
   }
@@ -444,7 +444,7 @@ svg.shk-btn_mute,
   .shk-artist {
     display: inline-block;
   }
-  .shk-title_wrap.Overflow .shk-title_inner::after,
+  .shk-title_wrap[data-overflow] .shk-title_inner::after,
   .shk-title {
     font-size: 1em;
     line-height: 1;

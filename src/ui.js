@@ -1,6 +1,6 @@
 import PlayerComp from './templates/Player'
 import IconComp from './templates/Icon'
-import { secondToTime, numToString, marquee, createElement } from './utils'
+import { secondToTime, numToString, marquee, createElement, toggleAttribute } from './utils'
 import applyFocusVisible from './focus-visible'
 
 let resize, coverUrl = null, cooldown = true
@@ -58,11 +58,7 @@ export default class UI {
 
     // dark mode
     this.el.style = `--color-primary: ${options.themeColor}; --color-handle-shadow: ${options.themeColor}cc`
-    if (options.theme === 'auto') {
-      this.el.classList.add('Theme-auto')
-    } else if (options.theme === 'dark') {
-      this.el.classList.add('Theme-dark')
-    }
+    this.el.setAttribute('data-theme', options.theme)
 
     // download
     if (options.download && options.audio && options.audio.src) {
@@ -87,25 +83,24 @@ export default class UI {
     }
 
     // player position
-    if (options.fixed.type !== 'static') {
-      options.fixed.type === 'fixed' ? this.el.classList.add('Fixed') : this.el.classList.add('Auto')
-      if (options.fixed.position === 'top') {
-        this.el.classList.add('Top')
-      }
+    this.el.setAttribute('data-fixed-type', options.fixed.type)
+    if (options.fixed.type !== 'static' && options.fixed.position === 'top') {
+      this.el.setAttribute('data-fixed-pos', options.fixed.position)
     }
 
     // player status display
-    options.autoPlay ? this.el.classList.add('Play') : this.el.classList.add('Pause')
+    const playStatus = options.autoPlay ? 'playing' : 'paused'
+    this.el.setAttribute('data-play', playStatus)
 
     // mute status display
     if (options.muted) {
-      this.el.classList.add('Mute')
+      this.el.setAttribute('data-mute', '')
     }
   }
 
   initEvents() {
     this.moreBtn.addEventListener('click', () => {
-      this.el.classList.toggle('Extra')
+      toggleAttribute(this.el, 'data-extra')
     })
     Array.from(this.extraControls.children).forEach(el => {
       this.hideExtraControl(el)
@@ -153,14 +148,12 @@ export default class UI {
   }
 
   setPlaying() {
-    this.el.classList.add('Play')
-    this.el.classList.remove('Pause')
+    this.el.setAttribute('data-play', 'playing')
   }
 
   setPaused() {
-    this.el.classList.add('Pause')
-    this.el.classList.remove('Play')
-    this.el.classList.remove('Loading')
+    this.el.setAttribute('data-play', 'paused')
+    this.el.removeAttribute('data-loading')
   }
 
   setTime(type, time) {
@@ -204,7 +197,7 @@ export default class UI {
   hideExtraControl(el) {
     el.addEventListener('click', () => {
       setTimeout(() => {
-        this.el.classList.remove('Extra')
+        this.el.removeAttribute('data-extra')
       }, 800)
     })
   }

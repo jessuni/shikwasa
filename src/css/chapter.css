@@ -10,7 +10,7 @@
 .shk .shk-controls_extra .shk-btn.shk-btn_chapter {
   display: none;
 }
-.shk.has-chapter .shk-controls_extra .shk-btn.shk-btn_chapter {
+.shk[data-has-chapter] .shk-controls_extra .shk-btn.shk-btn_chapter {
   display: inline-block;
 }
 .shk-chapter {
@@ -30,7 +30,7 @@
   overflow: hidden;
   transition: height ease-in-out .2s, bottom ease-in-out .1s, opacity linear .1s;
 }
-.shk.show-chapter .shk-chapter {
+.shk[data-show-chapter] .shk-chapter {
   height: 340px;
   bottom: 120px;
   opacity: 1;
@@ -83,7 +83,7 @@
   color: currentColor;
   fill: currentColor;
 }
-.shk-chapter_item.Active .shk-chapter_btn div {
+.shk-chapter_item[data-active] .shk-chapter_btn div {
   color: var(--color-primary);
   font-weight: 600;
 }
@@ -92,9 +92,9 @@
   height: 12px;
   flex-shrink: 0;
 }
-.shk.Play .shk-chapter_item.Active .shk-icon_playing,
-.shk.Play .shk-chapter_item.Active .shk-icon_playing:before,
-.shk.Play .shk-chapter_item.Active .shk-icon_playing:after {
+.shk[data-play="playing"] .shk-chapter_item[data-active] .shk-icon_playing,
+.shk[data-play="playing"] .shk-chapter_item[data-active] .shk-icon_playing:before,
+.shk[data-play="playing"] .shk-chapter_item[data-active] .shk-icon_playing:after {
   display: block;
 }
 .shk-icon_playing,
@@ -131,7 +131,7 @@
   display: flex;
   align-items: flex-start;
 }
-.shk.Play .shk-chapter_item.Active .shk-icon_triangle {
+.shk[data-play="playing"] .shk-chapter_item[data-active] .shk-icon_triangle {
   display: none;
 }
 .shk-icon_triangle svg {
@@ -152,18 +152,18 @@
   white-space: nowrap;
   flex-grow: 1;
 }
-.shk-chapter_item.Active .shk-chapter_title_wrap.Overflow {
+.shk-chapter_item[data-active] .shk-chapter_title_wrap[data-overflow] {
   mask-image: linear-gradient(to right,transparent,#202124 2%,#202124 98%,transparent);
 }
 .shk-chapter_title_inner {
   display: flex;
   animation-duration: inherit;
 }
-.shk-chapter_item.Active .shk-chapter_title_wrap.Overflow .shk-chapter_title_inner {
+.shk-chapter_item[data-active] .shk-chapter_title_wrap[data-overflow] .shk-chapter_title_inner {
   padding: 0 3%;
   box-sizing: border-box;
 }
-.shk-chapter_item.Active .shk-chapter_title_wrap.Overflow .shk-chapter_title_inner::after {
+.shk-chapter_item[data-active] .shk-chapter_title_wrap[data-overflow] .shk-chapter_title_inner::after {
   display: block;
   content: attr(data-chapter);
 }
@@ -173,12 +173,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.shk-chapter_item.Active .shk-chapter_title {
+.shk-chapter_item[data-active] .shk-chapter_title {
   overflow: visible;
 }
 
-.shk-chapter_item.Active .shk-chapter_title_wrap.Overflow .shk-chapter_title_inner::after,
-.shk-chapter_item.Active .shk-chapter_title_wrap.Overflow .shk-chapter_title {
+.shk-chapter_item[data-active] .shk-chapter_title_wrap[data-overflow] .shk-chapter_title_inner::after,
+.shk-chapter_item[data-active] .shk-chapter_title_wrap[data-overflow] .shk-chapter_title {
   animation: marquee linear infinite;
   animation-duration: inherit;
   padding-right: 60px;

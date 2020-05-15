@@ -1,5 +1,5 @@
 import chapterTemplate from './templates/Chapter'
-import { createElement, secondToTime, marquee } from './utils'
+import { createElement, secondToTime, marquee, toggleAttribute } from './utils'
 
 let resize
 
@@ -165,11 +165,11 @@ class ChapterUI {
 
   initEvents(player, audio) {
     this.chapterBtn.addEventListener('click', () => {
-      player.el.classList.toggle('show-chapter')
+      toggleAttribute(player.el, 'data-show-chapter')
     })
     player.ui.hideExtraControl(this.chapterBtn)
     this.closeBtn.addEventListener('click', () => {
-      player.el.classList.remove('show-chapter')
+      player.el.removeAttribute('data-show-chapter')
     })
 
     this.handleChapterPanel(player, audio)
@@ -184,12 +184,12 @@ class ChapterUI {
 
   handleChapterPanel(player, audio) {
     if (audio.chapters.length) {
-      player.el.classList.add('has-chapter')
+      player.el.setAttribute('data-has-chapter', '')
     } else {
-      player.el.classList.remove('has-chapter')
+      player.el.removeAttribute('data-has-chapter')
     }
     if (!audio.chapters.length || !player.seekable) {
-      player.el.classList.remove('show-chapter')
+      player.el.removeAttribute('data-show-chapter')
     }
   }
 
@@ -233,14 +233,14 @@ class ChapterUI {
     this.chapterList.querySelectorAll('.shk-chapter_item')
       .forEach(chEl => {
         if (chEl.getAttribute('data-id') === id) {
-          chEl.classList.add('Active')
+          chEl.setAttribute('data-active', '')
           this.scrollIntoView(chEl)
           this.activeChapterEl = chEl
           const titleEl = chEl.querySelector('.shk-chapter_title')
           const titleWrap = chEl.querySelector('.shk-chapter_title_wrap')
           marquee(titleWrap, titleEl)
         } else {
-          chEl.classList.remove('Active')
+          chEl.removeAttribute('data-active')
         }
       })
   }
