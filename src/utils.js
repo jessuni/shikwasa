@@ -144,7 +144,11 @@ export function createElement(options) {
 }
 
 export function toggleAttribute(el, name) {
-  if (el.getAttribute(name) === '') {
+  if (typeof el.toggleAttribute === 'function') {
+    el.toggleAttribute(name)
+    return
+  }
+  if (el.hasAttribute(name)) {
     el.removeAttribute(name)
   } else {
     el.setAttribute(name, '')
