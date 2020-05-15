@@ -13,7 +13,7 @@
   --color-body-shadow: #b9b6b680;
 }
 .shk[data-theme="dark"] {
-  --color-theme: #555;
+  --color-theme: #333;
   --color-secondary: #b9b6b6;
   --color-text: #f8f9fa;
   --color-handle-shadow-mobile: #141414;
@@ -21,7 +21,7 @@
 }
 @media (prefers-color-scheme: dark) {
   .shk[data-theme="auto"] {
-    --color-theme: #555;
+    --color-theme: #333;
     --color-secondary: #b9b6b6;
     --color-text: #fff;
     --color-handle-shadow-mobile: #141414;
