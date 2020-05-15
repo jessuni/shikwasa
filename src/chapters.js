@@ -167,9 +167,11 @@ class ChapterUI {
     this.chapterBtn.addEventListener('click', () => {
       player.el.classList.toggle('show-chapter')
     })
+    player.ui.hideExtraControl(this.chapterBtn)
     this.closeBtn.addEventListener('click', () => {
       player.el.classList.remove('show-chapter')
     })
+
     this.handleChapterPanel(player, audio)
     resize = () => {
       if (!this.activeChapterEl) return

@@ -107,6 +107,9 @@ export default class UI {
     this.moreBtn.addEventListener('click', () => {
       this.el.classList.toggle('Extra')
     })
+    Array.from(this.extraControls.children).forEach(el => {
+      this.hideExtraControl(el)
+    })
 
     // add keyboard focus style
     applyFocusVisible(this.el)
@@ -196,6 +199,14 @@ export default class UI {
     percentage = Math.min(percentage, 1)
     percentage = Math.max(0, percentage)
     return percentage
+  }
+
+  hideExtraControl(el) {
+    el.addEventListener('click', () => {
+      setTimeout(() => {
+        this.el.classList.remove('Extra')
+      }, 800)
+    })
   }
 
   mount(container) {
