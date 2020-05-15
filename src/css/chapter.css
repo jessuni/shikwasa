@@ -21,18 +21,20 @@
   width: calc(100% - 40px);
   margin: 0 auto;
   box-sizing: border-box;
-  box-shadow: 10px 0px 40px rgba(0, 41, 37, 0.07);
+  box-shadow: 0px 0px 10px rgba(0, 41, 37, 0.07);
   border: 1px solid rgba(0, 41, 37, 0.05);
   border-radius: 2px;
   background: var(--color-theme);
   z-index: 0;
+  opacity: 0;
   overflow: hidden;
-  transition: height ease-in-out .2s, bottom ease-in-out .1s;
+  transition: height ease-in-out .2s, bottom ease-in-out .1s, opacity linear .1s;
 }
 .shk.show-chapter .shk-chapter {
   height: 340px;
   bottom: 120px;
-  transition: height ease-in-out .2s, bottom ease-in-out .1s;
+  opacity: 1;
+  transition: height ease-in-out .2s, bottom ease-in-out .1s, opacity linear .1s;
 }
 .shk-btn_close {
   position: absolute;
