@@ -43,8 +43,8 @@ class Player {
   }
 
   get duration() {
-    if (!this.audio && !this.audio.duration) {
-      return this.options.audio.duration || this._audio.duration || NaN
+    if (!this.audio || !this.audio.duration) {
+      return this._audio.duration
     }
     return this.audio.duration
   }

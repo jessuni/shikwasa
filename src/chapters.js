@@ -188,7 +188,7 @@ class ChapterUI {
     } else {
       player.el.classList.remove('has-chapter')
     }
-    if (audio.chapters.length || !player.seekable) {
+    if (!audio.chapters.length || !player.seekable) {
       player.el.classList.remove('show-chapter')
     }
   }
