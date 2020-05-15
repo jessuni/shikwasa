@@ -35,7 +35,7 @@ export async function handleOptions(options) {
     options[k] = (options[k] || typeof options[k] === 'boolean') ?
       options[k] : config[k]
   })
-  options.container = document.querySelector(options.container)
+  options.container = options.container() || config.container
   const fixedType = config.fixedOptions.find(item => item === options.fixed.type)
   if (!fixedType) {
     options.fixed.type = config.fixed.type

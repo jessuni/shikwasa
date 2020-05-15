@@ -90,7 +90,6 @@ class Player {
   }
 
   initUI() {
-    console.log('task: init ui')
     this.ui = new UI(this.options)
     this.el = this.ui.el
     this.initControlEvents()
@@ -180,7 +179,6 @@ class Player {
   }
 
   initAudio() {
-    console.log('task: init audio')
     if (this.options.audio.src) {
       this.audio = new Audio()
       this.initAudioEvents()
