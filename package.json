@@ -27,9 +27,7 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "webpack-dev-server --config webpack.dev.js",
-    "dev:website": "webpack-dev-server --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack-dev-server",
     "deploy": "gh-pages -d dist",
     "lint": "eslint --fix src"
   },

@@ -1,13 +1,13 @@
 const fs = require('fs')
 const path = require('path')
-const COMMON_CONFIG = require('./webpack.common')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const allFiles = fs.readdirSync('pages')
 const pages = allFiles.filter(name => {
   return /\.html$/.test(name)
 })
-const entry = {}
+const entry = { lib: './src/main.js' }
+
 const plugins = pages.map(filename => {
   const name = filename.replace(/\.html$/, '')
   const regex = new RegExp(name + '.js')
@@ -22,16 +22,8 @@ const plugins = pages.map(filename => {
   })
 })
 
-const ruleOption = [{
-  test: /\.css$/,
-  use: [
-    'style-loader',
-    'css-loader',
-    'postcss-loader',
-  ],
-}]
 module.exports = {
-  ...COMMON_CONFIG({ ruleOption }),
+  entry,
   mode: 'development',
   output: {
     pathinfo: false,
@@ -44,6 +36,45 @@ module.exports = {
     disableHostCheck: true,
   },
   devtool: 'cheap-module-eval-source-map',
+  module: {
+    rules: [
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  targets: {
+                    esmodules: true,
+                  },
+                },
+              ],
+            ],
+          },
+        },
+      },
+      {
+        test: /(\.jsx|\.js)$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+        ],
+      },
+    ],
+  },
   plugins,
-  entry,
 }
