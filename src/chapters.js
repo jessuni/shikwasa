@@ -1,3 +1,4 @@
+import './css/chapter.css'
 import chapterTemplate from './templates/Chapter'
 import { createElement, secondToTime, marquee, toggleAttribute } from './utils'
 

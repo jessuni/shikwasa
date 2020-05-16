@@ -8,6 +8,7 @@ const CONSOLE_MSG = `console.log(\`%c🍊%c Shikwasa Podcast Player v${JSON.stri
 
 const output = {
   path: path.resolve(__dirname, 'dist'),
+  chunkFilename: 'shikwasa.[name].js',
   library: 'Shikwasa',
 }
 
@@ -30,17 +31,23 @@ const ruleOption = [
   },
 ]
 
-const createConfig = (target, generateHTML = false) => {
+const createConfig = (target) => {
   const plugins = []
-  if (generateHTML) {
-    plugins.push(
-      new MiniCssExtractPlugin({
-        filename: 'shikwasa.[name].css',
-      }),
-      new HtmlWebpackPlugin({
-        template: './pages/index.html',
-      })
-    )
+  plugins.push(
+    new MiniCssExtractPlugin({
+      filename: 'shikwasa.css',
+      chunkFilename: 'shikwasa.[name].css',
+    }),
+    new HtmlWebpackPlugin({
+      template: './pages/index.html',
+    })
+  )
+  let name = target
+  if (target === 'var') {
+    name = 'min'
+  }
+  if (target === 'umd') {
+    name = 'cjs'
   }
   return {
     ...COMMON_CONFIG({ ruleOption }),
@@ -48,15 +55,14 @@ const createConfig = (target, generateHTML = false) => {
     output: {
       ...output,
       libraryTarget: target,
-      filename: 'shikwasa.[name].' + target + '.js',
+      filename: 'shikwasa.' + name + '.js',
     },
     plugins,
   }
 }
-
 module.exports = () => {
   return [
     createConfig('umd'),
-    createConfig('var', true),
+    createConfig('var'),
   ]
 }
