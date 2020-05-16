@@ -97,6 +97,7 @@ class Chapter {
   }
 
   searchDirection(time, chapter) {
+    time = Math.round(time)
     if (!chapter ||
       typeof chapter !== 'object' ||
       chapter.endTime <= time) {
