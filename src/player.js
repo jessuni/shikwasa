@@ -309,14 +309,13 @@ class Player {
     if (isNaN(time)) {
       console.error('TypeError: seeking time is NaN')
     }
+    time = Math.min(time, this.duration)
+    time = Math.max(time, 0)
     this.ui.setProgress(time, null, this.duration)
     if (!this._canplay) {
       this._initSeek = time
-    } else if (this.audio) {
-      time = Math.min(time, this.duration)
-      time = Math.max(time, 0)
-      this.audio.currentTime = time
     }
+    this.audio.currentTime = time
   }
 
   seekBySpan({ time = 10, forward = true } = {}) {
