@@ -314,8 +314,9 @@ class Player {
     this.ui.setProgress(time, null, this.duration)
     if (!this._canplay) {
       this._initSeek = time
+    } else {
+      this.audio.currentTime = time
     }
-    this.audio.currentTime = time
   }
 
   seekBySpan({ time = 10, forward = true } = {}) {
