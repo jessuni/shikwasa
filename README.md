@@ -14,14 +14,15 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 
 - 🚀Ultra lightweight
 - 🐣Dependency free
+- 🎬Podcast chapters
 - 🏎Playback speed control
 - 🎮Skip forward/backward
-- [ ] Podcast Chapters
+- 👓Accessibility-aware
+- 🌙Dark Mode
+- SSR compatible
 - [ ] Playlist
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
-
-⚠️If you are looking for the full power of Shikwasa player, but prefer customizing structures and styles of your own, check out a more flexible framework that helps you build your own player [Shisa](https://github.com/jessuni/shisa).
 
 <details>
   <summary>📖Table of Contents</summary>
@@ -42,6 +43,7 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
     * [speedOptions](#speedoptions)
     * [download](#download)
   * [Events](#events)
+  * [Chapters](#chapters)
   * [Roadmap](#roadmap)
   * [What about the weird name of this project?](#what-about-the-weird-name-of-this-project)
   * [License](#license)
@@ -78,7 +80,7 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
    // an example with basic init options
 
    const player = new Shikwasa({
-     container: '.elementOfYourChoice',
+     container: () => document.querySelector('.elementOfYourChoice'),
      audio: {
        title: 'Hello World!',
        artist: 'Shikwasa FM',
@@ -132,6 +134,10 @@ player.update({
 })
 ```
 
+**.updateChapter(index)**
+
+Seek the audio to the target chapter. `index` is the index of of `chapters` array. Part of the [Chapter Feature](#Chapters).
+
 **.destroy()**
 
 Destroy the player instance.
@@ -142,7 +148,22 @@ Register an event listener. Supported events see: [Events](#events)
 
 ### Properties
 
+**.chapters**
+
+- Read-only
+- type: `Array`
+- default: `[]`
+
+Chapter metadata of the current audio. Part of the [Chapter Feature](#Chapters).
+
+**.currentChapter**
+
 **.currentTime**
+- Read-only
+- type: `Array`
+- default: `null`
+
+Indicate which chapter is currently on play. Chapter feature is available only when `audio.chapters` is passed or an audio parser is used.
 
 - Read-only
 - type: `Number`
@@ -164,6 +185,11 @@ The current mute state of the player. Similar to the native [`HTMLMediaElement.m
 
 The current playbackRate of the player. Similar to the native [`HTMLMediaElement.playbackRate`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate), except that`playbackRate`'s value will not be affected when audio source is updated.
 
+**.duration**
+
+- type: `Number`
+- default: `audio.duration || options.audio.duration`
+
 ## Options
 
 ### Audio
@@ -182,8 +208,27 @@ The current playbackRate of the player. Similar to the native [`HTMLMediaElement
     cover: String,
     src: String,
     duration: Number,  // optional
+    chapters: Array,  // optional, read below for details
   }
 ```
+
+This is part of the [Chapter Feature](#Chapters).
+
+```javascript
+  audio.chapters: [{
+    title,
+    startTime,
+    endTime,
+  }]`
+```
+
+| Property      | Type     |  Description                             |
+|---------------|----------|------------------------------------------|
+| title         | String   | chapter title                            |
+| startTime     | Number   | chapter start time in seconds            |
+| endTime       | Number   | chapter end time in seconds              |
+
+⚠️Note: `endTime` should be the same as `startTime` of the next chapter.
 
 ### container
 
@@ -262,8 +307,47 @@ download: true
 download: 'data:audio/mp3;base64,...'
 ```
 
+### parser
+
+(Optional) Use an external parser to parse the current audio's metadata. If a parser passed, it will read the audio's `title`, `artist`, `duration` and `chapters`, meaning you don't have to provide these four properties into `audio` manually unless you preferred your own. **Priority: property values passed to `audio` > parsed data.**
+
+-type: `Null|Object`
+-default: `null`
+-usage: `parser: jsmediatags`
+
+⚠️Note: If `audio.src` is not of the same origin, proper CORS configuration will be needed to use the parser.
+Due to `jsmediatags` limitation, relative urls are not supported. Please use absolute urls for `audio.src`.
+
 ## Events
+
 Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) native events.
+
+## Chapters
+
+The chapter feature will be dynamically available in either ways:
+
+1. If a `chapters` array is included in `audio` in options / audio update. [How to pass chapter?](#Audio)
+2. Pass an external parser, [jsmediatags](https://github.com/aadsm/jsmediatags), in the `parser` options. [How to use a parser?](#parser)
+
+Then `.updateChapter(index)`(see [here](#methods)), `chapters` and `currentChapter`(see [here](#properties)) will also be available to use.
+
+`chapters` array passed in the options / audio update will take higher priority.
+
+### Using parser for chapters
+
+```javascript
+import jsmediatags from 'jsmediatags'
+
+const shk = new Shikwasa({
+  ...
+  parser: jsmediatags,
+  audio: {
+    src: ...
+    // the parser will read title, artist, duration and chapters info from the audio file, so you don't need to provide them anymore
+  }
+})
+```
+Other information check out [parser](#parser).
 
 ## Roadmap
 
