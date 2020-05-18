@@ -5,26 +5,48 @@ import { createElement, secondToTime, marquee, toggleAttribute } from './utils'
 let resize
 
 class Chapter {
-  constructor(ctx, audio) {
+  constructor(ctx) {
     this.ctx = ctx
     this.list = []
+    this.initEvents()
     this.current = null
     this._currentSrc = this.ctx.audio.src
+    this._chapterPatched = false
+    // this.ui = new ChapterUI(this.ctx, audio)
+    // this.updateList(audio)
+    // this.ctx.on('audioupdate', (audio) => {
+    //   this.clearList()
+    //   if (audio.chapters.length) {
+    //     this.updateList(audio)
+    //   }
+    //   this.ui.handleChapterPanel(this.ctx, audio)
+    // })
+  }
+
+  init() {
     this.patchPlayer()
-    this.ui = new ChapterUI(this.ctx, audio)
-    this.updateList(audio)
-    this.ctx.on('timeupdate', this.onTimeupdate.bind(this))
+    this.ui = new ChapterUI(this.ctx)
     this.ctx.on('chapterchange', (data) => {
       const id = data && data.newVal ? data.newVal.id : null
       this.ui.setChapterActive(id)
     })
-    this.ctx.on('audioupdate', (audio) => {
-      this.clearList()
+  }
+
+  initEvents() {
+    this.ctx.on('audioupdate',(audio) => {
+      if (!this._chapterPatched) {
+        this.init()
+        this._chapterPatched = true
+      } else {
+        this.clearList()
+      }
       if (audio.chapters.length) {
         this.updateList(audio)
       }
       this.ui.handleChapterPanel(this.ctx, audio)
     })
+    this.ctx.on('timeupdate', this.onTimeupdate.bind(this))
+
   }
 
   clearList() {
@@ -165,7 +187,7 @@ class ChapterUI {
     this.overflowLayer = this.el.querySelector('.shk-chapter_main')
   }
 
-  initEvents(player, audio) {
+  initEvents(player) {
     this.chapterBtn.addEventListener('click', () => {
       toggleAttribute(player.el, 'data-show-chapter')
     })
@@ -174,7 +196,7 @@ class ChapterUI {
       player.el.removeAttribute('data-show-chapter')
     })
 
-    this.handleChapterPanel(player, audio)
+    // this.handleChapterPanel(player, audio)
     resize = () => {
       if (!this.activeChapterEl) return
       const textWrap = this.activeChapterEl.querySelector('.shk-chapter_title_wrap')
@@ -278,6 +300,7 @@ class ChapterUI {
     window.removeEventListener('resize', resize)
   }
 }
+window.Chapter = Chapter
 
 export default Chapter
 

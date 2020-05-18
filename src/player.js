@@ -3,6 +3,7 @@ import Events from './events'
 import { toggleAttribute, handleOptions, handleAudio } from './utils'
 
 const playerArr = []
+const REGISTERED_COMPS = []
 const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.userAgent) : false
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -13,8 +14,8 @@ class Player {
     this.id = playerArr.length
     playerArr.push(this)
     this.comps = {}
+    this._initedHooks = []
     this._audio = {}
-    this._inited = false
     this._hasMediaSession = false
     this._initSeek = 0
     this._canplay = false
@@ -22,23 +23,25 @@ class Player {
     this._chapterPatched = false
     this.events = new Events()
     this.created(options)
-    this._inited = true
   }
 
   async created(options) {
     this.options = await handleOptions(options)
-    this.on('audioupdate', (audio) => {
-      if (audio.chapters.length && !this._chapterPatched) {
-        import('./chapters').then(module => {
-          if (module.default) {
-            this.comps.chapter = new module.default(this, audio)
-            this._chapterPatched = true
-          }
-        })
-      }
-    })
+    // this.on('audioupdate', (audio) => {
+    //   if (audio.chapters.length && !this._chapterPatched) {
+    //     import('./chapters').then(module => {
+    //       if (module.default) {
+    //         this.comps.chapter = new module.default(this, audio)
+    //         this._chapterPatched = true
+    //       }
+    //     })
+    //   }
+    // })
+    this._renderComponents()
+    this.initHooks()
     this.initUI(options)
     this.initAudio()
+    this.events.trigger('inited')
     this.ui.mount(this.options.container)
   }
 
@@ -87,6 +90,15 @@ class Player {
       this.audio.defaultMuted = v
     }
     return false
+  }
+
+  initHooks() {
+    this.on('inited', () => {
+      this._inited = true
+      if (this._initedHooks.length) {
+        this._initedHooks.forEach(fn => fn())
+      }
+    })
   }
 
   initUI() {
@@ -231,7 +243,7 @@ class Player {
       this.el.removeAttribute('data-loading')
     })
     this.on('progress', () => {
-      if (this.duration) {
+      if (this.audio.buffered.length) {
         const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
         this.ui.setBar('loaded', percentage)
       }
@@ -358,6 +370,21 @@ class Player {
     this.comps = null
     this.options.container.innerHTML = ''
   }
+
+  _renderComponents() {
+    if (!REGISTERED_COMPS.length) return
+    REGISTERED_COMPS.forEach(comp => {
+      const name = comp.name.toLowerCase()
+      this.comps[name] = new comp(this)
+      if (this.comps[name].inited && typeof this.comps[name].inited === 'function') {
+        this._initedHooks.push(this.comps[name].inited.bind(this.comps[name]))
+      }
+    })
+  }
+}
+
+Player.use = function (comp) {
+  REGISTERED_COMPS.push(comp)
 }
 
 export default Player
