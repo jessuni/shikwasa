@@ -14,7 +14,6 @@ class Player {
     this.id = playerArr.length
     playerArr.push(this)
     this.comps = {}
-    this._initedHooks = []
     this._audio = {}
     this._hasMediaSession = false
     this._initSeek = 0
@@ -38,7 +37,6 @@ class Player {
     //   }
     // })
     this._renderComponents()
-    this.initHooks()
     this.initUI(options)
     this.initAudio()
     this.events.trigger('inited')
@@ -90,15 +88,6 @@ class Player {
       this.audio.defaultMuted = v
     }
     return false
-  }
-
-  initHooks() {
-    this.on('inited', () => {
-      this._inited = true
-      if (this._initedHooks.length) {
-        this._initedHooks.forEach(fn => fn())
-      }
-    })
   }
 
   initUI() {
@@ -376,9 +365,6 @@ class Player {
     REGISTERED_COMPS.forEach(comp => {
       const name = comp.name.toLowerCase()
       this.comps[name] = new comp(this)
-      if (this.comps[name].inited && typeof this.comps[name].inited === 'function') {
-        this._initedHooks.push(this.comps[name].inited.bind(this.comps[name]))
-      }
     })
   }
 }
