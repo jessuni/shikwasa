@@ -10,17 +10,8 @@ class Chapter {
     this.list = []
     this.initEvents()
     this.current = null
-    this._currentSrc = this.ctx.audio.src
+    this._currentSrc = null
     this._chapterPatched = false
-    // this.ui = new ChapterUI(this.ctx, audio)
-    // this.updateList(audio)
-    // this.ctx.on('audioupdate', (audio) => {
-    //   this.clearList()
-    //   if (audio.chapters.length) {
-    //     this.updateList(audio)
-    //   }
-    //   this.ui.handleChapterPanel(this.ctx, audio)
-    // })
   }
 
   init() {

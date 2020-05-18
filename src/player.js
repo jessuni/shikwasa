@@ -338,9 +338,9 @@ class Player {
   }
 
   async update(audio) {
-    if (this._inited) {
-      this._audio = await handleAudio(audio, this.options.parser)
-    }
+    this._audio = this._inited ?
+      await handleAudio(audio, this.options.parser) :
+      audio
     this._canplay = false
     this.audio.src = this._audio.src
     this.audio.title = this._audio.title
