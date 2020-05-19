@@ -90,7 +90,7 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
    })
    ```
 
-  If `container` has any child nodes, it will be cleared before Shikwasa mounts.
+  Any child nodes inside `container` will be cleared upon the time Shiwkasa mounts.
 
 4. If you use module system, import like this:
 
@@ -100,6 +100,17 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
 
     const player = new Shikwasa(options)
    ```
+
+5. To use the chapter plugin, add a seperate script and stylesheet along with what's above:
+
+  ```javascript
+    import Chapter as 'shikwasa/dist/shikwasa.chapter.cjs'
+    import 'shikwasa/dist/shikwasa.chapter.min.css'
+
+    // register the chapter plugin before creating an instance
+    Shikwasa.use(Chapter)
+  ```
+  Please thoroughly read the section [Chapters](#chapters) before using this feature.
 
 ## API
 
@@ -313,7 +324,17 @@ download: 'data:audio/mp3;base64,...'
 
 -type: `Null|Object`
 -default: `null`
--usage: `parser: jsmediatags`
+-usage:
+
+`npm install jsmediatags` or use CDN
+
+```javascript
+  import jsmediatags from 'jsmediatags'
+  new Shikwasa({
+    ...
+  parser: jsmediatags
+  })
+```
 
 ⚠️Note: If `audio.src` is not of the same origin, proper CORS configuration will be needed to use the parser.
 Due to `jsmediatags` limitation, relative urls are not supported. Please use absolute urls for `audio.src`.
@@ -324,10 +345,10 @@ Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/
 
 ## Chapters
 
-The chapter feature will be dynamically available in either ways:
-
-1. If a `chapters` array is included in `audio` in options / audio update. [How to pass chapter?](#Audio)
-2. Pass an external parser, [jsmediatags](https://github.com/aadsm/jsmediatags), in the `parser` options. [How to use a parser?](#parser)
+1. register the chapter plugin before creating a Shikwasa instance. [How-to](#usage)
+2. This does not grant that the audio will display chapters. To display chapters, you'll need to either provide it to the player. Shikwasa also supports using `jsmediatags` as an external parser to read and extract chapter info from the audio file;
+  - To manually provide chapter, include a `chapters` object in `audio`. [How to pass chapter?](#Audio)
+  - To use a parser, pass [jsmediatags](https://github.com/aadsm/jsmediatags), in the `parser` options. [How to use a parser?](#parser)
 
 Then `.updateChapter(index)`(see [here](#methods)), `chapters` and `currentChapter`(see [here](#properties)) will also be available to use.
 
@@ -371,7 +392,7 @@ Love it, name after it.
 
 [npm]: https://img.shields.io/npm/v/shikwasa.svg?style=flat-square
 [npm-url]: https://npmjs.com/package/shikwasa
-[size]:https://badge-size.herokuapp.com/jessuni/shikwasa/master/dist/shikwasa.min.js?compression=gzip&style=flat-square
+[size]:https://badge-size.herokuapp.com/jessuni/shikwasa/next/dist/shikwasa.min.js?compression=gzip&style=flat-square
 [size-url]:https://github.com/jessuni/shikwasa/tree/master/dist
 [license]:https://img.shields.io/github/license/jessuni/shikwasa?style=flat-square
 [license-url]:https://github.com/jessuni/shikwasa/blob/master/LICENSE.md
