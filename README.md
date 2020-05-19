@@ -317,7 +317,7 @@ download: 'data:audio/mp3;base64,...'
 
 ### parser
 
-(Optional) Use an external parser to parse the current audio's metadata. If a parser passed, it will read the audio's `title`, `artist`, `duration` and `chapters`, meaning you don't have to provide these four properties into `audio` manually unless you preferred your own. **Priority: property values passed to `audio` > parsed data.**
+(Optional) Use an external parser to parse the current audio's metadata. If a parser is passed, it will read the audio's `title`, `artist`, `duration` and `chapters`, meaning you don't have to provide these four properties into `audio` manually unless you preferred your own. **Priority: property values passed to `audio` > parsed data.**
 
 - type: `Null|Object`
 - default: `null`
@@ -342,7 +342,8 @@ Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/
 
 Player events:
 
-`audioupdate`: fired when the `audio` object is updated.
+`audioupdate`: fired when audio source is updated.
+
 `chapterchange`: fired when `chapter` changes.
 
 
@@ -368,9 +369,6 @@ const shk = new Shikwasa({
   parser: jsmediatags,
   audio: {
     src: ...
-    // the parser will read title, artist, duration and chapters info
-    // from the audio file, so you don't need to provide any of those
-    // unless you preferred you own
   }
 })
 ```
