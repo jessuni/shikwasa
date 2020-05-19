@@ -1,6 +1,5 @@
 node_modules
-dist/assets
-dist/index.html
+dist
 .cache
 gh.js
 pages
