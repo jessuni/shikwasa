@@ -51,8 +51,6 @@ function bundle(target, format) {
   }
 }
 
-console.log(bundle('src/chapter.js', 'chapter', 'cjs'))
-
 module.exports = [
   bundle(process.env.TARGET, 'cjs'),
   bundle(process.env.TARGET, 'umd'),

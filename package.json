@@ -1,8 +1,8 @@
 {
   "name": "shikwasa",
-  "version": "1.0.7",
+  "version": "2.0.0-beta.0",
   "description": "A web audio player born for podcasts. With chapters, playback speed and forward/backward controls, it is best paired with your podcasting website.",
-  "main": "dist/shikwasa.lib.cjs.js",
+  "main": "dist/shikwasa.cjs.js",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -47,13 +47,13 @@
     "player",
     "html5audio",
     "shikwasa",
-    "playback"
+    "playback",
+    "chapter"
   ],
   "license": "MIT",
   "repository": "github:jessuni/shikwasa",
   "browserslist": [
-    "last 2 versions",
-    "IE 10",
+    ">0.2%",
     "not ie <= 8"
   ]
 }
