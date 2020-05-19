@@ -407,11 +407,11 @@ Love it, name after it.
 
 [npm]: https://img.shields.io/npm/v/shikwasa.svg?style=flat-square
 [npm-url]: https://npmjs.com/package/shikwasa
-[size]:https://badge-size.herokuapp.com/jessuni/shikwasa/next/dist/shikwasa.min.js?compression=gzip&style=flat-square
-[size-url]:https://github.com/jessuni/shikwasa/tree/master/dist
+[size]:http://img.badgesize.io/https://unpkg.com/shikwasa/dist/shikwasa.min.js?compression=gzip&label=gzip%20size&style=flat-square
+[size-url]:https://github.com/jessuni/shikwasa/tree/next/dist
 [license]:https://img.shields.io/github/license/jessuni/shikwasa?style=flat-square
 [license-url]:https://github.com/jessuni/shikwasa/blob/master/LICENSE.md
 [jsdelivr]: https://badgen.net/jsdelivr/hits/npm/shikwasa?color=orange&style=flat-square
 [jsdelivr-url]: https://www.jsdelivr.com/package/npm/shikwasa
-[dependency]: https://badgen.net/david/dep/jessuni/shikwasa?color=grey&style=flat-square
+[dependency]: https://img.shields.io/badge/dependencies-none-lightgrey.svg?style=flat-square
 [dependency-url]: https://david-dm.org/jessuni/shikwasa
