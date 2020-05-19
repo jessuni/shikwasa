@@ -19,23 +19,12 @@ class Player {
     this._initSeek = 0
     this._canplay = false
     this._dragging = false
-    this._chapterPatched = false
     this.events = new Events()
     this.created(options)
   }
 
   async created(options) {
     this.options = await handleOptions(options)
-    // this.on('audioupdate', (audio) => {
-    //   if (audio.chapters.length && !this._chapterPatched) {
-    //     import('./chapters').then(module => {
-    //       if (module.default) {
-    //         this.comps.chapter = new module.default(this, audio)
-    //         this._chapterPatched = true
-    //       }
-    //     })
-    //   }
-    // })
     this._renderComponents()
     this.initUI(options)
     this.initAudio()
@@ -73,9 +62,7 @@ class Player {
     if (this.audio) {
       this.audio.playbackRate = v
       this.audio.defaultPlaybackRate = v
-      return v
     }
-    return false
   }
 
   get muted() {
@@ -87,7 +74,6 @@ class Player {
       this.audio.muted = v
       this.audio.defaultMuted = v
     }
-    return false
   }
 
   initUI() {
