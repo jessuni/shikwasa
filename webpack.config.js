@@ -6,7 +6,7 @@ const allFiles = fs.readdirSync('pages')
 const pages = allFiles.filter(name => {
   return /\.html$/.test(name)
 })
-const entry = { lib: './src/main.js' }
+const entry = { main: './src/main.js' }
 
 const plugins = pages.map(filename => {
   const name = filename.replace(/\.html$/, '')
