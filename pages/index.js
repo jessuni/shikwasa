@@ -1,5 +1,7 @@
-import Shikwasa from '../src/main'
-import Chapter from '../src/chapter'
+import Shikwasa from '../dist/shikwasa.cjs'
+import Chapter from '../dist/shikwasa.chapter.cjs'
+import '../dist/shikwasa.min.css'
+import '../dist/shikwasa.chapter.min.css'
 
 const src = window.location.origin + '/assets/03-06-11_STS-133_FD11_Mission_Status_Briefing.mp3'
 
@@ -12,8 +14,6 @@ window.shk = new Shikwasa({
   themeColor: '#0b3d91',
   container: () => document.querySelector('.container'),
   audio: {
-    // title: 'STS-133 FD11 Mission Status Briefing',
-    // artist: 'NASA',
     cover: 'https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg',
     src,
   },
