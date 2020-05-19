@@ -1,16 +1,21 @@
 import Shikwasa from '../src/main'
+import Chapter from '../src/chapter'
 
-window.Shikwasa = Shikwasa
+const src = window.location.origin + '/assets/03-06-11_STS-133_FD11_Mission_Status_Briefing.mp3'
 
-new Shikwasa({
+Shikwasa.use(Chapter)
+
+window.shk = new Shikwasa({
   fixed: {
     type: 'auto',
   },
-  container: '.container',
+  themeColor: '#0b3d91',
+  container: () => document.querySelector('.container'),
   audio: {
-    title: 'EP01: How Shikwasa Survives in the Infamous Citrus Family',
-    artist: 'Shikwasa',
-    cover: './assets/logo-contrast.svg',
-    src: './assets/Minyo_San_Kyoku.mp3',
+    // title: 'STS-133 FD11 Mission Status Briefing',
+    // artist: 'NASA',
+    cover: 'https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg',
+    src,
   },
+  parser: window.jsmediatags,
 })
