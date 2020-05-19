@@ -66,6 +66,7 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
       <script src="shikwasa.min.js"></script>
     </body>
    ```
+
 2. Specify a container for the player to be injected into. For example:
 
    ```html
@@ -77,20 +78,20 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
 3. Create an instance of the player
 
    ```javascript
-   // an example with basic init options
+    // an example with basic init options
 
-   const player = new Shikwasa({
-     container: () => document.querySelector('.elementOfYourChoice'),
-     audio: {
-       title: 'Hello World!',
-       artist: 'Shikwasa FM',
-       cover: 'image.png',
-       src: 'audio.mp3',
-     },
-   })
+    const player = new Shikwasa({
+      container: () => document.querySelector('.elementOfYourChoice'),
+      audio: {
+        title: 'Hello World!',
+        artist: 'Shikwasa FM',
+        cover: 'image.png',
+        src: 'audio.mp3',
+      },
+    })
    ```
 
-  Any child nodes inside `container` will be cleared upon the time Shiwkasa mounts.
+   Any child nodes inside `container` will be cleared upon the time Shiwkasa mounts.
 
 4. If you use module system, import like this:
 
@@ -101,16 +102,17 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
     const player = new Shikwasa(options)
    ```
 
-5. To use the chapter plugin, add a seperate script and stylesheet along with what's above:
+5. To use the chapter plugin, add a seperate script and stylesheet along with the above:
 
-  ```javascript
+   ```javascript
     import Chapter as 'shikwasa/dist/shikwasa.chapter.cjs'
     import 'shikwasa/dist/shikwasa.chapter.min.css'
 
     // register the chapter plugin before creating an instance
     Shikwasa.use(Chapter)
-  ```
-  Please thoroughly read the section [Chapters](#chapters) before using this feature.
+   ```
+
+Please read the section [Chapters](#chapters) thoroughly before using this feature.
 
 ## API
 
@@ -137,17 +139,17 @@ Toggle audio play state between play and pause.
 Passing an [`audio` object](#audio) in will replace the current audio source.
 
 ```javascript
-player.update({
-  title: 'Embrace the universe with a cup of shikwasa juice',
-  artist: 'Shikwasa',
-  cover: 'image.png',
-  src: 'sourceAudio.mp3'
+  player.update({
+    title: 'Embrace the universe with a cup of shikwasa juice',
+    artist: 'Shikwasa',
+    cover: 'image.png',
+    src: 'sourceAudio.mp3'
 })
 ```
 
 **.updateChapter(index)**
 
-Seek the audio to the target chapter. `index` is the index of of `chapters` array. Part of the [Chapter Feature](#Chapters).
+Seek the audio to the target chapter. `index` is the index of of `chapters` array. See [Chapter](#Chapters).
 
 **.destroy()**
 
@@ -165,17 +167,17 @@ Register an event listener. Supported events see: [Events](#events)
 - type: `Array`
 - default: `[]`
 
-Chapter metadata of the current audio. Part of the [Chapter Feature](#Chapters).
+Chapter metadata of the current audio, if any. See [Chapter](#Chapters).
 
 **.currentChapter**
 
-**.currentTime**
 - Read-only
-- type: `Array`
+- type: `Null|Object`
 - default: `null`
 
-Indicate which chapter is currently on play. Chapter feature is available only when `audio.chapters` is passed or an audio parser is used.
+Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
 
+**.currentTime**
 - Read-only
 - type: `Number`
 - default: `0`
@@ -198,7 +200,7 @@ The current playbackRate of the player. Similar to the native [`HTMLMediaElement
 
 **.duration**
 
-- type: `Number`
+- type: `Number|NaN`
 - default: `audio.duration || options.audio.duration`
 
 ## Options
@@ -219,19 +221,14 @@ The current playbackRate of the player. Similar to the native [`HTMLMediaElement
     cover: String,
     src: String,
     duration: Number,  // optional
-    chapters: Array,  // optional, read below for details
+    chapters: [  // Array, optional
+      { title, startTime, endTime }, // the first chapter
+      { title, startTime, endTime }, // the second chatper
+    ],
   }
 ```
 
-This is part of the [Chapter Feature](#Chapters).
-
-```javascript
-  audio.chapters: [{
-    title,
-    startTime,
-    endTime,
-  }]`
-```
+The structure of [`audio.chapters`](#Chapters):
 
 | Property      | Type     |  Description                             |
 |---------------|----------|------------------------------------------|
@@ -293,7 +290,7 @@ Whether audio should be muted by default. Similar to HTMLMediaElement's `default
 
 (Optional) Choose from `auto`, `metadata` and `none`. For details view [MDN Doumentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio#attr-preload).
 
-When set to `none`, Shikwasa's behavior will be slightly different from that of the native `<audio>` element in Webkit browsers: unlike the native one that will request audio source even when `preload = none`, Shikwasa will not trigger any request until the audio is played – to prevent uneccessary requests and ensure the same behavior across all browsers.
+If a [`parser`](#parser) is used, the audio will be requested immediately on page load for the parser to work properly, even if `preload` is set to `none`.
 
 - type: `String`
 - default: `metadata`
@@ -322,9 +319,9 @@ download: 'data:audio/mp3;base64,...'
 
 (Optional) Use an external parser to parse the current audio's metadata. If a parser passed, it will read the audio's `title`, `artist`, `duration` and `chapters`, meaning you don't have to provide these four properties into `audio` manually unless you preferred your own. **Priority: property values passed to `audio` > parsed data.**
 
--type: `Null|Object`
--default: `null`
--usage:
+- type: `Null|Object`
+- default: `null`
+- usage:
 
 `npm install jsmediatags` or use CDN
 
@@ -343,16 +340,23 @@ Due to `jsmediatags` limitation, relative urls are not supported. Please use abs
 
 Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) native events.
 
+Player events:
+
+`audioupdate`: fired when the `audio` object is updated.
+`chapterchange`: fired when `chapter` changes.
+
+
 ## Chapters
 
-1. register the chapter plugin before creating a Shikwasa instance. [How-to](#usage)
+Shikwasa will support chapter display and seeking with the chapter plugin. To use:
+
+1. Register the chapter plugin before creating a Shikwasa instance. [How-to](#usage)
 2. This does not grant that the audio will display chapters. To display chapters, you'll need to either provide it to the player. Shikwasa also supports using `jsmediatags` as an external parser to read and extract chapter info from the audio file;
-  - To manually provide chapter, include a `chapters` object in `audio`. [How to pass chapter?](#Audio)
-  - To use a parser, pass [jsmediatags](https://github.com/aadsm/jsmediatags), in the `parser` options. [How to use a parser?](#parser)
+  - (1)To manually provide chapter, include a `chapters` object in `audio`. [How to pass chapter?](#Audio)
+  - (2)To use a parser, pass [jsmediatags](https://github.com/aadsm/jsmediatags), in the `parser` options. [How to use a parser?](#parser)
 
-Then `.updateChapter(index)`(see [here](#methods)), `chapters` and `currentChapter`(see [here](#properties)) will also be available to use.
 
-`chapters` array passed in the options / audio update will take higher priority.
+**(1) will take higher priority.**
 
 ### Using parser for chapters
 
@@ -364,18 +368,29 @@ const shk = new Shikwasa({
   parser: jsmediatags,
   audio: {
     src: ...
-    // the parser will read title, artist, duration and chapters info from the audio file, so you don't need to provide them anymore
+    // the parser will read title, artist, duration and chapters info
+    // from the audio file, so you don't need to provide any of those
+    // unless you preferred you own
   }
 })
 ```
-Other information check out [parser](#parser).
+
+Related:
+
+- [Methods](#methods): `.updateChapter(index)`
+- [Properties](#properties): `chapters`, `currentChapter`
+- Options: [`audio`](#audio), [`parser`](#parser)
+
+For other information, check out the section [Parser](#parser).
 
 ## Roadmap
 
-Under v1.0.0:
-- [ ] supporting audio id3 metadata --currently working on this one
-- [ ] cleaner & sleeker interface
-- [ ] dark mode
+Under v2.0.0:
+- [x] supporting audio id3 metadata --currently working on this one
+- [x] cleaner & sleeker interface
+- [x] dark mode
+- [x] a complete rewrite
+- [x] keyboard support
 
 Others:
 - [ ] podcast playlist
