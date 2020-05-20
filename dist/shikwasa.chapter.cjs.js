@@ -102,6 +102,16 @@ function toggleAttribute(el, name) {
   } else {
     el.setAttribute(name, '');
   }
+}
+function animateScroll(timestamp, startTime, duration, startPos, distance, scrollEl) {
+  var elapsed = (timestamp - startTime) / 1000;
+  var t = elapsed / duration;
+  scrollEl.scrollTop = startPos + distance * t;
+  if (t < 1) {
+    window.requestAnimationFrame(ts => {
+      animateScroll(ts, startTime, duration, startPos, distance, scrollEl);
+    });
+  }
 }var resize;
 class Chapter {
   constructor(ctx) {
@@ -334,14 +344,4 @@ class ChapterUI {
     window.removeEventListener('resize', resize);
   }
 }
-window.Chapter = Chapter;
-function animateScroll(timestamp, startTime, duration, startPos, distance, scrollEl) {
-  var elapsed = (timestamp - startTime) / 1000;
-  var t = elapsed / duration;
-  scrollEl.scrollTop = startPos + distance * t;
-  if (t < 1) {
-    window.requestAnimationFrame(ts => {
-      animateScroll(ts, startTime, duration, startPos, distance, scrollEl);
-    });
-  }
-}module.exports=Chapter;
+window.Chapter = Chapter;module.exports=Chapter;

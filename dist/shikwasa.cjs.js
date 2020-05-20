@@ -877,5 +877,5 @@ class Player {
 }
 Player.use = function (comp) {
   REGISTERED_COMPS.push(comp);
-};console.log("%c\uD83C\uDF4A%c Shikwasa Podcast Player v2.0.0-beta.0 %c https://jessuni.github.io/shikwasa/", 'background-color:#00869B40;padding:4px;', 'background:#00869B80;color:#fff;padding:4px 0', 'padding: 2px 0;');
+};console.log("%c\uD83C\uDF4A%c Shikwasa Podcast Player v2.0.0-beta.0 %c https://shikwasa.js.org", 'background-color:#00869B40;padding:4px;', 'background:#00869B80;color:#fff;padding:4px 0', 'padding: 2px 0;');
 module.exports=Player;
