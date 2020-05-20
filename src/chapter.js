@@ -1,6 +1,6 @@
 import './css/chapter.css'
 import chapterTemplate from './templates/Chapter'
-import { createElement, secondToTime, marquee, toggleAttribute } from './utils'
+import { createElement, secondToTime, marquee, toggleAttribute, animateScroll } from './utils'
 
 let resize
 
@@ -294,23 +294,4 @@ class ChapterUI {
 window.Chapter = Chapter
 
 export default Chapter
-
-function animateScroll(
-  timestamp,
-  startTime,
-  duration,
-  startPos,
-  distance,
-  scrollEl) {
-  const elapsed = (timestamp - startTime) / 1000
-  const t = elapsed / duration
-
-  // easing in a linear fashion
-  scrollEl.scrollTop = startPos + distance * t
-  if (t < 1) {
-    window.requestAnimationFrame(ts => {
-      animateScroll(ts, startTime, duration, startPos, distance, scrollEl)
-    })
-  }
-}
 
