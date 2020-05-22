@@ -15,12 +15,14 @@ class Player {
     playerArr.push(this)
     this.comps = {}
     this._audio = {}
+    this._inited = false
     this._hasMediaSession = false
     this._initSeek = 0
     this._canplay = false
     this._dragging = false
     this.events = new Events()
     this.created(options)
+    this._inited = true
   }
 
   async created(options) {
@@ -28,7 +30,6 @@ class Player {
     this._renderComponents()
     this.initUI(options)
     this.initAudio()
-    this.events.trigger('inited')
     this.ui.mount(this.options.container)
   }
 
