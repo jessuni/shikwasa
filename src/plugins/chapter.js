@@ -1,6 +1,6 @@
-import './css/chapter.css'
-import chapterTemplate from './templates/Chapter'
-import { createElement, secondToTime, marquee, toggleAttribute, animateScroll } from './utils'
+import '../css/chapter.css'
+import chapterTemplate from '../templates/Chapter'
+import { createElement, secondToTime, marquee, toggleAttribute, animateScroll } from '../utils'
 
 let resize
 
