@@ -1,4 +1,4 @@
-import config from './config'
+import { DEFAULT ,CONFIG } from './config'
 
 export function secondToTime(time) {
   time = Math.round(time)
@@ -31,14 +31,14 @@ export function marquee(textWrap, textEl, speed = 60) {
 }
 
 export async function handleOptions(options) {
-  Object.keys(config).forEach(k => {
+  Object.keys(DEFAULT).forEach(k => {
     options[k] = (options[k] || typeof options[k] === 'boolean') ?
-      options[k] : config[k]
+      options[k] : DEFAULT[k]
   })
-  options.container = options.container() || config.container
-  const fixedType = config.fixedOptions.find(item => item === options.fixed.type)
+  options.container = options.container()
+  const fixedType = CONFIG.fixedOptions.find(item => item === options.fixed.type)
   if (!fixedType) {
-    options.fixed.type = config.fixed.type
+    options.fixed.type = DEFAULT.fixed.type
   }
   if (!Array.isArray(options.speedOptions)) {
     options.speedOptions = [options.speedOptions]
@@ -64,7 +64,7 @@ export async function handleAudio(audio = {}, parser = null) {
   let audioInfo = {}
   if (parser && (!audio.title || !audio.artist || !audio.cover)) {
     try {
-      const { tags } = await parseAudio(audio.src, parser)
+      const { tags } = await parseAudio(audio.src, parser) || {}
       audioInfo = handleParsedTags(tags)
     } catch (e) {
       console.error(e)
@@ -74,8 +74,8 @@ export async function handleAudio(audio = {}, parser = null) {
       chap.id = `ch${i}`
     })
   }
-  Object.keys(config.audioOptions).forEach(k => {
-    audioInfo[k] = audio[k] || audioInfo[k] || config.audioOptions[k]
+  Object.keys(CONFIG.audioOptions).forEach(k => {
+    audioInfo[k] = audio[k] || audioInfo[k] || CONFIG.audioOptions[k]
   })
   audioInfo.src = audio.src
   return audioInfo
@@ -90,7 +90,7 @@ export function parseAudio(src, parser) {
   })
 }
 
-export function handleParsedTags(tags) {
+export function handleParsedTags(tags = {}) {
   let cover, chapters, duration
   const { title, artist } = tags
   if (tags.picture && tags.picture.data && tags.picture.format) {

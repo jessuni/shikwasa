@@ -5,3 +5,4 @@ gh.js
 pages
 !pages/index.html
 !pages/index.js
+coverage

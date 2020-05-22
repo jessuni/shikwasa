@@ -1,5 +1,5 @@
-const CONFIG = {
-  container: document.querySelector('body'),
+export const DEFAULT = {
+  container: () => document.querySelector('body'),
   parser: null,
   fixed: {
     type: 'auto',
@@ -11,10 +11,11 @@ const CONFIG = {
   autoPlay: false,
   muted: false,
   preload: 'metadata',
-  speedOptions: [0.5, 0.75, 1.25, 1.5],
+  speedOptions: [0.5, 0.75, 1, 1.25, 1.5],
   audio: null,
+}
 
-  // not in options
+export const CONFIG = {
   fixedOptions: ['auto', 'static', 'fixed'],
   audioOptions: {
     title: 'Unknown Title',
@@ -25,7 +26,3 @@ const CONFIG = {
     src: null,
   },
 }
-
-
-
-export default CONFIG
