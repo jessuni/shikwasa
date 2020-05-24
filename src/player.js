@@ -22,15 +22,20 @@ class Player {
     this._dragging = false
     this.events = new Events()
     this.created(options)
-    this._inited = true
   }
 
   async created(options) {
-    this.options = await handleOptions(options)
+    this.options = handleOptions(options)
+    if (this.options.audio && this.options.audio.src) {
+      this.options.audio = await handleAudio(options.audio, options.parser)
+    } else {
+      throw new Error('Shikwasa: audio source is not specified')
+    }
     this._renderComponents()
     this.initUI(options)
     this.initAudio()
     this.ui.mount(this.options.container)
+    this._inited = true
   }
 
   get duration() {

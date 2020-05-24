@@ -30,12 +30,14 @@ export function marquee(textWrap, textEl, speed = 60) {
   }
 }
 
-export async function handleOptions(options) {
+export function handleOptions(options) {
   Object.keys(DEFAULT).forEach(k => {
     options[k] = (options[k] || typeof options[k] === 'boolean') ?
       options[k] : DEFAULT[k]
   })
-  options.container = options.container()
+  if (typeof options.container === 'function') {
+    options.container = options.container()
+  }
   const fixedType = CONFIG.fixedOptions.find(item => item === options.fixed.type)
   if (!fixedType) {
     options.fixed.type = DEFAULT.fixed.type
@@ -51,11 +53,6 @@ export async function handleOptions(options) {
     .filter(sp => !isNaN(sp))
   if (options.speedOptions.length > 1) {
     options.speedOptions.sort((a, b) => a - b)
-  }
-  if (options.audio && options.audio.src) {
-    options.audio = await handleAudio(options.audio, options.parser)
-  } else {
-    throw new Error('Shikwasa: audio source is not specified')
   }
   return options
 }
