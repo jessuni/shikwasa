@@ -14,12 +14,13 @@
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.3",
     "cssnano": "^4.1.10",
+    "cypress": "^4.7.0",
     "eslint": "^7.0.0",
     "eslint-loader": "^4.0.2",
+    "eslint-plugin-cypress": "^2.10.3",
     "gh-pages": "^2.2.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",
-    "jest": "^26.0.1",
     "mini-css-extract-plugin": "^0.9.0",
     "postcss-loader": "^3.0.0",
     "rollup": "^2.10.4",
@@ -40,7 +41,7 @@
     "build:chapter": "TARGET=chapter rollup -c",
     "deploy": "gh-pages -d dist",
     "lint": "eslint --fix src",
-    "test": "jest --coverage"
+    "test": "npx cypress open"
   },
   "author": "Jessie Ji <jessunix+shikwasa@gmail.com> (https://jessieji.com)",
   "keywords": [

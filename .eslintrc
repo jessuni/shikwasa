@@ -19,7 +19,8 @@
       "arrays": "always-multiline"
     }],
     "object-curly-spacing": 0,
-    "no-process-env": 0
+    "no-process-env": 0,
+    "no-unexpected-multiline": 0
   },
   "ignorePatterns": ["dist/*"]
 }

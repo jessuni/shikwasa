@@ -1,13 +1,14 @@
 import tags from './tags.json'
 
-const src = '/assets/03-06-11_STS-133_FD11_Mission_Status_Briefing.mp3'
+const src = '/assets/STS-133_FD11_Mission_Status_Briefing.mp3'
 
 const parsedAudio = {
   artist: 'NASA',
   title: 'STS-133 FD11 Mission Status Briefing',
   src: src,
-  duration: 666,
-  'chapters': [
+  duration: 667,
+  duration_display: '11:07',
+  chapters: [
     {
       'id': 'chp0',
       'startTime': 0,
@@ -64,6 +65,8 @@ const customAudio = {
   title: 'Shikwasa',
   src: src,
   duration: 1000,
+  duration_display: '16:40',
+  cover: '/assets/logo.svg',
   chapters: [
     { title: '1', startTime: 0, endTime: 500 },
     { title: '2', startTime: 500, endTime: 1000 },
