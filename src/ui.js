@@ -139,11 +139,6 @@ export default class UI {
     if (this.downloadBtn) {
       this.downloadBtn.href= audio.src
     }
-    if (!audio.duration) {
-      this.seekControls.forEach(el => el.setAttribute('disabled', ''))
-    } else {
-      this.seekControls.forEach(el => el.removeAttribute('disabled'))
-    }
     this.setBar('loaded', 0)
   }
 

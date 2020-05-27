@@ -78,6 +78,7 @@ export async function handleAudio(audio = {}, parser = null) {
   return audioInfo
 }
 
+
 export function parseAudio(src, parser) {
   return new Promise((resolve, reject) => {
     parser.read(src, {

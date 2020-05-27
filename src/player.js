@@ -21,21 +21,22 @@ class Player {
     this._canplay = false
     this._dragging = false
     this.events = new Events()
-    this.created(options)
+    this.options = handleOptions(options)
+    this.initUI(options)
+    this.initAudio()
+    this.init(options)
   }
 
-  async created(options) {
-    this.options = handleOptions(options)
+  async init(options) {
     if (this.options.audio && this.options.audio.src) {
       this.options.audio = await handleAudio(options.audio, options.parser)
     } else {
       throw new Error('Shikwasa: audio source is not specified')
     }
     this._renderComponents()
-    this.initUI(options)
-    this.initAudio()
+    this.update(this.options.audio)
     this.ui.mount(this.options.container)
-    this._inited = true
+    this.events.trigger('inited')
   }
 
   get duration() {
@@ -50,10 +51,15 @@ class Player {
   }
 
   set seekable(v) {
-    if (v !== true) return
-    this.ui.seekControls.forEach(el => {
-      el.removeAttribute('disabled')
-    })
+    if (v) {
+      this.ui.seekControls.forEach(el => {
+        el.removeAttribute('disabled')
+      })
+    } else {
+      this.ui.seekControls.forEach(el => {
+        el.setAttribute('disabled', '')
+      })
+    }
   }
 
   get currentTime() {
@@ -87,6 +93,9 @@ class Player {
     this.el = this.ui.el
     this.initControlEvents()
     this.initBarEvents()
+    this.events.on('inited', () => {
+      this._inited = true
+    })
   }
 
   initControlEvents() {
@@ -145,7 +154,7 @@ class Player {
 
       const backwardKeys = ['Left', 'Down']
       const forwardKeys = ['Right', 'Up']
-      const largeStepKeys = ['pageDown', 'pageUp']
+      const largeStepKeys = ['PageDown', 'PageUp']
       const edgeKeys = ['Home', 'End']
       const isBack = backwardKeys.indexOf(key) !== -1
       const isFwd = forwardKeys.indexOf(key) !== -1
@@ -158,9 +167,11 @@ class Player {
       }
       if (isStart) {
         this.seek(0)
+        return
       }
       if (isEnd) {
         this.seek(this.duration)
+        return
       }
       const step = (isWayFwd || isWayBack ? 0.1 : 0.01) * (isFwd || isWayFwd ? 1 : -1)
       const currentTime = this._canplay ? this.currentTime : this._initSeek
@@ -182,7 +193,6 @@ class Player {
       })
       this.audio.preload = this.options.preload
       this.muted = this.options.muted
-      this.update(this.options.audio)
     }
   }
 
@@ -326,6 +336,7 @@ class Player {
     this.audio.src = this._audio.src
     this.audio.title = this._audio.title
     this.events.trigger('audioupdate', this._audio)
+    this.seekable = this._audio.duration
     this.ui.setAudioInfo(this._audio)
     if (this._hasMediaSession) {
       this.setMediaMetadata(this._audio)
