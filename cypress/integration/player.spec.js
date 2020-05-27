@@ -1,5 +1,5 @@
-import data from '../../tests/data'
-import Setup from '../../tests/setup'
+import data from '../fixtures/data'
+import Setup from '../support/setup'
 import { DEFAULT, CONFIG } from '../../src/config'
 
 let Shikwasa, shk, document
