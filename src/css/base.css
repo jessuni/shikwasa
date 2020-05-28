@@ -2,7 +2,6 @@
   --color-primary: #00CCB8;
   --color-opac: #b9b9b94d;
   --color-handle-disabled: #b9b9b9;
-  --color-handle-shadow: #ffffff00;
   --font-sys: -apple-system,BlinkMacSystemFont,"avenir next", avenir, "Segoe UI", Roboto,Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue";
   --font-sans-serif: sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 
@@ -10,14 +9,14 @@
   --color-secondary: #767676;
   --color-text: #333;
   --color-handle-shadow-mobile: #b9b6b6;
-  --color-body-shadow: #b9b6b680;
+  --color-shadow: #b9b6b680;
 }
 .shk[data-theme="dark"] {
   --color-theme: #333;
   --color-secondary: #b9b6b6;
   --color-text: #f8f9fa;
   --color-handle-shadow-mobile: #141414;
-  --color-body-shadow: #14141480;
+  --color-shadow: #14141480;
 }
 @media (prefers-color-scheme: dark) {
   .shk[data-theme="auto"] {
@@ -25,7 +24,7 @@
     --color-secondary: #b9b6b6;
     --color-text: #fff;
     --color-handle-shadow-mobile: #141414;
-    --color-body-shadow: #14141480;
+    --color-shadow: #14141480;
   }
 }
 @keyframes rotate {
@@ -357,7 +356,7 @@ svg.shk-btn_mute,
   .shk-player {
     margin-top: 4px;
     padding: 20px 16px;
-    box-shadow: 2px 2px 8px -2px var(--color-body-shadow);
+    box-shadow: 2px 2px 8px -2px var(--color-shadow);
   }
   .shk-main {
     align-items: flex-end;
@@ -384,7 +383,7 @@ svg.shk-btn_mute,
   .shk-bar-handle {
     top: -9.5px;
     border: 4px solid transparent;
-    box-shadow: 0px 2px 10px var(--color-handle-shadow);
+    box-shadow: 0px 2px 10px 2px var(--color-shadow);
     transform: scale(.0001);
     transition: all .1s ease-in;
   }
@@ -408,7 +407,7 @@ svg.shk-btn_mute,
 @media (max-width: 640px) {
   .shk-player {
     padding: 5px 16px;
-    box-shadow: 0 -2px 6px -2px var(--color-body-shadow);
+    box-shadow: 0 -2px 6px -2px var(--color-shadow);
   }
   .shk[data-fixed-type="auto"] {
     position: fixed;

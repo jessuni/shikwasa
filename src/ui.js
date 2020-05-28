@@ -57,6 +57,7 @@ export default class UI {
   initOptions(options) {
 
     // dark mode
+    this.el.style = `--color-primary: ${options.themeColor}`
     this.el.setAttribute('data-theme', options.theme)
 
     // download
