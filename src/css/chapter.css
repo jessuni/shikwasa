@@ -27,10 +27,12 @@
   background: var(--color-theme);
   z-index: 0;
   opacity: 0;
+  visibility: hidden;
   overflow: hidden;
-  transition: height ease-in-out .2s, bottom ease-in-out .1s, opacity linear .1s;
+  transition: height ease-in-out .2s, bottom ease-in-out .1s, opacity linear .1s, visibility .1s .2s;
 }
 .shk[data-show-chapter] .shk-chapter {
+  visibility: visible;
   height: 340px;
   bottom: 120px;
   opacity: 1;
