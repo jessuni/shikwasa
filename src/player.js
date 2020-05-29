@@ -1,6 +1,6 @@
 import UI from './ui'
 import Events from './events'
-import { toggleAttribute, handleOptions, handleAudio } from './utils'
+import { toggleAttribute, handleOptions, handleAudio, parseAudio } from './utils'
 
 const playerArr = []
 const REGISTERED_COMPS = []
@@ -15,29 +15,19 @@ class Player {
     playerArr.push(this)
     this.comps = {}
     this._audio = {}
-    this._inited = false
     this._hasMediaSession = false
     this._initSeek = 0
     this._canplay = false
     this._dragging = false
     this.events = new Events()
     this.options = handleOptions(options)
-    this.initUI(options)
+    this.renderComponents()
+    this.initUI(this.options)
     this.initAudio()
-    this.init(options)
+    this.ui.mount(this.options.container)
   }
 
-  async init(options) {
-    if (this.options.audio && this.options.audio.src) {
-      this.options.audio = await handleAudio(options.audio, options.parser)
-    } else {
-      throw new Error('Shikwasa: audio source is not specified')
-    }
-    this._renderComponents()
-    this.update(this.options.audio)
-    this.ui.mount(this.options.container)
-    this.events.trigger('inited')
-  }
+
 
   get duration() {
     if (!this.audio || !this.audio.duration) {
@@ -93,9 +83,6 @@ class Player {
     this.el = this.ui.el
     this.initControlEvents()
     this.initBarEvents()
-    this.events.on('inited', () => {
-      this._inited = true
-    })
   }
 
   initControlEvents() {
@@ -193,6 +180,7 @@ class Player {
       })
       this.audio.preload = this.options.preload
       this.muted = this.options.muted
+      this.update(this.options.audio)
     }
   }
 
@@ -269,10 +257,11 @@ class Player {
 
   setMediaMetadata(audio) {
     /* global MediaMetadata */
+    const artwork = audio.cover ? [{ src: audio.cover}] : undefined
     navigator.mediaSession.metadata = new MediaMetadata({
       title: audio.title,
       artist: audio.artist,
-      artwork: [{ src: audio.cover }],
+      artwork,
     })
   }
 
@@ -310,7 +299,7 @@ class Player {
     if (!this.seekable) return
     time = parseInt(time)
     if (isNaN(time)) {
-      console.error('TypeError: seeking time is NaN')
+      console.error('Shikwasa: seeking time is NaN')
     }
     time = Math.min(time, this.duration)
     time = Math.max(time, 0)
@@ -328,18 +317,36 @@ class Player {
     this.seek(targetTime)
   }
 
-  async update(audio) {
-    this._audio = this._inited ?
-      await handleAudio(audio, this.options.parser) :
-      audio
-    this._canplay = false
-    this.audio.src = this._audio.src
-    this.audio.title = this._audio.title
-    this.events.trigger('audioupdate', this._audio)
-    this.seekable = this._audio.duration
-    this.ui.setAudioInfo(this._audio)
+  update(audio) {
+    if (audio && audio.src) {
+      this._audio = handleAudio(audio)
+      this._canplay = false
+
+      this.audio.src = this._audio.src
+      this.updateAudioData(this._audio)
+      this.events.trigger('audioupdate', this._audio)
+      if (this.options.parser &&
+        (!this._audio.title ||
+        !this._audio.artist ||
+        !audio.cover)
+      ) {
+        parseAudio(Object.assign({}, audio), this.options.parser).then(audioData => {
+          this._audio = audioData || this._audio
+          this.updateAudioData(this._audio)
+          this.events.trigger('audioparse', this._audio)
+        })
+      }
+    } else {
+      throw new Error('Shikwasa: audio source is not specified')
+    }
+  }
+
+  updateAudioData(audio) {
+    this.audio.title = audio.title
+    this.ui.setAudioInfo(audio)
+    this.seekable = audio.duration
     if (this._hasMediaSession) {
-      this.setMediaMetadata(this._audio)
+      this.setMediaMetadata(audio)
     }
   }
 
@@ -363,7 +370,7 @@ class Player {
     this.options.container.innerHTML = ''
   }
 
-  _renderComponents() {
+  renderComponents() {
     if (!REGISTERED_COMPS.length) return
     REGISTERED_COMPS.forEach(comp => {
       const name = comp.name.toLowerCase()

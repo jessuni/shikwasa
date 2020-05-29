@@ -31,55 +31,52 @@ export function marquee(textWrap, textEl, speed = 60) {
 }
 
 export function handleOptions(options) {
+  const _options = Object.assign({}, options)
+  _options.audio = Object.assign({}, options.audio)
   Object.keys(DEFAULT).forEach(k => {
-    options[k] = (options[k] || typeof options[k] === 'boolean') ?
-      options[k] : DEFAULT[k]
+    _options[k] = (_options[k] || typeof _options[k] === 'boolean') ?
+      _options[k] : DEFAULT[k]
   })
-  if (typeof options.container === 'function') {
-    options.container = options.container()
+  if (typeof _options.container === 'function') {
+    _options.container = _options.container()
   }
-  const fixedType = CONFIG.fixedOptions.find(item => item === options.fixed.type)
+  const fixedType = CONFIG.fixedOptions.find(item => item === _options.fixed.type)
   if (!fixedType) {
-    options.fixed.type = DEFAULT.fixed.type
+    _options.fixed.type = DEFAULT.fixed.type
   }
-  if (!Array.isArray(options.speedOptions)) {
-    options.speedOptions = [options.speedOptions]
+  if (!Array.isArray(_options.speedOptions)) {
+    _options.speedOptions = [_options.speedOptions]
   }
-  if (options.speedOptions.indexOf(1) === -1) {
-    options.speedOptions.push(1)
+  if (_options.speedOptions.indexOf(1) === -1) {
+    _options.speedOptions.push(1)
   }
-  options.speedOptions = options.speedOptions
+  _options.speedOptions = _options.speedOptions
     .map(sp => parseFloat(sp))
     .filter(sp => !isNaN(sp))
-  if (options.speedOptions.length > 1) {
-    options.speedOptions.sort((a, b) => a - b)
+  if (_options.speedOptions.length > 1) {
+    _options.speedOptions.sort((a, b) => a - b)
   }
-  return options
+  return _options
 }
 
-export async function handleAudio(audio = {}, parser = null) {
-  let audioInfo = {}
-  if (parser && (!audio.title || !audio.artist || !audio.cover)) {
-    try {
-      const { tags } = await parseAudio(audio.src, parser) || {}
-      audioInfo = handleParsedTags(tags)
-    } catch (e) {
-      console.error(e)
-    }
-  } else if (audio.chapters) {
-    audio.chapters.forEach((chap, i) => {
-      chap.id = `ch${i}`
-    })
-  }
+export function handleAudio(audio = {}, parsedData = {}) {
+  let audioData = Object.assign({}, audio)
+
   Object.keys(CONFIG.audioOptions).forEach(k => {
-    audioInfo[k] = audio[k] || audioInfo[k] || CONFIG.audioOptions[k]
+    audioData[k] = audioData[k] ||
+      parsedData[k] ||
+      CONFIG.audioOptions[k]
   })
-  audioInfo.src = audio.src
-  return audioInfo
+  return audioData
 }
 
+export async function parseAudio(audio = {}, parser = {}) {
+  const { tags } = await parserWrap(audio.src, parser) || {}
+  const tagData = handleParsedTags(tags)
+  return handleAudio(audio, tagData)
+}
 
-export function parseAudio(src, parser) {
+export function parserWrap(src, parser) {
   return new Promise((resolve, reject) => {
     parser.read(src, {
       onSuccess: resolve,
