@@ -1,8 +1,27 @@
 language: node_js
 node_js:
   - node
-cache: npm
-script:
-  - npm run lint
-  - npm run test:ci
-  - npm run build
+cache:
+  directories:
+    - ~/.cache
+    - ~/.npm
+install:
+  - npm ci
+jobs:
+  include:
+    - stage: test
+      script:
+        - npm run lint
+        - npm run start:ci &
+        - npm run test:ci --record -key $CYPRESS_DASHBOARD_KEY CYPRESS_BASE_URL=http://localhost:8080
+        - npm run build
+        - kill $(jobs -p) || true
+    - stage: deploy
+      script:
+        - node ./gh.js
+
+stages:
+  - name: test
+  if: type = push
+  - name: deploy
+  if type = push AND branch = master

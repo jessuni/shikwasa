@@ -29,9 +29,7 @@ module.exports = {
     pathinfo: false,
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
     hot: true,
-    host: '192.168.1.133',
     port: '8080',
     disableHostCheck: true,
   },

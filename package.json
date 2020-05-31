@@ -35,14 +35,15 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "webpack-dev-server",
+    "start:ci": "webpack-dev-server",
+    "dev": "webpack-dev-server --host 192.168.1.133",
     "build": "npm run build:main && npm run build:chapter",
     "build:main": "TARGET=main rollup -c",
     "build:chapter": "TARGET=chapter rollup -c",
     "deploy": "gh-pages -d dist",
     "lint": "eslint --fix src",
-    "test:ci": "cypress run --record http-server -p 8888 -c-1 --silent",
-    "test:open": "npx cypress open"
+    "test:open": "npx cypress open",
+    "test:ci": "npx cypress run"
   },
   "author": "Jessie Ji <jessunix+shikwasa@gmail.com> (https://jessieji.com)",
   "keywords": [
