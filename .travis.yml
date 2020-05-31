@@ -7,20 +7,24 @@ cache:
     - ~/.npm
 install:
   - npm ci
-jobs:
-  include:
-    - stage: test
-      script:
-        - npm run lint
-        - npm run start:ci &
-        - npm run test:ci --record -key $CYPRESS_DASHBOARD_KEY CYPRESS_BASE_URL=http://localhost:8080
-        - npm run build
-        - kill $(jobs -p) || true
-    - stage: deploy
-      script:
-        - node ./gh.js
+script:
+  - npm run lint
+  - npm run start:ci &
+  - npm run test:ci --record -key $CYPRESS_DASHBOARD_KEY CYPRESS_BASE_URL=http://localhost:8080
+# jobs:
+#   include:
+#     - stage: test
+#       script:
+#         - npm run lint
+#         - npm run start:ci &
+#         - npm run test:ci --record -key $CYPRESS_DASHBOARD_KEY CYPRESS_BASE_URL=http://localhost:8080
+#         - npm run build
+#         - kill $(jobs -p) || true
+#     - stage: deploy
+#       script:
+#         - node ./gh.js
 
-stages:
-  - name: test
-  - name: deploy
-  if: type = push AND branch = master
+# stages:
+#   - name: test
+#   - name: deploy
+#   if: type = push AND branch = master
