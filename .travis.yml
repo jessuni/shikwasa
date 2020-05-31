@@ -10,7 +10,7 @@ install:
 script:
   - npm run lint
   - npm run start:ci &
-  - npm run test:ci --record -key $CYPRESS_DASHBOARD_KEY CYPRESS_BASE_URL=http://localhost:8080
+  - CYPRESS_BASE_URL=http://localhost:8080 npm run test:ci --record -key $CYPRESS_DASHBOARD_KEY
 # jobs:
 #   include:
 #     - stage: test
