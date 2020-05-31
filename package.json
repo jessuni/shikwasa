@@ -41,7 +41,7 @@
     "build:chapter": "TARGET=chapter rollup -c",
     "deploy": "gh-pages -d dist",
     "lint": "eslint --fix src",
-    "test:ci": "cypress run",
+    "test:ci": "cypress run --record http-server -p 8888 -c-1 --silent",
     "test:open": "npx cypress open"
   },
   "author": "Jessie Ji <jessunix+shikwasa@gmail.com> (https://jessieji.com)",
