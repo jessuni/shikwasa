@@ -43,7 +43,7 @@
     "deploy": "gh-pages -d dist",
     "lint": "eslint --fix src",
     "test:open": "npx cypress open",
-    "test:ci": "npx cypress run CYPRESS_BASE_URL=http://localhost:8080"
+    "test:ci": "CYPRESS_BASE_URL=http://localhost:8080 npx cypress run"
   },
   "author": "Jessie Ji <jessunix+shikwasa@gmail.com> (https://jessieji.com)",
   "keywords": [
