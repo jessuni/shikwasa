@@ -36,14 +36,14 @@
   "scripts": {
     "start": "npm run dev",
     "start:ci": "webpack-dev-server --client-log-level silent",
-    "dev": "webpack-dev-server --host 192.168.1.133",
+    "dev": "webpack-dev-server",
     "build": "npm run build:main && npm run build:chapter",
     "build:main": "TARGET=main rollup -c",
     "build:chapter": "TARGET=chapter rollup -c",
     "deploy": "gh-pages -d dist",
     "lint": "eslint --fix src",
     "test:open": "npx cypress open",
-    "test:ci": "CYPRESS_BASE_URL=http://localhost:8080 npx cypress run"
+    "test:ci": "npx cypress run"
   },
   "author": "Jessie Ji <jessunix+shikwasa@gmail.com> (https://jessieji.com)",
   "keywords": [

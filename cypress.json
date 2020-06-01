@@ -1,6 +1,6 @@
 {
   "projectId": "ym82ut",
-  "baseUrl": "http://192.168.1.133:8080",
+  "baseUrl": "http://localhost:8080",
   "viewportWidth": 720,
   "viewportHeight": 480,
   "fixturesFolder": false
