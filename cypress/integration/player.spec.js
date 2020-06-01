@@ -305,8 +305,8 @@ describe('Progress bar controls', () => {
       shk.audio.currentTime = targetTime
     })
 
-    it('displays loading progress correctly', () => {
-      shk.on('progress', (done) => {
+    it('displays loading progress correctly', (done) => {
+      shk.on('progress', () => {
         const buffer = shk.audio.buffered
         if (buffer.length) {
           cy.get('.shk-bar_loaded').then($el => {
