@@ -5,6 +5,6 @@ pages
 !pages/index.html
 !pages/index.js
 coverage
-cypress
+cypress/*
 !cypress/fixtures
 !cypress/integration
