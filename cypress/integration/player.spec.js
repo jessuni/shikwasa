@@ -118,23 +118,26 @@ describe('Player initiation', () => {
           options.preload = p
           if (options.preload === 'none' && !options.audio.duration && !options.parser) {
             it('renders duration as 0 and disable seek controls when duration is unknown', () => {
-              shk = new Shikwasa(options)
-              shk.on('inited', () => {
-                cy.get('.shk-time_duration').contains('00:00')
-                expect(shk.ui.seekControls.every(el => el.disabled)).to.be.true
-              })
+            shk = new Shikwasa(options)
+              cy.get('.shk-time_duration').contains('00:00')
+              expect(shk.ui.seekControls.every(el => el.disabled)).to.be.true
             })
           } else {
-            it(`enable seek controls if custom duration=${options.audio.duration}, ${k}, preload=${p}`, () => {
+            it(`enable seek controls if custom duration=${options.audio.duration}, ${k}, preload=${p}`, (done) => {
               shk = new Shikwasa(options)
               if (!options.audio.duration && !options.parser) {
                 shk.on('durationchange', () => {
                   expect(shk.ui.seekControls.every(el => !el.disabled)).to.be.true
+                  done()
+                })
+              } else if (options.parser) {
+                shk.on('audioparse', () => {
+                  expect(shk.ui.seekControls.every(el => !el.disabled)).to.be.true
+                  done()
                 })
               } else {
-                shk.on('inited', () => {
-                  expect(shk.ui.seekControls.every(el => !el.disabled)).to.be.true
-                })
+                expect(shk.ui.seekControls.every(el => !el.disabled)).to.be.true
+                done()
               }
             })
           }
@@ -142,17 +145,17 @@ describe('Player initiation', () => {
           if (options.audio.duration) {
             it('renders custom data if present', () => {
               shk = new Shikwasa(options)
-              shk.on('inited', () => {
-                cy.get('.shk-time_duration').contains(data.customAudio.duration_display)
-              })
+              cy.get('.shk-time_duration').contains(data.customAudio.duration_display)
             })
           }
 
           if (!options.audio.duration && options.parser) {
-            it('renders parsed data if no custom data is provided', () => {
+            it('renders parsed data if no custom data is provided', (done) => {
               shk = new Shikwasa(options)
-              shk.on('inited', () => {
-                cy.get('.shk-time_duration').contains(data.parsedAudio.duration_display)
+              shk.on('audioparse', () => {
+                cy.get('.shk-time_duration').contains(data.parsedAudio.duration_display).then(() => {
+                  done()
+                })
               })
             })
           }
@@ -279,43 +282,36 @@ describe('Player controls', () => {
 
 describe('Progress bar controls', () => {
   let shk
+  const targetTime = 20
   beforeEach(() => {
     shk = new Shikwasa({
       audio: data.parsedAudio,
-      preload: 'auto',
     })
   })
 
   describe('When audio playback time changes, ui updates accordingly', () => {
-    it('displays playing progress correctly', (done) => {
-      const targetTime = 20
-      let expectedWidth
-      shk.on('timeupdate', () => {
+    it('displays playing progress correctly', () => {
+      cy.get('.shk-btn_toggle').click().then(() => {
+        shk.audio.currentTime = targetTime
+        cy.get('.shk-btn_toggle').click()
         cy.get('.shk-bar').then($el => {
-          expectedWidth = $el.outerWidth() * targetTime / shk.audio.duration
-          // workaround for not being able to get computed width on load
+          let expectedWidth = $el.outerWidth() * targetTime / shk.audio.duration
+          cy.wait(500) // wait for animation to stop
           cy.get('.shk-bar_played').then(el => {
-            setTimeout(() => {
-              expect(el.outerWidth()).to.be.closeTo(expectedWidth, 1)
-              done()
-            }, 500)
+            expect(el.outerWidth()).to.be.closeTo(expectedWidth, 1)
           })
         })
       })
-      shk.audio.currentTime = targetTime
     })
 
-    it('displays loading progress correctly', (done) => {
-      shk.on('progress', () => {
-        const buffer = shk.audio.buffered
-        if (buffer.length) {
-          cy.get('.shk-bar_loaded').then($el => {
-            setTimeout(() => {
-              expect($el.width()).to.be.above(0)
-              done()
-            }, 500)
-          })
-        }
+    it('displays loading progress correctly', () => {
+      cy.get('.shk-btn_toggle').click().then(() => {
+        shk.audio.currentTime = targetTime
+        cy.get('.shk-btn_toggle').click()
+        cy.wait(500) // wait for animation to stop
+        cy.get('.shk-bar_loaded').then($el => {
+          expect($el.outerWidth()).to.be.above(0)
+        })
       })
     })
   })
