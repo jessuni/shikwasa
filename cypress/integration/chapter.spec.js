@@ -151,7 +151,7 @@ describe('Chapter actions', () => {
     })
   })
   describe('When audio playback time changes, ui updates accordingly', () => {
-    it.only('highlights current chapter when audio current time updates', () => {
+    it('highlights current chapter when audio current time updates', () => {
       shk = new Shikwasa({
         audio: data.parsedAudio,
         container,
@@ -159,7 +159,6 @@ describe('Chapter actions', () => {
 
       cy.get('.shk-btn_toggle').click().then(() => {
         shk.audio.currentTime = 480
-        console.log(shk)
         cy.get('.shk-btn_toggle').click()
         cy.get('.shk-chapter_item[data-id="ch4"]')
           .should('have.attr', 'data-active')
