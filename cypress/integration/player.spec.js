@@ -303,17 +303,6 @@ describe('Progress bar controls', () => {
         })
       })
     })
-
-    it('displays loading progress correctly', () => {
-      cy.get('.shk-btn_toggle').click().then(() => {
-        shk.audio.currentTime = targetTime
-        cy.get('.shk-btn_toggle').click()
-        cy.wait(500) // wait for animation to stop
-        cy.get('.shk-bar_loaded').then($el => {
-          expect($el.outerWidth()).to.be.above(0)
-        })
-      })
-    })
   })
 
   describe('when performing actions related to progress bar, audio current time mutates', () => {
