@@ -6,6 +6,3 @@ pages/*
 !pages/index.js
 !pages/cypress.html
 !pages/cypress.js
-coverage
-cypress/screenshots/
-cypress/videos

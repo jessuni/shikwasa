@@ -1,0 +1,69 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  push:
+    branches-ignore:
+      - 'wip-*'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  cypress-run:
+
+    runs-on: ubuntu-16.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [12.x, 14.x]
+        browser: [chrome, firefox]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v1.24.3
+        with:
+          start: npm run start:ci
+          wait-on: 'http://localhost:8080'
+          browser: ${{ matrix. browser }}
+
+      - name: Upload failed test screenshots
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+  build:
+
+    name: Build
+    runs-on: ubuntu-16.04
+
+    strategy:
+      matrix:
+        node: [12.x, 14.x]
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build --if-present
