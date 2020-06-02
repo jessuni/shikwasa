@@ -36,6 +36,7 @@ describe('Chapter injection',() => {
     cy.get('li.shk-chapter_item')
       .should('exist')
     cy.get('.shk-btn_more').click()
+    cy.wait(500)
     cy.get('.shk-btn_chapter')
       .should('be.visible')
   })
@@ -173,14 +174,18 @@ describe('Chapter scrolls', () => {
       audio: data.parsedAudio,
       container,
     })
-    cy.get('.shk-btn_toggle').click()
     cy.get('.shk-btn_more').click()
     cy.get('.shk-btn_chapter').click()
     cy.get('.shk-chapter_item[data-id="ch7"]')
-      .should('not.be.visible').then($el => {
-        shk.audio.currentTime = 637
-        cy.wrap($el).should('be.visible')
-      })
+      .should('not.be.visible')
+    cy.get('.shk-btn_toggle').click().then(() => {
+      shk.audio.currentTime = 637
+      cy.get('.shk-btn_toggle').click()
+      cy.get('.shk-chapter_item[data-id="ch7"]')
+        .should('have.attr', 'data-active')
+      cy.get('.shk-chapter_item[data-id="ch7"]')
+        .should('be.visible')
+    })
   })
 })
 
