@@ -407,5 +407,5 @@ Love it, name after it.
 [jsdelivr-url]: https://www.jsdelivr.com/package/npm/shikwasa
 [dependency]: https://img.shields.io/badge/dependencies-none-lightgrey.svg?style=flat-square
 [dependency-url]: https://david-dm.org/jessuni/shikwasa
-[CI]: https://github.com/jessuni/shikwasa/workflows/Node.js%20CI/badge.svg?branch=next
-[CI-url]: https://github.com/jessuni/shikwasa/actions
+[CI]: https://github.com/jessuni/shikwasa/actions
+[CI-url]: https://github.com/jessuni/shikwasa/workflows/Node.js%20CI/badge.svg?branch=next

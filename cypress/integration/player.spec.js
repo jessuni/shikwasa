@@ -349,23 +349,28 @@ describe('Progress bar controls', () => {
       cases.forEach(c => {
         it(`seeks to target time on ${c.action}`, () => {
           shk.seek(initTime)
-          shk.play()
-          cy.get('.shk-bar-handle').as('handle').focus()
-          cy.get('@handle').type(`{${c.action}}`).then(() => {
+          cy.get('.shk-btn_toggle').click().then(() => {
+            cy.get('.shk-btn_toggle').click()
+            cy.get('.shk-bar-handle').as('handle').focus()
+            cy.get('@handle', { timeout: 10000 }).type(`{${c.action}}`)
+          })
+
+          cy.get('.shk', { timeout: 8000 }).then(() => {
             let time = shk.audio.duration * c.expected
             if (c.action !== 'home' && c.action !== 'end') {
               time = time + initTime
             }
-            if (window.Cypress.browser.name !== 'firefox') {
-              cy.wait(500) // prevent failing due to cypress run speed
-              expect(shk.audio.currentTime).to.be.closeTo(time, 1)
-            } else if (c.action === 'end') {
+            cy.wait(500)
+            if (c.action === 'end') {
               expect(shk.audio.currentTime).to.satisfy(v => {
-                return Math.round(v) === time || v === 0
+                time = Math.round(time)
+                v = Math.round(v)
+                return [time, time - 1].indexOf(v) !== -1 || v === 0
               })
+            } else {
+              expect(shk.audio.currentTime).to.be.closeTo(time, 1)
             }
           })
-
         })
       })
     })
