@@ -6,19 +6,20 @@
 [![size][size]][size-url]
 [![dependency][dependency]][dependency-url]
 [![jsdelivr][jsdelivr]][jsdelivr-url]
+![![CI][CI]][CI-url]
 [![license][license]][license-url]
 
 ## About
 
 Shikwasa is an web audio player born for podcast. If you're tired of using music players as a substitute to play podcast, you've come to the right place. **SAY NO** to players that does not even support podcast common features!
 
-- 🚀Ultra lightweight
-- 🐣Dependency free
-- 🎬Podcast chapters
-- 🏎Playback speed control
-- 🎮Skip forward/backward
-- 👓Accessibility-aware
-- 🌙Dark Mode
+- 🚀 Ultra lightweight
+- 🐣 Dependency free
+- 🎬 Podcast chapters
+- 🏎 Playback speed control
+- 🎮 Skip forward/backward
+- 👓 Accessibility-aware
+- 🌙 Dark Mode
 - SSR compatible
 - [ ] Playlist
 
@@ -43,7 +44,7 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
     * [speedOptions](#speedoptions)
     * [download](#download)
   * [Events](#events)
-  * [Chapters](#chapters)
+  * [Chapter Plugin](#chapters)
   * [Roadmap](#roadmap)
   * [What about the weird name of this project?](#what-about-the-weird-name-of-this-project)
   * [License](#license)
@@ -102,17 +103,7 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
     const player = new Shikwasa(options)
    ```
 
-5. To use the chapter plugin, import a seperate plugin and stylesheet along with the above:
-
-   ```javascript
-    import Chapter as 'shikwasa/dist/shikwasa.chapter.cjs'
-    import 'shikwasa/dist/shikwasa.chapter.min.css'
-
-    // register the chapter plugin before creating an instance
-    Shikwasa.use(Chapter)
-   ```
-
-Please read the section [Chapters](#chapters) thoroughly before using this feature.
+To use the Chapter feature, you need to import the chapter script and stylesheets as well. [View details](#chapters)
 
 ## API
 
@@ -147,10 +138,6 @@ Passing an [`audio` object](#audio) in will replace the current audio source.
 })
 ```
 
-**.updateChapter(index)**
-
-Seek the audio to the target chapter. `index` is the index of of `chapters` array. See [Chapter](#Chapters).
-
 **.destroy()**
 
 Destroy the player instance.
@@ -160,22 +147,6 @@ Destroy the player instance.
 Register an event listener. Supported events see: [Events](#events)
 
 ### Properties
-
-**.chapters**
-
-- Read-only
-- type: `Array`
-- default: `[]`
-
-Chapter metadata of the current audio, if any. See [Chapter](#Chapters).
-
-**.currentChapter**
-
-- Read-only
-- type: `Null|Object`
-- default: `null`
-
-Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
 
 **.currentTime**
 - Read-only
@@ -221,29 +192,15 @@ The current playbackRate of the player. Similar to the native [`HTMLMediaElement
     cover: String,
     src: String,
     duration: Number,  // optional
-    chapters: [  // Array, optional
-      { title, startTime, endTime }, // the first chapter
-      { title, startTime, endTime }, // the second chatper
-    ],
   }
 ```
 
-The structure of [`audio.chapters`](#Chapters):
-
-| Property      | Type     |  Description                             |
-|---------------|----------|------------------------------------------|
-| title         | String   | chapter title                            |
-| startTime     | Number   | chapter start time in seconds            |
-| endTime       | Number   | chapter end time in seconds              |
-
-⚠️Note: `endTime` should be the same as `startTime` of the next chapter.
-
 ### container
 
-(Optional) The container element for the player, in CSS selector pattern.
+(Optional) The container element for the player. If `document` is not available in the env, pass a function that will return the container element.
 
-- type: `String`
-- default: `body`
+- type: `HTMLElement`
+- default: `() => document.querySelector('body')`
 
 ### fixed
 
@@ -333,16 +290,17 @@ download: 'data:audio/mp3;base64,...'
   new Shikwasa({
     ...
   parser: jsmediatags,
-  audio: { src: '...' },
+  audio: { src: ... },
   })
 ```
+
 
 ⚠️Note: If `audio.src` is not of the same origin, proper CORS configuration will be needed to use the parser.
 Due to `jsmediatags` limitation, relative urls are not supported. Please use absolute urls for `audio.src`.
 
 ## Events
 
-Support all [htmlMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) native events.
+Support all [HTMLMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) native events.
 
 Player events:
 
@@ -355,38 +313,67 @@ Player events:
 
 Shikwasa will support chapter display and seeking with the chapter plugin. To use:
 
-1. Register the chapter plugin before creating a Shikwasa instance. [How-to](#usage)
-2. This does not grant that the audio will display chapters for sure. To display chapters, you need to provide chapter data to the player.
+1. Register the chapter plugin before creating a Shikwasa instance.
 
-  If you don't have direct access to the chapter data, Shikwasa has built-in support to work with [jsmediatags](https://github.com/aadsm/jsmediatags) to read and extract the data from the audio file;
+   ```javascript
+    import Chapter as 'shikwasa/dist/shikwasa.chapter.cjs'
+    import 'shikwasa/dist/shikwasa.chapter.min.css'
 
-  - (1)To manually provide chapters, include a `chapters` object in `audio`. [How to pass chapter?](#audio)
-  - (2)To use an external parser, pass `jsmediatags` in the `parser` options. [How to use a parser?](#parser)
+    Shikwasa.use(Chapter)
+    new Shikwasa({...})
+   ```
 
+2. This does not guarantee that the audio will display chapters. To display chapters, you need to provide chapter data to the player.
+
+   If you don't have direct access to the chapter data, Shikwasa has built-in support to work with [jsmediatags](https://github.com/aadsm/jsmediatags) to read and extract the data from the audio file;
+
+  - (1) To manually provide chapters, add the `chapters` property when passing `audio` in [options](#options) or [`.update(audio)`](#methods).
+    ```javascript
+      audio: {
+        ...
+        chapters: [  // Array, optional
+          { title, startTime, endTime }, // the first chapter
+          { title, startTime, endTime }, // the second chatper
+        ],
+      }
+    ```
+
+    The structure of a single chapter object:
+
+    | Property      | Type     |  Description                             |
+    |---------------|----------|------------------------------------------|
+    | title         | String   | chapter title                            |
+    | startTime     | Number   | chapter start time in seconds            |
+    | endTime       | Number   | chapter end time in seconds              |
+
+    ⚠️Note: `endTime` should be the same as `startTime` of the next chapter.
+
+
+  - (2) To use an external parser, pass `jsmediatags` in the `parser` options. [How to use a parser?](#parser)
 
 **(1) will take higher priority.**
 
-### Using parser for chapters
+### Registering Chapter plugin will empower Shikwasa instance with the folloing API:
 
-```javascript
-import jsmediatags from 'jsmediatags'
+**.updateChapter(index)**
 
-const shk = new Shikwasa({
-  ...
-  parser: jsmediatags,
-  audio: {
-    src: ...
-  }
-})
-```
+Seek the audio to the target chapter. `index` is the index of of `chapters` array.
 
-Related:
+**.chapters**
 
-- [Methods](#methods): `.updateChapter(index)`
-- [Properties](#properties): `chapters`, `currentChapter`
-- Options: [`audio`](#audio), [`parser`](#parser)
+- Read-only
+- type: `Array`
+- default: `[]`
 
-For other information, check out the section [Parser](#parser).
+Chapter metadata of the current audio, if any. See [Chapter](#Chapters).
+
+**.currentChapter**
+
+- Read-only
+- type: `Null|Object`
+- default: `null`
+
+Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
 
 ## Roadmap
 
@@ -420,3 +407,5 @@ Love it, name after it.
 [jsdelivr-url]: https://www.jsdelivr.com/package/npm/shikwasa
 [dependency]: https://img.shields.io/badge/dependencies-none-lightgrey.svg?style=flat-square
 [dependency-url]: https://david-dm.org/jessuni/shikwasa
+[CI]: https://github.com/jessuni/shikwasa/workflows/Node.js%20CI/badge.svg?branch=next
+[CI-url]: https://github.com/jessuni/shikwasa/actions
