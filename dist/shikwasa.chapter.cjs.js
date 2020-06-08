@@ -135,13 +135,11 @@ class Chapter {
       if (!this._chapterPatched) {
         this.init();
         this._chapterPatched = true;
-      } else {
-        this.clearList();
       }
-      if (audio.chapters.length) {
-        this.updateList(audio);
-      }
-      this.ui.handleChapterPanel(this.ctx, audio);
+      this.updateList(audio);
+    });
+    this.ctx.on('audioparse', audio => {
+      this.updateList(audio);
     });
     this.ctx.on('timeupdate', this.onTimeupdate.bind(this));
   }
@@ -151,9 +149,25 @@ class Chapter {
     this.current = null;
   }
   updateList(audio) {
-    this.list = audio.chapters;
-    this.ui.renderChapterList(this.ctx.chapters);
-    this.clickChapterHandler();
+    if (this.list.length) {
+      this.clearList();
+    }
+    if (audio.chapters.length) {
+      this.list = this.handleChapters(audio);
+      this.ui.renderChapterList(this.ctx.chapters);
+      this.clickChapterHandler();
+    }
+    this.ui.handleChapterPanel(this.ctx, audio);
+  }
+  handleChapters(audio) {
+    if (audio.chapters && audio.chapters.length) {
+      return audio.chapters.map((chap, i) => {
+        if (!/^ch\d+$/.test(chap.id)) {
+          chap.id = "ch".concat(i);
+        }
+        return chap;
+      });
+    }
   }
   patchPlayer() {
     var self = this;
