@@ -38,7 +38,7 @@ function bundle(target, format) {
   return {
     input: `src/${target}.js`,
     output: {
-      name: 'shikwasa',
+      name: 'Shikwasa',
       file: `dist/shikwasa.${target === 'main' ? '' : target + '.' }${text}.js`,
       format,
       compact: true,
