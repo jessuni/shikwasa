@@ -238,14 +238,15 @@ class Player {
   }
 
   initMediaSession() {
+    const self = this
     if ('mediaSession' in navigator) {
       this._hasMediaSession = true
       this.setMediaMetadata(this.options.audio)
       const controls = {
-        play: this.play,
-        pause: this.pause,
-        seekforward: this.seekBySpan,
-        seekbackward: () => this.seekBySpan({ forward: false }),
+        play: this.play.bind(self),
+        pause: this.pause.bind(self),
+        seekforward: this.seekBySpan.bind(self),
+        seekbackward: () => this.seekBySpan({ forward: false }).bind(self),
       }
       Object.keys(controls).forEach(key => {
         navigator.mediaSession.setActionHandler(key, () => {
