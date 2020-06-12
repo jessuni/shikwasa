@@ -358,4 +358,4 @@ class ChapterUI {
     window.removeEventListener('resize', resize);
   }
 }
-window.Chapter = Chapter;module.exports=Chapter;
+Chapter._name = 'chapter';module.exports=Chapter;

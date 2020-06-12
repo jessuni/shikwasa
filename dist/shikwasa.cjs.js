@@ -744,16 +744,17 @@ class Player {
     });
   }
   initMediaSession() {
+    var self = this;
     if ('mediaSession' in navigator) {
       this._hasMediaSession = true;
       this.setMediaMetadata(this.options.audio);
       var controls = {
-        play: this.play,
-        pause: this.pause,
-        seekforward: this.seekBySpan,
+        play: this.play.bind(self),
+        pause: this.pause.bind(self),
+        seekforward: this.seekBySpan.bind(self),
         seekbackward: () => this.seekBySpan({
           forward: false
-        })
+        }).bind(self)
       };
       Object.keys(controls).forEach(key => {
         navigator.mediaSession.setActionHandler(key, () => {
@@ -829,7 +830,7 @@ class Player {
       this.audio.src = this._audio.src;
       this.updateAudioData(this._audio);
       this.events.trigger('audioupdate', this._audio);
-      if (this.options.parser && (!this._audio.title || !this._audio.artist || !audio.cover)) {
+      if (this.options.parser && (!audio.title || !audio.artist || !audio.cover || !audio.chapters)) {
         parseAudio(Object.assign({}, audio), this.options.parser).then(audioData => {
           this._audio = audioData || this._audio;
           this.updateAudioData(this._audio);
@@ -868,8 +869,7 @@ class Player {
   renderComponents() {
     if (!REGISTERED_COMPS.length) return;
     REGISTERED_COMPS.forEach(comp => {
-      var name = comp.name.toLowerCase();
-      this.comps[name] = new comp(this);
+      this.comps[comp._name] = new comp(this);
     });
   }
 }
