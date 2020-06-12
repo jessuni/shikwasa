@@ -61,7 +61,6 @@ export function handleOptions(options) {
 
 export function handleAudio(audio = {}, parsedData = {}) {
   let audioData = Object.assign({}, audio)
-
   Object.keys(CONFIG.audioOptions).forEach(k => {
     audioData[k] = audioData[k] ||
       parsedData[k] ||
