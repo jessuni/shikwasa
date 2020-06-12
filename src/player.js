@@ -375,8 +375,7 @@ class Player {
   renderComponents() {
     if (!REGISTERED_COMPS.length) return
     REGISTERED_COMPS.forEach(comp => {
-      const name = comp.name.toLowerCase()
-      this.comps[name] = new comp(this)
+      this.comps[comp._name] = new comp(this)
     })
   }
 }

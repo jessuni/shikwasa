@@ -306,7 +306,8 @@ class ChapterUI {
     window.removeEventListener('resize', resize)
   }
 }
-window.Chapter = Chapter
+
+Chapter._name = 'chapter'
 
 export default Chapter
 
