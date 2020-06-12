@@ -55,6 +55,3 @@ module.exports = [
   bundle(process.env.TARGET, 'cjs'),
   bundle(process.env.TARGET, 'umd'),
 ]
-
-console.log(bundle(process.env.TARGET, 'cjs'),
-  bundle(process.env.TARGET, 'umd'))
