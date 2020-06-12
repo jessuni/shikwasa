@@ -38,7 +38,7 @@ function bundle(target, format) {
   return {
     input: `src/${target}.js`,
     output: {
-      name: 'Shikwasa',
+      name: target === 'main' ? 'Shikwasa' : target[0].toUpperCase() + target.slice(1),
       file: `dist/shikwasa.${target === 'main' ? '' : target + '.' }${text}.js`,
       format,
       compact: true,
@@ -55,3 +55,6 @@ module.exports = [
   bundle(process.env.TARGET, 'cjs'),
   bundle(process.env.TARGET, 'umd'),
 ]
+
+console.log(bundle(process.env.TARGET, 'cjs'),
+  bundle(process.env.TARGET, 'umd'))
