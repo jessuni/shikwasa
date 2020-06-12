@@ -274,14 +274,16 @@ download: 'data:audio/mp3;base64,...'
 
 ### parser
 
-(Optional) Use [`jsmediatags`](https://github.com/aadsm/jsmediatags) as an external parser to parse the current audio's metadata. It will read the audio's `title`, `artist`, `duration` and `chapters`, meaning you don't have to provide these four properties into `audio` manually unless you preferred your own. **Priority: property values passed to `audio` > parsed data.**
+(Optional) To focus on the player itself as well as to maintain Shikwasa as efficient as possible, we don't extract data from audio files. If you don't have control over the chapter data but would like to implement chapter feature, we support using [`jsmediatags`](https://github.com/aadsm/jsmediatags) as an external parser to parse the current audio's metadata.
+
+It will read the audio's `title`, `artist`, `duration` and `chapters`, meaning you don't have to provide these four properties into `audio` manually unless you preferred your own. **Priority: property values passed to `audio` > parsed data.**
 
 - type: `Null|Object`
 - default: `null`
 - usage:
 
 ```javascript
-  npm install jsmediatags` // https://github.com/aadsm/jsmediatags
+  npm install jsmediatags // https://github.com/aadsm/jsmediatags
 ```
 
 ```javascript
@@ -306,8 +308,7 @@ Player events:
 
 `audioupdate`: fired when audio source is updated.
 
-`chapterchange`: fired when `chapter` changes.
-
+`audioparse`: fired when audio file data is parsed.
 
 ## Chapters
 
@@ -353,7 +354,7 @@ Shikwasa will support chapter display and seeking with the chapter plugin. To us
 
 **(1) will take higher priority.**
 
-### Registering Chapter plugin will empower Shikwasa instance with the folloing API:
+### Registering Chapter plugin will empower Shikwasa instance with the following API:
 
 **.updateChapter(index)**
 
@@ -374,6 +375,10 @@ Chapter metadata of the current audio, if any. See [Chapter](#Chapters).
 - default: `null`
 
 Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
+
+#### Events:
+
+`chapterchange`: fired when `currentChapter` changes.
 
 ## Roadmap
 
