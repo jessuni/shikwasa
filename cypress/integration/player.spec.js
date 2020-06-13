@@ -270,7 +270,7 @@ describe('Player controls', () => {
   it('downloads audio when clicking download button', () => {
     cy.get('.shk-btn_download').click({ force: true }).then($el => {
       const url = $el.prop('href')
-      cy.request(url).then(resp => {
+      cy.request(url, { timeout: 40000 }).then(resp => {
         expect(resp.status).equals(200)
         expect(resp.headers)
           .to.have.property('content-type')
