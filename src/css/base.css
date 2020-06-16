@@ -2,8 +2,6 @@
   --color-primary: #00CCB8;
   --color-opac: #b9b9b94d;
   --color-handle-disabled: #b9b9b9;
-  --font-sys: -apple-system,BlinkMacSystemFont,"avenir next", avenir, "Segoe UI", Roboto,Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue";
-  --font-sans-serif: sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 
   --color-theme: #ffffff;
   --color-secondary: #767676;
@@ -43,7 +41,7 @@
 .shk {
   font-weight: 400;
   font-size: 16px;
-  font-family: var(--font-sys), var(--font-sans-serif);
+  font-family: inherit;
   line-height: 1.42;
   cursor: auto;
   position: relative;
@@ -84,7 +82,6 @@
   user-select: none;
   position: relative;
 }
-/* shrink text height to 28px */
 .shk-cover {
   width: 80px;
   height: 80px;
@@ -346,7 +343,7 @@ svg.shk-btn_mute,
   display: inline-block;
   vertical-align: middle;
   font-size: 0.8em;
-  font-weight: 200;
+  font-weight: 300;
   color: var(--color-secondary);
 }
 .shk-icons {
@@ -474,7 +471,6 @@ svg.shk-btn_mute,
   .shk-time {
     margin: 0 5px;
     font-size: 0.7em;
-    font-weight: 300;
     line-height: 1;
     display: flex;
     justify-content: space-between;
