@@ -134,8 +134,9 @@ export default class UI {
     this.title.innerHTML = audio.title
     this.titleInner.setAttribute('data-title', audio.title)
     this.artist.innerHTML = audio.artist
-    this.currentTime.innerHTML = '00:00'
-    this.duration.innerHTML = audio.duration ? secondToTime(audio.duration) : '00:00'
+    if (audio.duration) {
+      this.duration.innerHTML = secondToTime(audio.duration)
+    }
     if (this.downloadBtn) {
       this.downloadBtn.href= audio.src
     }

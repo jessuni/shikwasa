@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Shikwasa | A web player born for podcast</title>
+  <link rel="preload" href="https://unpkg.com/dracula-prism/css/dracula-prism.css" as="style" crossorigin>
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/components/prism-core.min.js" as="script" crossorigin>
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js" as="script" crossorigin>
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/shikwasa@2.0.0-beta.2/dist/shikwasa.min.js" as="script" crossorigin>
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/shikwasa@2.0.0-beta.2/dist/shikwasa.chapter.min.js" as="script" crossorigin>
+  <meta name="description" content="A web player born for podcast">
+  <meta property="og:title" content="Shikwasa | A web player born for podcast">
+  <meta property="og:description" content="A web player born for podcast">
+  <meta property="og:image" content="./assets/logo.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shikwasa.js.org">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:creator" content="@jessieste">
+  <meta name="twitter:title" content="Home">
+  <meta name="twitter:description" content="A web player born for podcast">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./normalize.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shikwasa@2.0.0-beta.1/dist/shikwasa.min.css" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shikwasa@2.0.0-beta.1/dist/shikwasa.chapter.min.css" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/dracula-prism/css/dracula-prism.css" crossorigin>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137724348-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-137724348-2');
+  </script>
+</head>
+<body class="lang-js">
+<section class="hero">
+  <div class="hero-bg">
+    <svg viewBox="0 0 250 150">
+      <path d="M0 0h200c0 42.44-16.67 67.6-50 75.47-50 11.8-50 25.4-50 74.53H0V0z"></path>
+    </svg>
+  </div>
+  <div class="inner">
+    <div class="hero-main">
+      <svg class="logo" viewBox="0 0 512 512">
+        <path
+          d="M131.26 146.03a12.92 12.92 0 015.11-7.86 57.8 57.8 0 019.42-5.68c3.54-1.73 7.25-3.36 11.12-4.88 3.88-1.53 7.45-3.16 10.72-4.88a29.73 29.73 0 008.12-6.08 12.06 12.06 0 003.2-8.47c0-4.25-1.1-7.77-3.3-10.56a28.1 28.1 0 00-8.82-7.17c-3.67-2-7.85-3.65-12.52-4.98l-14.33-4.08c-4.88-1.4-9.65-2.93-14.33-4.59a53.78 53.78 0 01-12.53-6.27 30.35 30.35 0 01-8.81-9.17c-2.2-3.58-3.31-8.03-3.31-13.34 0-4.39.9-8.54 2.7-12.45a48.2 48.2 0 017.22-11.16c3-3.52 6.48-6.74 10.42-9.66a69.47 69.47 0 0112.43-7.37c4.34-2 8.71-3.56 13.12-4.69C151.3 1.56 155.38 1 159.12 1h2.2c1.2.4 2.8 1.06 4.81 2l5.81 2.68c1.87.87 3.48 1.66 4.81 2.4 1.34.72 2 1.15 2 1.29v4.58a153.66 153.66 0 00-22.45 4.38c-4.4 1.2-8.87 2.7-13.42 4.49a65.76 65.76 0 00-12.22 6.27 33.9 33.9 0 00-8.82 8.27 17.66 17.66 0 00-3.4 10.66c0 5.7 2 10.19 6 13.44 4.02 3.26 9.03 5.95 15.04 8.07a184.8 184.8 0 0019.74 5.68 147.01 147.01 0 0119.74 5.98c6.01 2.32 11.02 5.38 15.03 9.16 4 3.79 6.01 8.87 6.01 15.24 0 3.46-1.04 7.07-3.1 10.86a55.57 55.57 0 01-8.22 11.16 97.43 97.43 0 01-11.53 10.46 99.4 99.4 0 01-13.12 8.66 90.93 90.93 0 01-13.13 5.98c-4.27 1.53-8.08 2.29-11.42 2.29-1.07 0-2.2-.13-3.4-.4a8.75 8.75 0 01-3.12-1.3 5.64 5.64 0 01-2-2.68c-.47-1.2-.37-2.73.3-4.59zM203 30.28c0-.67.03-1.84.1-3.51.07-1.67.1-3.41.1-5.22 0-1.8.03-3.5.1-5.11.06-1.6.1-2.68.1-3.21 3.31-3.61 6.07-5.75 8.25-6.42 2.2-.67 3.95-.3 5.28 1.1 1.32 1.4 2.28 3.65 2.88 6.72.6 3.08 1.03 6.55 1.3 10.43.26 3.88.4 7.96.4 12.24s.06 8.26.19 11.94c.13 3.67.4 6.92.8 9.72.4 2.81 1.12 4.68 2.18 5.62h68.24c2.79 0 4.77-.87 5.97-2.6 1.2-1.75 1.89-4.02 2.09-6.83a54 54 0 00-.3-9.63c-.4-3.6-.76-7.32-1.1-11.13-.33-3.81-.46-7.56-.4-11.23.07-3.68.67-6.92 1.8-9.73a15.31 15.31 0 015.27-6.82c2.39-1.74 5.9-2.61 10.54-2.61a19.1 19.1 0 013.19 8.32c.4 3.01.5 6.12.3 9.33s-.54 6.39-1 9.53c-.46 3.14-.7 6.19-.7 9.13 0 7.89.5 15.78 1.5 23.67.99 7.89 2.05 15.78 3.18 23.67 1.13 7.89 2.19 15.75 3.18 23.57 1 7.82 1.5 15.55 1.5 23.17.26 8.3-.27 14.2-1.6 17.75-1.32 3.55-2.98 5.15-4.97 4.82-2-.34-4.21-2.38-6.67-6.12-2.45-3.75-4.7-8.76-6.76-15.05a136.23 136.23 0 01-4.97-22.16 159.17 159.17 0 01-1.5-27.58h-71.81c.93 9.22 2.15 17.92 3.68 26.07a471.1 471.1 0 013.58 21.57c.86 6.22 1.2 11.16 1 14.84-.2 3.68-1.56 5.58-4.08 5.72-3.85 0-7.1-1.3-9.75-3.91-2.66-2.61-4.94-6.19-6.87-10.74a81.23 81.23 0 01-4.67-15.94c-1.2-6.09-2.19-12.5-2.99-19.26-.8-6.75-1.42-13.67-1.88-20.76-.47-7.09-.9-13.91-1.3-20.46-.4-6.56-.86-12.67-1.4-18.36-.52-5.68-1.18-10.53-1.98-14.54zm144 50.47c0-.8.03-2.1.1-3.9a1539.3 1539.3 0 00.5-15.47 17.1 17.1 0 015.7-5.19c2.33-1.33 4.7-2.4 7.1-3.19.4 7.19 1.53 14.84 3.4 22.96a869.16 869.16 0 006 24.45 506.37 506.37 0 015.7 24.25c1.67 7.99 2.5 15.44 2.5 22.36 0 5.99-3.07 8.98-9.2 8.98-3.73 0-6.87-1.53-9.4-4.6-2.53-3.05-4.57-6.94-6.1-11.67a105.68 105.68 0 01-3.7-15.77 171.26 171.26 0 01-1.9-17.06c-.33-5.6-.53-10.72-.6-15.37-.07-4.66-.1-8.26-.1-10.78zM351.05 6c2.6 1.07 4.78 2.8 6.56 5.21 1.78 2.4 2.56 4.58 2.36 6.51-.2 1.94-1.74 3.28-4.62 4.01-2.87.74-7.65-.03-14.35-2.3 0-3.61.72-6.75 2.15-9.42 1.44-2.67 4.07-4.01 7.9-4.01zM44.23 182.95c0-2.5-.06-5.21-.2-8.12-.13-2.9.1-5.6.7-8.12.6-2.5 1.66-4.58 3.18-6.23 1.53-1.65 4.01-2.48 7.45-2.48 2.52 3.43 4.15 7.7 4.87 12.77.73 5.09 1.23 10.43 1.5 16.05.26 5.6.56 11.18.89 16.73a42.58 42.58 0 003.28 14.66c.13.52.76 1.28 1.89 2.27 1.12 1 1.88 1.62 2.28 1.88 3.98-3.43 7.59-7 10.83-10.69a846 846 0 019.64-10.8 279.5 279.5 0 019.54-10 60.07 60.07 0 0110.44-8.31 50.6 50.6 0 0112.72-5.65 56.6 56.6 0 0116-2.08c0 3.17-1.13 6.34-3.38 9.51a65.05 65.05 0 01-8.55 9.6 224.07 224.07 0 01-11.33 9.9c-4.1 3.37-8.08 6.8-11.92 10.3-3.84 3.5-7.29 7-10.34 10.5a34.71 34.71 0 00-6.56 10.6c2.26.53 6 1.81 11.23 3.86 5.24 2.05 11.2 4.55 17.9 7.52 6.68 2.98 13.6 6.18 20.76 9.61a333.65 333.65 0 0119.68 10.2 116.93 116.93 0 0114.6 9.5c3.78 2.98 5.67 5.39 5.67 7.23v2.48c0 1.25-.1 2.54-.3 3.86a8.39 8.39 0 01-1.29 3.47c-.66.99-1.72 1.48-3.18 1.48a45.81 45.81 0 01-15.7-3.07 90.3 90.3 0 01-14.31-7.13c-4.64-2.84-9.24-5.8-13.81-8.9-4.58-3.11-9.25-6.08-14.02-8.92a81.42 81.42 0 00-14.8-6.93 57.83 57.83 0 00-16.6-3.07c-1.99 3.17-2.85 6.24-2.58 9.2a24.16 24.16 0 002.68 8.92c1.52 2.97 3.35 6 5.47 9.1a70.68 70.68 0 015.56 9.71 36.95 36.95 0 013.18 10.6c.53 3.7-.07 7.59-1.79 11.68-.26.4-.76.83-1.49 1.29l-2.38 1.49c-.86.52-1.76.92-2.69 1.18-.92.27-1.52.4-1.79.4-1.72 0-3.6-1.65-5.66-4.95-2.05-3.3-4.24-7.8-6.56-13.47a323.2 323.2 0 01-7.15-19.5 667.17 667.17 0 01-7.16-22.78 482.58 482.58 0 01-6.36-23.77c-1.92-7.98-3.64-15.44-5.17-22.37a346.15 346.15 0 01-3.57-18.32c-.86-5.29-1.3-9.25-1.3-11.89zM181 201.22c0-2.1.43-4.04 1.29-5.82.86-1.77 2.54-2.66 5.05-2.66 2.11 0 4.2 2.17 6.24 6.51 2.05 4.34 4.16 9.9 6.34 16.67 2.18 6.78 4.45 14.2 6.83 22.3a491.68 491.68 0 007.53 23.48 190.54 190.54 0 008.32 20.32c2.9 5.98 6 10.16 9.3 12.53 3.18-1.32 5.72-3.65 7.64-7a48.25 48.25 0 004.65-12.04c1.19-4.67 2.08-9.74 2.68-15.2l1.78-16.37c.6-5.46 1.22-10.79 1.88-15.98.66-5.2 1.62-9.77 2.87-13.71 1.26-3.95 2.87-7.1 4.86-9.48a9.4 9.4 0 017.52-3.55c1.85 0 3.5.17 4.96.5 1.45.33 2.7 1.67 3.76 4.04.53 1.71 1.39 4.21 2.57 7.5 1.2 3.29 2.55 7.1 4.06 11.44a441.27 441.27 0 0011.1 28.41c2.04 4.74 4.06 9.24 6.04 13.52 1.98 4.27 3.9 7.92 5.74 10.95a12 12 0 002.08 2.47c1.13 1.11 1.89 1.74 2.28 1.87l8.52-8.48c2.25-2.24 3.96-5.56 5.15-9.97 1.19-4.4 2.08-9.5 2.67-15.29.6-5.79 1-12 1.2-18.64.2-6.65.36-13.26.49-19.83.13-6.58.4-12.96.8-19.14.39-6.18 1.05-11.6 1.97-16.28.93-4.67 2.25-8.38 3.96-11.15 1.72-2.76 4.1-4.14 7.13-4.14.14 0 .3.03.5.1.2.06.43.1.7.1.39.13.65.2.79.2.13 0 .46.22.99.69l1.48 1.28c.46.4.86.79 1.2 1.18.32.4.55.72.68.99 0 .92.04 2.56.1 4.93.07 2.37.1 4.93.1 7.7 0 2.76.03 5.36.1 7.79.07 2.43.1 4.1.1 5.03 0 2.63-.03 6.25-.1 10.85s-.26 9.83-.6 15.69c-.32 5.85-.79 12.1-1.38 18.74-.6 6.64-1.49 13.22-2.67 19.73a176.89 176.89 0 01-4.46 18.75 75.76 75.76 0 01-6.54 15.78c-2.57 4.54-5.54 8.16-8.91 10.85a18.59 18.59 0 01-11.99 4.05c-4.49 0-8.28-1.48-11.39-4.44a40.47 40.47 0 01-8.02-11.05 88.62 88.62 0 01-5.74-14.4c-1.59-5.2-3.2-10.03-4.86-14.5a56.94 56.94 0 00-5.35-11.15c-1.91-2.96-4.25-4.44-7.03-4.44-.26 0-.63.06-1.09.2-.46.12-.82.2-1.09.2-.13.52-.53 2.82-1.19 6.9-.66 4.07-1.58 8.9-2.77 14.5a366.99 366.99 0 01-4.36 18.05 151.65 151.65 0 01-5.84 17.76 65.94 65.94 0 01-7.13 13.51c-2.58 3.62-5.38 5.43-8.42 5.43-6.2 0-11.89-2.33-17.04-7-5.15-4.67-9.74-10.72-13.76-18.16a155.4 155.4 0 01-10.6-24.76 298.88 298.88 0 01-7.63-26.73 250.91 250.91 0 01-4.55-24.47c-1-7.56-1.49-13.45-1.49-17.66zm263.54 92.83a400.63 400.63 0 00-13.03 9.18 86.76 86.76 0 01-10.64 6.82 45.38 45.38 0 01-11.04 4.14c-3.92.92-8.72 1.39-14.43 1.39-12.33 0-21.48-3.26-27.45-9.78-5.97-6.51-8.95-16.22-8.95-29.12 0-5 .66-10.2 1.99-15.6a81.3 81.3 0 015.87-16.1 94.19 94.19 0 019.25-15.2 71.7 71.7 0 0112.13-12.74 59.59 59.59 0 0114.42-8.78 40.98 40.98 0 0116.22-3.26c9.54.92 17.04 3.26 22.47 7.01a36.08 36.08 0 0112.34 14.41 68.67 68.67 0 015.77 19.55 324.98 324.98 0 012.48 22.22c.6 7.63 1.36 15.27 2.3 22.9a72.05 72.05 0 005.76 21.13c-1.72 4.34-3.35 7.4-4.87 9.18-1.53 1.78-3.22 2.07-5.08.89-1.85-1.19-4-4.08-6.46-8.69a261.32 261.32 0 01-9.05-19.55zM376 277.56c0 7.4 1.4 12.83 4.23 16.28 2.82 3.44 7.83 5.16 15.04 5.16 5.37 0 10.52-.94 15.43-2.83a40.8 40.8 0 0012.88-7.8 37.9 37.9 0 008.85-11.98 35.78 35.78 0 003.34-15.58c0-2.34.07-5.62.2-9.85.13-4.22-.13-8.4-.79-12.57a29.8 29.8 0 00-3.73-10.81c-1.84-3.05-4.6-4.58-8.26-4.58-6.82 0-13.11 1.72-18.88 5.16a54.3 54.3 0 00-14.94 13.16 63.88 63.88 0 00-9.83 17.63 53.93 53.93 0 00-3.54 18.61zM173.15 499.08A214.22 214.22 0 00189.84 486c3.04-2.65 5.89-5.42 8.54-8.33a46.73 46.73 0 006.26-8.43c1.52-2.7 2.28-5.25 2.28-7.63s-1.2-4.36-3.58-5.95c-4.23 0-8.87.17-13.9.5-5.04.33-10.07.46-15.1.4-5.04-.07-9.9-.5-14.6-1.3a38 38 0 01-12.62-4.36 23.2 23.2 0 01-8.84-9.02c-2.19-3.9-3.28-8.88-3.28-14.96 0-7.14 1.36-13.58 4.07-19.33a52.94 52.94 0 0110.83-15.27 80.7 80.7 0 0115.2-11.7c5.63-3.37 11.3-6.24 16.99-8.62 3.44.93 6.62 2.58 9.53 4.96a42.68 42.68 0 017.55 7.93 11.71 11.71 0 01-5.46 6.74 50.85 50.85 0 01-9.34 4.16l-11.03 3.77a41.72 41.72 0 00-10.43 5.25 27.82 27.82 0 00-7.84 8.53c-2.12 3.5-3.18 8.09-3.18 13.77 0 4.23 1.06 7.34 3.18 9.32 2.12 1.98 4.9 3.34 8.34 4.07 3.44.72 7.35.99 11.72.79 4.37-.2 8.84-.5 13.41-.9 4.57-.39 9.04-.62 13.41-.69 4.37-.06 8.28.47 11.73 1.59a17.27 17.27 0 018.24 5.45c2.05 2.51 3.08 6.21 3.08 11.1 0 2.12-.7 4.83-2.09 8.13a78.77 78.77 0 01-5.56 10.6 93.89 93.89 0 01-8.14 11.2 93.4 93.4 0 01-9.74 10.02 60.98 60.98 0 01-10.13 7.34c-3.38 1.91-6.53 2.87-9.44 2.87-2.78 0-4.6-1-5.46-2.97a14.83 14.83 0 01-1.3-5.95zm102.44-165.31c.8-2.39 1.96-3.78 3.49-4.17 1.52-.4 3.28-.6 5.27-.6 3.05 0 6.47 2.02 10.25 6.06 3.78 4.04 7.67 9.43 11.65 16.18 3.98 6.76 8 14.5 12.04 23.24a605.69 605.69 0 0111.74 27.1 724.72 724.72 0 0110.65 27.91c3.32 9.27 6.2 17.78 8.66 25.52a274.16 274.16 0 015.67 20.16c1.33 5.7 1.99 9.6 1.99 11.72 0 2.12-.5 4.13-1.5 6.05-.99 1.92-2.75 2.88-5.27 2.88-1.59 0-2.95-.5-4.08-1.49a13.4 13.4 0 01-2.88-3.67 67.13 67.13 0 01-2.2-4.37 114.6 114.6 0 00-1.78-3.77c-.53-1.46-1.63-4.24-3.29-8.34-1.66-4.1-3.38-8.41-5.17-12.91l-5.08-12.71c-1.6-3.97-2.72-6.82-3.38-8.54-9.29-1.6-18.61-3.08-27.97-4.47-9.35-1.4-19.2-2.75-29.55-4.07h-2.2c-4.77 20.52-8.98 36.74-12.63 48.65-3.65 11.92-6.7 20.4-9.16 25.43-2.45 5.03-4.38 7.11-5.77 6.25-1.4-.86-2.32-3.9-2.79-9.13-.46-5.23-.4-12.22.2-20.96a332.7 332.7 0 013.39-28.9 699.32 699.32 0 016.07-33.06 340.78 340.78 0 018.66-33.36 265.26 265.26 0 0111.34-29.9c4.18-9.2 8.73-16.78 13.63-22.73zM270 403.9c0 4.9 1.61 8.5 4.84 10.8a26.2 26.2 0 0011.71 4.46c4.58.66 9.39.93 14.43.8 5.05-.14 9.39-.2 13.02-.2 0-5.29-.87-11-2.62-17.14a139.83 139.83 0 00-6.66-18.34 289.78 289.78 0 00-8.58-17.73 881.64 881.64 0 00-8.38-15.56c-1.48 1.45-3.06 4.13-4.74 8.03-1.68 3.9-3.37 8.25-5.05 13.08a284 284 0 00-7.57 25.46c0 .4-.06 1.42-.2 3.07-.13 1.66-.2 2.75-.2 3.27z" />
+      </svg>
+      <!--shikwasa svg-->
+      <div class="hero-text">
+        <h2>A web audio player born for <strong>podcasts.</strong></h2>
+        <a href="https://github.com/jessuni/shikwasa">View on Github</a>
+      </div>
+      <div class="hero-player"></div>
+    </div>
+  </div>
+</section>
+<section class="main">
+  <div class="feature">
+    <div class="feature-item">
+      <h2 id="listening-made-easy">Listening made easy</h2>
+      <div class="feature-main">
+        <p>Seek to any timestamp listed in your shownotes.</p>
+        <div class="feature-action">
+          <div><a href="#t=03:05">03:05</a> Some info</div>
+          <div><a href="#t=04:05">04:05</a> Some other info</div>
+          <div class="code">
+            <pre><code>anchor.onClick = () => {
+    const href = anchor.getAttribute('href')
+    const time = formatTime(time)
+    instance.seek(time)
+    instance.play()
+  }</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="feature-main">
+        <p>Share audio progress with query string url.</p></p>
+        <div class="feature-action">
+          copy <code>shikwasa.js.org/#t=06:05</code>
+          to the address bar of a new browser tab
+          <div class="code">
+            <pre><code>window.onload = () => {
+    const hash = window.location.hash
+    const time = formatTime(hash)
+    instance.seek(time)
+  }</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <h2 id="chapters">Chapters</h2>
+      <div class="feature-main">
+        <p>Better than shownotes! Always let users know where they are by the highlighted chapter.</p>
+        <div class="feature-action">
+          <pre><code>const instance = new Shikwasa({
+  audio: {
+    src: '...',
+    chapters: [
+      {
+        title: 'Final Q&A',
+        startTime: 2300,
+        endTime: 4500,
+      },
+    ]
+  },
+})</code></pre>
+        </div>
+        <p>Jump to the desired chapter in no time with <code>updateChapter</code>.</p>
+        <div class="feature-action">
+          <button class="button demo-chapter">Click me</button>
+          to a random chapter
+        </div>
+      </div>
+      <div class="feature-main">
+        <p>
+          If the chapter data is unknown to you, but the audio file has id3tagv2-chapters data, we support reading and organizing chapter data with a little help of an external library.
+          <a href="https://github.com/jessuni/shikwasa/blob/next/README.md#parser" target="_blank" rel="noreferrer">Learn more</a>
+        </p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <h2 id="accessibility-aware">Accessibility aware</h2>
+      <div class="feature-main">
+        <h3 id="keyboard-control">Keyboard control</h3>
+        <p>
+          Seek to audio position with
+          <kbd>→</kbd>
+          <kbd>←</kbd>
+          <kbd>PageUp</kbd>
+          <kbd>PageDown</kbd>
+          <kbd>Home</kbd>
+          <kbd>End</kbd>
+          , or simply play around with
+          <kbd>Tab</kbd>
+          <kbd>Space</kbd>
+          <kbd>⏯︎</kbd> (<kbd>⏯︎</kbd> control requires specifying an audio source first)
+          .
+        </p>
+      </div>
+      <div class="feature-main">
+        <p>Bonus: The focus outline is visible only when you navigates with a keyboard.</p>
+      </div>
+      <div class="feature-main">
+        <h3 id="aria-support">ARIA support</h3>
+        <p>Visually impaired people deserve an accessible listening experience. ARIA markup, check.</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <h2 id="theme">Theme</h2>
+      <div class="feature-main">
+        <h3 id="dark mode">Dark mode</h3>
+        <p>
+          Choose among
+          <button class="button demo-theme Active" data-value="auto">auto</button>
+          <button class="button demo-theme" data-value="dark">dark</button>
+          <button class="button demo-theme" data-value="light">light</button>
+          .
+        </p>
+      </div>
+      <div class="feature-main">
+        <h3 id="theme-color">Theme color</h3>
+        <p>Blend it in with your site. Any color.</p>
+        <div class="feature-action">
+          <button class="button Round Beige demo-theme-color" aria-label="beige" title="beige" data-color="213,169,118"></button>
+          <button class="button Round Turquoise demo-theme-color" aria-label="turquoise" title="purple" data-color="132,191,207"></button>
+          <button class="button Round Blue demo-theme-color" aria-label="blue" title="blue" data-color="85,185,243"></button>
+          <button class="button Round Graphite demo-theme-color" aria-label="graphite" title="graphite" data-color="49,51,53"></button>
+        </div>
+      </div>
+      <div class="feature-item">
+        <h2 id="more">More...</h2>
+        <div class="feature-main">
+          <ul>
+            <li>No dependencies</li>
+            <li>Audio element not existing in DOM</li>
+            <li>Notice how the other player automatically paused when a new player starts playing? Shikwasa has full of these delightful
+            details.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="demo">
+    <div class="demo-player" id="demo"></div>
+  </div>
+</section>
+<footer>
+  <a href="https://github.com/jessuni/shikwasa" class="icon-link">
+    <svg viewBox="0 0 24 24" class="icon">
+      <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+      </path>
+    </svg>
+  </a>
+  <span>
+    made with <span aria-label="love" role="img">💙</span> by <a href="https://jessieji.com">Jessie Ji</a>
+  </span>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/components/prism-core.min.js" crossorigin></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js" crossorigin></script>
+</body>
+</html>

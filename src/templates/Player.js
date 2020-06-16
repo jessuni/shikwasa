@@ -96,7 +96,7 @@ const PlayerTemplate = /* template */`
             </svg>
           </span>
           <span class="shk-time">
-            <span class="shk-time_now">--:--</span><span class="shk-time_duration">--:--</span>
+            <span class="shk-time_now">00:00</span><span class="shk-time_duration">00:00</span>
           </span>
         </div>
       </div>
