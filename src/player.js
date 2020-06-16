@@ -9,6 +9,24 @@ const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
 const dragEnd = isMobile ? 'touchend' : 'mouseup'
 
+// detecting addEventListener option support
+let supportsPassive = false
+if (typeof window !== 'undefined') {
+  try {
+    const opts = Object.defineProperty({}, 'passive', {
+      get: function () {
+        supportsPassive = true
+        return false
+      },
+    })
+    window.addEventListener('testPassvie', null, opts)
+    window.removeEventListener('testPassvie', null, opts)
+  } catch (e) {
+    supportsPassive = false
+  }
+}
+const addPassive = supportsPassive && isMobile
+
 class Player {
   constructor(options) {
     this.id = playerArr.length
@@ -24,7 +42,7 @@ class Player {
     this.renderComponents()
     this.initUI(this.options)
     this.initAudio()
-    this.ui.mount(this.options.container)
+    this.ui.mount(this.options.container, supportsPassive)
   }
 
 
@@ -114,7 +132,7 @@ class Player {
       e.preventDefault()
       this.el.setAttribute('data-seeking', '')
       this._dragging = true
-      document.addEventListener(dragMove, dragMoveHandler)
+      document.addEventListener(dragMove, dragMoveHandler, addPassive ? { passive: true } : false)
       document.addEventListener(dragEnd, dragEndHandler)
     }
     const dragMoveHandler = (e) => {

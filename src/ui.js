@@ -98,7 +98,7 @@ export default class UI {
     }
   }
 
-  initEvents() {
+  initEvents(supportsPassive) {
     this.moreBtn.addEventListener('click', () => {
       toggleAttribute(this.el, 'data-extra')
     })
@@ -107,7 +107,7 @@ export default class UI {
     })
 
     // add keyboard focus style
-    applyFocusVisible(this.el)
+    applyFocusVisible(this.el, supportsPassive)
 
     resize = () => {
       if (!cooldown) return
@@ -198,14 +198,14 @@ export default class UI {
     })
   }
 
-  mount(container) {
+  mount(container, supportsPassive) {
     container.innerHTML = ''
     container.append(this.el)
     if (this.icons) {
       container.append(this.icons)
     }
     this.mounted = true
-    this.initEvents()
+    this.initEvents(supportsPassive)
     marquee(this.titleWrap, this.title)
   }
 

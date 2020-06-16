@@ -3,7 +3,7 @@
  * https://github.com/WICG/focus-visible/blob/master/src/focus-visible.js
  * stripped only relevent section and replace manipulating the whole document to only a certain element, i.e. shikwasa player to prevent changing document behavior
  */
-function applyFocusVisiblePolyfill(parent) {
+function applyFocusVisiblePolyfill(parent, supportsPassive) {
   var hadKeyboardEvent = true
   var hadFocusVisibleRecently = false
   var hadFocusVisibleRecentlyTimeout = null
@@ -133,6 +133,7 @@ function applyFocusVisiblePolyfill(parent) {
    * focused element had .focus-visible.
    * @param {Event} e
    */
+
   function onVisibilityChange() {
     if (document.visibilityState === 'hidden') {
       // If the tab becomes active again, the browser will handle calling focus
@@ -152,9 +153,9 @@ function applyFocusVisiblePolyfill(parent) {
     parent.addEventListener('pointermove', onInitialPointerMove)
     parent.addEventListener('pointerdown', onInitialPointerMove)
     parent.addEventListener('pointerup', onInitialPointerMove)
-    parent.addEventListener('touchmove', onInitialPointerMove)
-    parent.addEventListener('touchstart', onInitialPointerMove)
-    parent.addEventListener('touchend', onInitialPointerMove)
+    parent.addEventListener('touchmove', onInitialPointerMove, supportsPassive ? { passive: true } : false)
+    parent.addEventListener('touchstart', onInitialPointerMove, supportsPassive ? { passive: true } : false)
+    parent.addEventListener('touchend', onInitialPointerMove, supportsPassive ? { passive: true } : false)
   }
 
   function removeInitialPointerMoveListeners(el) {
@@ -164,9 +165,9 @@ function applyFocusVisiblePolyfill(parent) {
     parent.removeEventListener('pointermove', el)
     parent.removeEventListener('pointerdown', onInitialPointerMove)
     parent.removeEventListener('pointerup', onInitialPointerMove)
-    parent.removeEventListener('touchmove', onInitialPointerMove)
-    parent.removeEventListener('touchstart', onInitialPointerMove)
-    parent.removeEventListener('touchend', onInitialPointerMove)
+    parent.removeEventListener('touchmove', onInitialPointerMove, supportsPassive ? { passive: true } : false)
+    parent.removeEventListener('touchstart', onInitialPointerMove, supportsPassive ? { passive: true } : false)
+    parent.removeEventListener('touchend', onInitialPointerMove, supportsPassive ? { passive: true } : false)
   }
   /**
    * When the polfyill first loads, assume the user is in keyboard modality.
@@ -186,7 +187,7 @@ function applyFocusVisiblePolyfill(parent) {
   parent.addEventListener('keydown', onKeyDown, true)
   parent.addEventListener('mousedown', onPointerDown, true)
   parent.addEventListener('pointerdown', onPointerDown, true)
-  parent.addEventListener('touchstart', onPointerDown, true)
+  parent.addEventListener('touchstart', onPointerDown, supportsPassive ? { passive: true, capture: true } : true)
   parent.addEventListener('visibilitychange', onVisibilityChange, true)
 
   addInitialPointerMoveListeners()
