@@ -2,9 +2,9 @@ node_modules
 .cache
 gh.js
 pages/*
-!pages/index.html
-!pages/index.js
+!pages/public/*
 !pages/cypress.html
 !pages/cypress.js
+
 cypress/screenshots
 cypress/videos

@@ -3,7 +3,9 @@ import autoprefixer from 'autoprefixer'
 import replace from '@rollup/plugin-replace'
 import babel from '@rollup/plugin-babel'
 import cleanup from 'rollup-plugin-cleanup'
-import minify from 'rollup-plugin-babel-minify'
+import babelMinify from 'rollup-plugin-babel-minify'
+import { minify } from 'html-minifier'
+import fs from 'fs'
 import pkg from './package.json'
 
 const CONSOLE_CODE = `console.log(\`%c🍊%c Shikwasa Podcast Player v${pkg.version} %c https://shikwasa.js.org\`,'background-color:#00869B40;padding:4px;','background:#00869B80;color:#fff;padding:4px 0','padding: 2px 0;')`
@@ -29,7 +31,7 @@ function bundle(target, format) {
   const plugins = [...sharedPlugins]
   if (format === 'umd') {
     text = 'min'
-    plugins.push(minify({
+    plugins.push(babelMinify({
       comments: false,
       banner: false,
       sourceMap: false,
@@ -51,7 +53,42 @@ function bundle(target, format) {
   }
 }
 
-module.exports = [
-  bundle(process.env.TARGET, 'cjs'),
-  bundle(process.env.TARGET, 'umd'),
-]
+function bundleDemo() {
+  const html = fs.readFileSync('./pages/public/index.html').toString()
+  const htmlMinified = minify(html)
+  if (!fs.existsSync('./public')) {
+    fs.mkdirSync('./public')
+  }
+  var stream = fs.createWriteStream('./public/index.html')
+  stream.write(htmlMinified)
+  stream.end()
+  return {
+    input: 'pages/public/index.js',
+    output: {
+      dir: 'public',
+      compact: true,
+      sourcemap: false,
+      format: 'iife',
+    },
+    plugins: [
+      ...sharedPlugins,
+      babelMinify({
+        comments: false,
+        banner: false,
+        sourceMap: false,
+      }),
+    ],
+  }
+}
+
+export default () => {
+  if (process.env.TARGET) {
+    return [
+      bundle(process.env.TARGET, 'cjs'),
+      bundle(process.env.TARGET, 'umd'),
+    ]
+  } else {
+    return bundleDemo()
+  }
+}
+
