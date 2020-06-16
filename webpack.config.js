@@ -29,7 +29,7 @@ module.exports = {
     pathinfo: false,
   },
   devServer: {
-    contentBase: path.join(__dirname, './pages/public'),
+    contentBase: path.join(__dirname, 'pages'),
     hot: true,
     host: 'localhost',
     port: '8080',

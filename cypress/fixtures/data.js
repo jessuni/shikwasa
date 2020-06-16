@@ -1,6 +1,6 @@
 import tags from './tags.json'
 
-const src = '/assets/STS-133_FD11_Mission_Status_Briefing.mp3'
+const src = 'public/assets/STS-133_FD11_Mission_Status_Briefing.mp3'
 
 const parsedAudio = {
   artist: 'NASA',
