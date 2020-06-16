@@ -338,6 +338,8 @@ class ChapterUI {
     });
   }
   scrollIntoView(el) {
+    if (this.el.style.visibility === 'hidden') return;
+    if (el.offsetWidth === 0 && el.offsetHeight === 0) return;
     var layerMargin = window.getComputedStyle(this.overflowLayer).marginTop;
     var listMargin = window.getComputedStyle(this.chapterList).marginTop;
     var offsetTop = parseInt(layerMargin) + parseInt(listMargin);
@@ -347,11 +349,7 @@ class ChapterUI {
     var startTime = performance.now();
     var duration = 0.2;
     if (outOfView) {
-      if ('scrollBehavior' in document.documentElement.style) {
-        el.scrollIntoView();
-      } else {
-        animateScroll(startTime, startTime, duration, startPos, distance, this.overflowLayer);
-      }
+      animateScroll(startTime, startTime, duration, startPos, distance, this.overflowLayer);
     }
   }
   destroy() {

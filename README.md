@@ -1,4 +1,4 @@
-![shikwasa branding image](https://i.typcdn.com/jessuni/8438051210_7579.png)
+![shikwasa branding image](https://i.typlog.com/jessuni/8407706855_086142.png)
 
 <br>
 
@@ -405,7 +405,7 @@ Love it, name after it.
 [npm]: https://img.shields.io/npm/v/shikwasa.svg?style=flat-square
 [npm-url]: https://npmjs.com/package/shikwasa
 [size]:http://img.badgesize.io/https://unpkg.com/shikwasa/dist/shikwasa.min.js?compression=gzip&label=gzip%20size&style=flat-square
-[size-url]:https://github.com/jessuni/shikwasa/tree/next/dist
+[size-url]:https://github.com/jessuni/shikwasa/tree/master/dist
 [license]:https://img.shields.io/github/license/jessuni/shikwasa?style=flat-square
 [license-url]:https://github.com/jessuni/shikwasa/blob/master/LICENSE.md
 [jsdelivr]: https://badgen.net/jsdelivr/hits/npm/shikwasa?color=orange&style=flat-square
