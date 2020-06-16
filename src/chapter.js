@@ -276,6 +276,7 @@ class ChapterUI {
   }
 
   scrollIntoView(el) {
+    if (this.el.style.visibility === 'hidden') return
     const layerMargin = window.getComputedStyle(this.overflowLayer).marginTop
     const listMargin = window.getComputedStyle(this.chapterList).marginTop
     const offsetTop = parseInt(layerMargin) + parseInt(listMargin)
@@ -285,20 +286,14 @@ class ChapterUI {
     const startTime = performance.now()
     const duration = 0.2
     if (outOfView) {
-
-      // if supported use native css scroll behavior, otherwise simulate it
-      if ('scrollBehavior' in document.documentElement.style) {
-        el.scrollIntoView()
-      } else {
-        animateScroll(
-          startTime,
-          startTime,
-          duration,
-          startPos,
-          distance,
-          this.overflowLayer
-        )
-      }
+      animateScroll(
+        startTime,
+        startTime,
+        duration,
+        startPos,
+        distance,
+        this.overflowLayer
+      )
     }
   }
 
