@@ -172,6 +172,7 @@ div.feature-item:first-of-type {
   line-height: 1.7;
 }
 .button {
+  font-size: inherit;
   border: 1px solid var(--color-text);
   background-color: transparent;
   padding: 2px 4px;

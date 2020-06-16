@@ -57,7 +57,7 @@ function bundleDemo() {
   const html = fs.readFileSync('./pages/public/index.html').toString()
   const htmlMinified = minify(html, {
     collapseWhitespace: true,
-    collapseInlineTagWhitespace: true,
+    // collapseInlineTagWhitespace: true,
     removeComments: true,
   })
   if (!fs.existsSync('./public')) {
