@@ -216,7 +216,7 @@ function toggleAttribute(el, name) {
   } else {
     el.setAttribute(name, '');
   }
-}function applyFocusVisiblePolyfill(parent) {
+}function applyFocusVisiblePolyfill(parent, supportsPassive) {
   var hadKeyboardEvent = true;
   var hadFocusVisibleRecently = false;
   var hadFocusVisibleRecentlyTimeout = null;
@@ -288,9 +288,15 @@ function toggleAttribute(el, name) {
     parent.addEventListener('pointermove', onInitialPointerMove);
     parent.addEventListener('pointerdown', onInitialPointerMove);
     parent.addEventListener('pointerup', onInitialPointerMove);
-    parent.addEventListener('touchmove', onInitialPointerMove);
-    parent.addEventListener('touchstart', onInitialPointerMove);
-    parent.addEventListener('touchend', onInitialPointerMove);
+    parent.addEventListener('touchmove', onInitialPointerMove, supportsPassive ? {
+      passive: true
+    } : false);
+    parent.addEventListener('touchstart', onInitialPointerMove, supportsPassive ? {
+      passive: true
+    } : false);
+    parent.addEventListener('touchend', onInitialPointerMove, supportsPassive ? {
+      passive: true
+    } : false);
   }
   function removeInitialPointerMoveListeners(el) {
     parent.removeEventListener('mousemove', onInitialPointerMove);
@@ -299,9 +305,15 @@ function toggleAttribute(el, name) {
     parent.removeEventListener('pointermove', el);
     parent.removeEventListener('pointerdown', onInitialPointerMove);
     parent.removeEventListener('pointerup', onInitialPointerMove);
-    parent.removeEventListener('touchmove', onInitialPointerMove);
-    parent.removeEventListener('touchstart', onInitialPointerMove);
-    parent.removeEventListener('touchend', onInitialPointerMove);
+    parent.removeEventListener('touchmove', onInitialPointerMove, supportsPassive ? {
+      passive: true
+    } : false);
+    parent.removeEventListener('touchstart', onInitialPointerMove, supportsPassive ? {
+      passive: true
+    } : false);
+    parent.removeEventListener('touchend', onInitialPointerMove, supportsPassive ? {
+      passive: true
+    } : false);
   }
   function onInitialPointerMove() {
     hadKeyboardEvent = false;
@@ -310,7 +322,10 @@ function toggleAttribute(el, name) {
   parent.addEventListener('keydown', onKeyDown, true);
   parent.addEventListener('mousedown', onPointerDown, true);
   parent.addEventListener('pointerdown', onPointerDown, true);
-  parent.addEventListener('touchstart', onPointerDown, true);
+  parent.addEventListener('touchstart', onPointerDown, supportsPassive ? {
+    passive: true,
+    capture: true
+  } : true);
   parent.addEventListener('visibilitychange', onVisibilityChange, true);
   addInitialPointerMoveListeners();
   parent.addEventListener('focus', onFocus, true);
@@ -395,14 +410,14 @@ class UI {
       this.el.setAttribute('data-mute', '');
     }
   }
-  initEvents() {
+  initEvents(supportsPassive) {
     this.moreBtn.addEventListener('click', () => {
       toggleAttribute(this.el, 'data-extra');
     });
     Array.from(this.extraControls.children).forEach(el => {
       this.hideExtraControl(el);
     });
-    applyFocusVisiblePolyfill(this.el);
+    applyFocusVisiblePolyfill(this.el, supportsPassive);
     resize = () => {
       if (!cooldown) return;
       cooldown = false;
@@ -486,14 +501,14 @@ class UI {
       }, 800);
     });
   }
-  mount(container) {
+  mount(container, supportsPassive) {
     container.innerHTML = '';
     container.append(this.el);
     if (this.icons) {
       container.append(this.icons);
     }
     this.mounted = true;
-    this.initEvents();
+    this.initEvents(supportsPassive);
     marquee(this.titleWrap, this.title);
   }
   destroy() {
@@ -537,6 +552,22 @@ var isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.u
 var dragStart = isMobile ? 'touchstart' : 'mousedown';
 var dragMove = isMobile ? 'touchmove' : 'mousemove';
 var dragEnd = isMobile ? 'touchend' : 'mouseup';
+var supportsPassive = false;
+if (typeof window !== 'undefined') {
+  try {
+    var opts = Object.defineProperty({}, 'passive', {
+      get: function get() {
+        supportsPassive = true;
+        return false;
+      }
+    });
+    window.addEventListener('testPassvie', null, opts);
+    window.removeEventListener('testPassvie', null, opts);
+  } catch (e) {
+    supportsPassive = false;
+  }
+}
+var addPassive = supportsPassive && isMobile;
 class Player {
   constructor(options) {
     this.id = playerArr.length;
@@ -552,7 +583,7 @@ class Player {
     this.renderComponents();
     this.initUI(this.options);
     this.initAudio();
-    this.ui.mount(this.options.container);
+    this.ui.mount(this.options.container, supportsPassive);
   }
   get duration() {
     if (!this.audio || !this.audio.duration) {
@@ -631,7 +662,9 @@ class Player {
       e.preventDefault();
       this.el.setAttribute('data-seeking', '');
       this._dragging = true;
-      document.addEventListener(dragMove, dragMoveHandler);
+      document.addEventListener(dragMove, dragMoveHandler, addPassive ? {
+        passive: true
+      } : false);
       document.addEventListener(dragEnd, dragEndHandler);
     };
     var dragMoveHandler = e => {
@@ -876,5 +909,5 @@ class Player {
 }
 Player.use = function (comp) {
   REGISTERED_COMPS.push(comp);
-};console.log("%c\uD83C\uDF4A%c Shikwasa Podcast Player v2.0.0-beta.2 %c https://shikwasa.js.org", 'background-color:#00869B40;padding:4px;', 'background:#00869B80;color:#fff;padding:4px 0', 'padding: 2px 0;');
+};console.log("%c\uD83C\uDF4A%c Shikwasa Podcast Player v2.0.0 %c https://shikwasa.js.org", 'background-color:#00869B40;padding:4px;', 'background:#00869B80;color:#fff;padding:4px 0', 'padding: 2px 0;');
 module.exports=Player;

@@ -5,8 +5,9 @@ publish:
 	@npm publish
 
 deploy:
+	@rm -fr public
 	npm run build:demo
-	@cp ./pages/public/assets ./public/assets
+	@cp -r ./pages/public/assets/ ./public/assets
 	@cp ./pages/public/CNAME ./public
 	@node gh.js
 	@rm -fr ./public
