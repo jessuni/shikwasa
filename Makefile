@@ -1,6 +1,6 @@
 publish:
 	@rm -fr dist
-	@NODE_ACTION=npm run build
+	@npm run build
 	@cat package.json | grep version
 	@npm publish
 

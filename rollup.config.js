@@ -55,7 +55,11 @@ function bundle(target, format) {
 
 function bundleDemo() {
   const html = fs.readFileSync('./pages/public/index.html').toString()
-  const htmlMinified = minify(html)
+  const htmlMinified = minify(html, {
+    collapseWhitespace: true,
+    collapseInlineTagWhitespace: true,
+    removeComments: true,
+  })
   if (!fs.existsSync('./public')) {
     fs.mkdirSync('./public')
   }
