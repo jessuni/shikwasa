@@ -1,0 +1,11 @@
+{
+  "projectId": "ym82ut",
+  "baseUrl": "http://localhost:8080",
+  "viewportWidth": 720,
+  "viewportHeight": 480,
+  "fixturesFolder": false,
+  "firefoxGcInterval": {
+    "runMode": null,
+    "openMode": null
+  }
+}

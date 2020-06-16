@@ -1,5 +1,6 @@
 {
   "extends": "eslint:recommended",
+  "parser": "babel-eslint",
   "env": {
     "node": true,
     "browser": true,
@@ -18,6 +19,8 @@
       "arrays": "always-multiline"
     }],
     "object-curly-spacing": 0,
-    "no-process-env": 0
-  }
+    "no-process-env": 0,
+    "no-unexpected-multiline": 0
+  },
+  "ignorePatterns": ["dist/*"]
 }

@@ -1,37 +1,72 @@
-import Template from './template'
-import Bar from './bar'
+import UI from './ui'
 import Events from './events'
-import { secondToTime, numToString, handleOptions, setMediaSession } from './utils'
+import { toggleAttribute, handleOptions, handleAudio, parseAudio } from './utils'
 
 const playerArr = []
-let initSeek
+const REGISTERED_COMPS = []
 const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.userAgent) : false
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
 const dragEnd = isMobile ? 'touchend' : 'mouseup'
 
+// detecting addEventListener option support
+let supportsPassive = false
+if (typeof window !== 'undefined') {
+  try {
+    const opts = Object.defineProperty({}, 'passive', {
+      get: function () {
+        supportsPassive = true
+        return false
+      },
+    })
+    window.addEventListener('testPassvie', null, opts)
+    window.removeEventListener('testPassvie', null, opts)
+  } catch (e) {
+    supportsPassive = false
+  }
+}
+const addPassive = supportsPassive && isMobile
+
 class Player {
   constructor(options) {
     this.id = playerArr.length
     playerArr.push(this)
-    this.inited = false
-    this.canplay = false
-    this.dragging = false
-    this.options = handleOptions(options)
-    this.muted = this.options.muted
-    this.initUI()
-    this.initKeyEvents()
-    this.currentSpeed = 1
+    this.comps = {}
+    this._audio = {}
+    this._hasMediaSession = false
+    this._initSeek = 0
+    this._canplay = false
+    this._dragging = false
     this.events = new Events()
+    this.options = handleOptions(options)
+    this.renderComponents()
+    this.initUI(this.options)
     this.initAudio()
-    this.template.mount(this.options.container)
+    this.ui.mount(this.options.container, supportsPassive)
   }
 
+
+
   get duration() {
-    if (!this.audio || !this.audio.src) {
-      return this.options.audio.duration
+    if (!this.audio || !this.audio.duration) {
+      return this._audio.duration
+    }
+    return this.audio.duration
+  }
+
+  get seekable() {
+    return Boolean(this.duration)
+  }
+
+  set seekable(v) {
+    if (v) {
+      this.ui.seekControls.forEach(el => {
+        el.removeAttribute('disabled')
+      })
     } else {
-      return isNaN(this.audio.duration) ? this.options.audio.duration : this.audio.duration
+      this.ui.seekControls.forEach(el => {
+        el.setAttribute('disabled', '')
+      })
     }
   }
 
@@ -39,109 +74,137 @@ class Player {
     return this.audio ? this.audio.currentTime : undefined
   }
 
+  get playbackRate() {
+    return this.audio ? this.audio.playbackRate : undefined
+  }
+
+  set playbackRate(v) {
+    if (this.audio) {
+      this.audio.playbackRate = v
+      this.audio.defaultPlaybackRate = v
+    }
+  }
+
+  get muted() {
+    return this.audio ? this.audio.muted : undefined
+  }
+
+  set muted(v) {
+    if (this.audio) {
+      this.audio.muted = v
+      this.audio.defaultMuted = v
+    }
+  }
+
   initUI() {
-    this.template = new Template(this.options)
-    this.el = this.template.el
-    this.bar = new Bar(this.template)
-    this.initButtonEvents()
+    this.ui = new UI(this.options)
+    this.el = this.ui.el
+    this.initControlEvents()
     this.initBarEvents()
   }
 
-  initButtonEvents() {
-    this.template.playBtn.addEventListener('click', () => {
+  initControlEvents() {
+    this.ui.playBtn.addEventListener('click', () => {
       this.toggle()
     })
-    this.template.muteBtn.addEventListener('click', () => {
+    this.ui.muteBtn.addEventListener('click', () => {
       this.muted = !this.muted
-      this.el.classList.toggle('Mute')
-      if (this.audio) {
-        this.audio.muted = this.muted
-      }
+      toggleAttribute(this.el, 'data-mute')
     })
-    this.template.fwdBtn.addEventListener('click', () => {
-      this.seekForward()
+    this.ui.fwdBtn.addEventListener('click', () => {
+      this.seekBySpan()
     })
-    this.template.bwdBtn.addEventListener('click', () => {
-      this.seekBackward()
+    this.ui.bwdBtn.addEventListener('click', () => {
+      this.seekBySpan({ forward: false })
     })
-    this.template.speedBtn.addEventListener('click', () => {
-      const index = this.options.speedOptions.indexOf(this.currentSpeed)
+    this.ui.speedBtn.addEventListener('click', () => {
+      const index = this.options.speedOptions.indexOf(this.playbackRate)
       const speedRange = this.options.speedOptions
-      this.currentSpeed = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
-      this.template.speedBtn.innerHTML = numToString(this.currentSpeed) + 'x'
-      if (this.audio) {
-        this.audio.playbackRate = this.currentSpeed
-      }
+      this.playbackRate = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
+      this.ui.setSpeed(this.playbackRate)
     })
   }
 
   initBarEvents() {
-    let seekingTime
-    const dragStartHandler = () => {
-      this.el.classList.add('Seeking')
-      this.dragging = true
-      document.addEventListener(dragMove, dragMoveHandler)
+    let targetTime = 0
+    const dragStartHandler = (e) => {
+      if (!this.seekable) return
+      e.preventDefault()
+      this.el.setAttribute('data-seeking', '')
+      this._dragging = true
+      document.addEventListener(dragMove, dragMoveHandler, addPassive ? { passive: true } : false)
       document.addEventListener(dragEnd, dragEndHandler)
     }
     const dragMoveHandler = (e) => {
-      const offset = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0
-      let percentage = (offset - this.template.barWrap.getBoundingClientRect().left) / this.template.barWrap.clientWidth
-      percentage = Math.min(percentage, 1)
-      percentage = Math.max(0, percentage)
-      seekingTime = percentage * this.duration
-      this.setDisplayAndBarByTime(seekingTime)
+      this.ui.setProgress(null, this.ui.getPercentByPos(e), this.duration)
     }
-    const dragEndHandler = () => {
-      this.dragging = false
-      this.el.classList.remove('Seeking')
-      this.seek(seekingTime)
+    const dragEndHandler = (e) => {
+      e.preventDefault()
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
-    }
-    const instantSeek = (e) => {
-      if (this.dragging) return
-      dragMoveHandler(e)
-      this.seek(seekingTime)
-    }
-    this.template.barWrap.addEventListener(dragEnd, instantSeek)
-    this.template.handle.addEventListener(dragStart, dragStartHandler)
-  }
+      targetTime = this.ui.getPercentByPos(e) * this.duration
+      this.seek(targetTime)
+      this._dragging = false
 
-  initKeyEvents() {
-    const pressSpace = (e) => {
-      if (e.keyCode === 32) {
-        const activeEl = document.activeElement
-        if (!activeEl.classList.contains('shk_btn_toggle')) {
-          this.toggle()
-        }
-      }
+      // disable barPlayed transition on drag
+      setTimeout(() => this.el.removeAttribute('data-seeking'), 50)
     }
-    this.el.addEventListener('keyup', pressSpace)
+
+    // seeking with keyboard
+    const keydownHandler = (e) => {
+      if (!this.seekable) return
+
+      // for early browser compatibility
+      const key = e.key.replace('Arrow', '')
+
+      const backwardKeys = ['Left', 'Down']
+      const forwardKeys = ['Right', 'Up']
+      const largeStepKeys = ['PageDown', 'PageUp']
+      const edgeKeys = ['Home', 'End']
+      const isBack = backwardKeys.indexOf(key) !== -1
+      const isFwd = forwardKeys.indexOf(key) !== -1
+      const isWayBack = key === largeStepKeys[0]
+      const isWayFwd = key === largeStepKeys[1]
+      const isStart = key === edgeKeys[0]
+      const isEnd = key === edgeKeys[1]
+      if (!isBack && !isFwd && largeStepKeys.indexOf(key) === -1 && edgeKeys.indexOf(key) === -1) {
+        return
+      }
+      if (isStart) {
+        this.seek(0)
+        return
+      }
+      if (isEnd) {
+        this.seek(this.duration)
+        return
+      }
+      const step = (isWayFwd || isWayBack ? 0.1 : 0.01) * (isFwd || isWayFwd ? 1 : -1)
+      const currentTime = this._canplay ? this.currentTime : this._initSeek
+      const time = step * this.duration + currentTime
+      this.seek(time)
+    }
+    this.ui.barWrap.addEventListener(dragStart, dragStartHandler)
+    this.ui.handle.addEventListener('keydown', keydownHandler)
   }
 
   initAudio() {
     if (this.options.audio.src) {
       this.audio = new Audio()
-      this.audio.title = this.options.audio.title
-      this.initLoadingEvents()
       this.initAudioEvents()
       this.events.audioEvents.forEach(name => {
         this.audio.addEventListener(name, (e) => {
           this.events.trigger(name, e)
         })
       })
-      if (this.options.preload !== 'none') {
-        this.updateAudio(this.options.audio.src)
-        this.inited = true
-      }
+      this.audio.preload = this.options.preload
+      this.muted = this.options.muted
+      this.update(this.options.audio)
     }
   }
 
   initAudioEvents() {
     this.on('play', () => {
-      if (this.el.classList.contains('Pause')) {
-        this.setUIPlaying()
-      }
+      this.ui.setPlaying()
       playerArr.forEach(player => {
         if (player.id !== this.id && player.audio && !player.audio.paused) {
           player.pause()
@@ -149,50 +212,75 @@ class Player {
       })
     })
     this.on('pause', () => {
-      if (this.el.classList.contains('Play')) {
-        this.setUIPaused()
-      }
+      this.ui.setPaused()
     })
     this.on('ended', () => {
-      this.setUIPaused()
+      this.ui.setPaused()
       this.seek(0)
     })
+    this.on('waiting', () => {
+      this.el.setAttribute('data-loading', '')
+    })
     this.on('durationchange', () => {
-      if (this.duration !== 1) {
-        this.template.duration.innerHTML = secondToTime(this.duration)
+      if (this.duration && this.duration !== 1) {
+        this.seekable = true
+        this.ui.setTime('duration', this.duration)
       }
+    })
+    this.on('canplay', () => {
+      if (!this._canplay) {
+        this._canplay = true
+        if (this._initSeek) {
+          this.seek(this._initSeek)
+          this._initSeek = 0
+        }
+      }
+    })
+    this.on('canplaythrough', () => {
+      this.el.removeAttribute('data-loading')
     })
     this.on('progress', () => {
       if (this.audio.buffered.length) {
         const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
-        this.bar.set('audioLoaded', percentage)
+        this.ui.setBar('loaded', percentage)
       }
     })
     this.on('timeupdate', () => {
-      if (!this.dragging) {
-        this.setDisplayAndBarByTime(this.audio.currentTime)
+      if (!this._dragging) {
+        this.ui.setProgress(this.audio.currentTime, null, this.duration)
       }
+    })
+    this.on('abort', () => {
+      this.ui.setPaused()
     })
   }
 
-  initLoadingEvents() {
-    this.on('canplaythrough', () => {
-      if (this.el.classList.contains('Loading')) {
-        this.el.classList.remove('Loading')
+  initMediaSession() {
+    const self = this
+    if ('mediaSession' in navigator) {
+      this._hasMediaSession = true
+      this.setMediaMetadata(this.options.audio)
+      const controls = {
+        play: this.play.bind(self),
+        pause: this.pause.bind(self),
+        seekforward: this.seekBySpan.bind(self),
+        seekbackward: () => this.seekBySpan({ forward: false }).bind(self),
       }
-    })
-    this.on('waiting', () => {
-      if (!this.el.classList.contains('Loading')) {
-        this.el.classList.add('Loading')
-      }
-    })
-    this.on('canplay', () => {
-      if (!this.canplay) {
-        this.canplay = true
-        if (initSeek) {
-          this.seek(initSeek)
-        }
-      }
+      Object.keys(controls).forEach(key => {
+        navigator.mediaSession.setActionHandler(key, () => {
+          controls[key]()
+        })
+      })
+    }
+  }
+
+  setMediaMetadata(audio) {
+    /* global MediaMetadata */
+    const artwork = audio.cover ? [{ src: audio.cover}] : undefined
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: audio.title,
+      artist: audio.artist,
+      artwork,
     })
   }
 
@@ -200,46 +288,12 @@ class Player {
     this.events.on(name, callback)
   }
 
-  setDisplayAndBarByTime(time) {
-    time = time || 0
-    const percentage = time / this.duration || 0
-    this.template.currentTime.innerHTML = secondToTime(time)
-    this.bar.set('audioPlayed', percentage)
-  }
-
-  setUIPlaying() {
-    this.el.classList.add('Play')
-    this.el.classList.remove('Pause')
-  }
-
-  setUIPaused() {
-    this.el.classList.add('Pause')
-    this.el.classList.remove('Play')
-    this.el.classList.remove('Loading')
-  }
-
-  play(audio) {
-    if (!this.inited) {
-      this.audio.src = this.options.audio.src
-      this.inited = true
-    }
-    if (audio && audio.src) {
-      this.template.update(audio)
-      this.updateAudio(audio.src)
-    }
+  play() {
     if (!this.audio.paused) return
     const promise = this.audio.play()
-    const self = this
-    const targetAudio = audio || this.options.audio
-    const controls = {
-      play: this.play,
-      pause: this.pause,
-      seekforward: this.seekForward,
-      seekbackward: this.seekBackward,
-    }
     if (promise instanceof Promise) {
       promise.then(() => {
-        setMediaSession(targetAudio, controls, self)
+        this.initMediaSession()
       })
       promise.catch((e) => {
         if (e.name === 'NotAllowedError' || e.name === 'NotSupportedError') {
@@ -247,7 +301,7 @@ class Player {
         }
       })
     } else {
-      setMediaSession(targetAudio, controls, self)
+      this.initMediaSession()
     }
   }
 
@@ -257,47 +311,63 @@ class Player {
   }
 
   toggle() {
-    if (!this.inited) {
-      this.audio.src = this.options.audio.src
-      this.inited = true
-    }
     this.audio.paused ? this.play() : this.pause()
   }
 
   seek(time) {
-    let _time = parseInt(time)
-    if (isNaN(_time)) {
-      console.error('seeking time is NaN')
-      return
+    if (!this.seekable) return
+    time = parseInt(time)
+    if (isNaN(time)) {
+      console.error('Shikwasa: seeking time is NaN')
     }
-    _time = Math.min(_time, this.duration)
-    _time = Math.max(_time, 0)
-    this.setDisplayAndBarByTime(_time)
-    if (!this.canplay) {
-      initSeek = time
-    } else if (this.audio) {
-      this.audio.currentTime = _time
+    time = Math.min(time, this.duration)
+    time = Math.max(time, 0)
+    this.ui.setProgress(time, null, this.duration)
+    if (!this._canplay) {
+      this._initSeek = time
+    } else {
+      this.audio.currentTime = time
     }
   }
 
-  seekForward(time = 10) {
-    const seekingTime = Math.min(this.duration, this.audio.currentTime + time)
-    this.seek(seekingTime)
+  seekBySpan({ time = 10, forward = true } = {}) {
+    const currentTime = this._canplay ? this.audio.currentTime : this._initSeek
+    const targetTime = currentTime + time * (forward ? 1 : -1)
+    this.seek(targetTime)
   }
 
-  seekBackward(time = 10) {
-    const seekingTime = Math.max(0, this.audio.currentTime - time)
-    this.seek(seekingTime)
-  }
+  update(audio) {
+    if (audio && audio.src) {
+      this._audio = handleAudio(audio)
+      this._canplay = false
 
-  updateAudio(src) {
-    this.audio.src = src
-    this.audio.preload = this.options.preload
-    this.audio.muted = this.muted
-    if (this.options.autoplay && this.muted) {
-      this.audio.autoplay = this.options.autoPlay
+      this.audio.src = this._audio.src
+      this.updateAudioData(this._audio)
+      this.events.trigger('audioupdate', this._audio)
+      if (this.options.parser &&
+        (!audio.title ||
+        !audio.artist ||
+        !audio.cover ||
+        !audio.chapters)
+      ) {
+        parseAudio(Object.assign({}, audio), this.options.parser).then(audioData => {
+          this._audio = audioData || this._audio
+          this.updateAudioData(this._audio)
+          this.events.trigger('audioparse', this._audio)
+        })
+      }
+    } else {
+      throw new Error('Shikwasa: audio source is not specified')
     }
-    this.audio.playbackRate = this.currentSpeed
+  }
+
+  updateAudioData(audio) {
+    this.audio.title = audio.title
+    this.ui.setAudioInfo(audio)
+    this.seekable = audio.duration
+    if (this._hasMediaSession) {
+      this.setMediaMetadata(audio)
+    }
   }
 
   destroyAudio() {
@@ -309,9 +379,27 @@ class Player {
 
   destroy() {
     this.destroyAudio()
-    this.template.destroy()
+    this.ui.destroy()
+    Object.keys(this.comps).forEach(k => {
+      if (this.comps[k].destroy &&
+        typeof this.comps[k].destroy === 'function') {
+        this.comps[k].destroy()
+      }
+    })
+    this.comps = null
     this.options.container.innerHTML = ''
   }
+
+  renderComponents() {
+    if (!REGISTERED_COMPS.length) return
+    REGISTERED_COMPS.forEach(comp => {
+      this.comps[comp._name] = new comp(this)
+    })
+  }
+}
+
+Player.use = function (comp) {
+  REGISTERED_COMPS.push(comp)
 }
 
 export default Player

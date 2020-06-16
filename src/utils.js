@@ -1,4 +1,4 @@
-import config from './config'
+import { DEFAULT ,CONFIG } from './config'
 
 export function secondToTime(time) {
   time = Math.round(time)
@@ -8,9 +8,9 @@ export function secondToTime(time) {
   min = min < 10 ? '0' + min : min
   sec = sec < 10 ? '0' + sec : sec
   if (hour === 0) {
-    hour = hour < 10 ? '0' + hour : hour
     return `${min}:${sec}`
   }
+  hour = hour < 10 ? '0' + hour : hour
   return `${hour}:${min}:${sec}`
 }
 
@@ -19,73 +19,151 @@ export function numToString(num) {
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
 
-export function carousel(el, distance = 0, pause = 2000) {
-  let carouselTimeout, carouselInterval
-  const duration = distance * 50
-  const interval = duration + pause
-  function transform() {
-    el.style.transitionDuration = `${duration / 1000}s`
-    el.style.transform = `translateX(-${distance}px)`
-    carouselTimeout = setTimeout(() => {
-      el.style.transform = 'translateX(0px)'
-    }, interval)
+export function marquee(textWrap, textEl, speed = 60) {
+  const overflow = textEl.offsetWidth - textWrap.offsetWidth
+  if (overflow > 0) {
+    textWrap.setAttribute('data-overflow', '')
+    const duration = textEl.offsetWidth / speed
+    textWrap.style.animationDuration = `${duration}s`
+  } else {
+    textWrap.removeAttribute('data-overflow')
   }
-  transform()
-  carouselInterval = setInterval(() => transform(), interval * 2)
-  return [carouselTimeout, carouselInterval]
 }
 
 export function handleOptions(options) {
-  options.container = document.querySelector(options.container ? options.container : config.container)
-  options.fixed = options.fixed || config.fixed
-  options.download = typeof options.download === 'boolean' ? options.download : config.download
-  const fixedOptions = ['auto', 'static', 'fixed']
-  const result = fixedOptions.filter(item => item === options.fixed.type)[0]
-  if (!result) {
-    options.fixed.type = config.fixed.type
+  const _options = Object.assign({}, options)
+  _options.audio = Object.assign({}, options.audio)
+  Object.keys(DEFAULT).forEach(k => {
+    _options[k] = (_options[k] || typeof _options[k] === 'boolean') ?
+      _options[k] : DEFAULT[k]
+  })
+  if (typeof _options.container === 'function') {
+    _options.container = _options.container()
   }
-  options.themeColor = options.themeColor || config.themeColor
-  options.autoPlay = options.autoPlay || config.autoPlay
-  options.muted = options.muted || config.muted
-  options.preload = options.preload || config.preload
-  options.speedOptions = options.speedOptions || config.speedOptions
-  if (!Array.isArray(options.speedOptions)) {
-    options.speedOptions = [options.speedOptions]
+  const fixedType = CONFIG.fixedOptions.find(item => item === _options.fixed.type)
+  if (!fixedType) {
+    _options.fixed.type = DEFAULT.fixed.type
   }
-  if (!options.speedOptions.includes(1)) {
-    options.speedOptions.push(1)
+  if (!Array.isArray(_options.speedOptions)) {
+    _options.speedOptions = [_options.speedOptions]
   }
-  options.speedOptions = options.speedOptions
-  .map(sp => parseFloat(sp))
-  .filter(sp => !isNaN(sp))
-  if (options.speedOptions.length > 1) {
-    options.speedOptions.sort((a, b) => a - b)
+  if (_options.speedOptions.indexOf(1) === -1) {
+    _options.speedOptions.push(1)
   }
-  if (!options.audio) {
-    console.error('audio is not specified')
-  } else {
-    options.audio.title = options.audio.title || 'Unknown Title'
-    options.audio.artist = options.audio.artist || 'Unknown Artist'
-    options.audio.cover = options.audio.cover || null
-    options.audio.duration = options.audio.duration || 0
+  _options.speedOptions = _options.speedOptions
+    .map(sp => parseFloat(sp))
+    .filter(sp => !isNaN(sp))
+  if (_options.speedOptions.length > 1) {
+    _options.speedOptions.sort((a, b) => a - b)
   }
-  return options
+  return _options
 }
 
-export function setMediaSession(audio, fns = {}, self) {
-  if ('mediaSession' in navigator) {
-    /* global MediaMetadata */
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: audio.title,
-      artist: audio.artist,
-      artwork: [
-        { src: audio.cover }
-      ]
+export function handleAudio(audio = {}, parsedData = {}) {
+  let audioData = Object.assign({}, audio)
+  Object.keys(CONFIG.audioOptions).forEach(k => {
+    audioData[k] = audioData[k] ||
+      parsedData[k] ||
+      CONFIG.audioOptions[k]
+  })
+  return audioData
+}
+
+export async function parseAudio(audio = {}, parser = {}) {
+  const { tags } = await parserWrap(audio.src, parser) || {}
+  const tagData = handleParsedTags(tags)
+  return handleAudio(audio, tagData)
+}
+
+export function parserWrap(src, parser) {
+  return new Promise((resolve, reject) => {
+    parser.read(src, {
+      onSuccess: resolve,
+      onError: reject,
     })
-    if (Object.entries(fns).length && fns.constructor === Object) {
-      Object.keys(fns).forEach(key => {
-        navigator.mediaSession.setActionHandler(key, fns[key].bind(self))
+  })
+}
+
+export function handleParsedTags(tags = {}) {
+  let cover, chapters, duration
+  const { title, artist } = tags
+  if (tags.picture && tags.picture.data && tags.picture.format) {
+    const byteArray = new Uint8Array(tags.picture.data)
+    const blob = new Blob([byteArray], { type: tags.picture.format })
+    cover = URL.createObjectURL(blob)
+  }
+  if (tags.TLEN && tags.TLEN.data) {
+    duration = +tags.TLEN.data / 1000
+  }
+  if (tags.CHAP && tags.CHAP.length) {
+    chapters = tags.CHAP
+      .filter(ch => ch.id === 'CHAP')
+      .map(ch => {
+        if (ch.data && ch.data.subFrames && ch.data.subFrames.TIT2) {
+          return {
+            id: ch.data.id,
+            startTime: ch.data.startTime / 1000,
+            endTime: ch.data.endTime / 1000,
+            title: ch.data.subFrames.TIT2.data,
+          }
+        }
+        return false
+      })
+      .sort((a, b) => a.id - b.id)
+  }
+  return { title, artist, cover, duration, chapters }
+}
+
+export function createElement(options) {
+  options.tag = options.tag || 'div'
+  const el = document.createElement(options.tag)
+  if (options.className) {
+    if (typeof options.className === 'string') {
+      el.classList.add(options.className)
+    } else {
+      options.className.forEach(className => {
+        el.classList.add(className)
       })
     }
+  }
+  if (options.attrs) {
+    Object.keys(options.attrs).forEach(key => {
+      el.setAttribute(key, options.attrs[key])
+    })
+  }
+  if (options.innerHTML) {
+    el.innerHTML = options.innerHTML
+  }
+  return el
+}
+
+export function toggleAttribute(el, name) {
+  if (typeof el.toggleAttribute === 'function') {
+    el.toggleAttribute(name)
+    return
+  }
+  if (el.hasAttribute(name)) {
+    el.removeAttribute(name)
+  } else {
+    el.setAttribute(name, '')
+  }
+}
+
+export function animateScroll(
+  timestamp,
+  startTime,
+  duration,
+  startPos,
+  distance,
+  scrollEl) {
+  const elapsed = (timestamp - startTime) / 1000
+  const t = elapsed / duration
+
+  // easing in a linear fashion
+  scrollEl.scrollTop = startPos + distance * t
+  if (t < 1) {
+    window.requestAnimationFrame(ts => {
+      animateScroll(ts, startTime, duration, startPos, distance, scrollEl)
+    })
   }
 }
