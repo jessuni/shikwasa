@@ -52,14 +52,6 @@
 .js-focus-visible :focus:not(.focus-visible) {
   outline: none;
 }
-.shk-player {
-  height: 120px;
-  box-sizing: border-box;
-  border-radius: 2px;
-  background-color: var(--color-theme);
-  position: relative;
-  z-index: 10;
-}
 .shk[data-fixed-type='fixed'] {
   position: fixed;
   bottom: 0;
@@ -73,6 +65,17 @@
 }
 .shk[data-seeking] .shk-player {
   cursor: grabbing;
+}
+.shk button {
+  font-family: inherit;
+}
+.shk-player {
+  height: 120px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  background-color: var(--color-theme);
+  position: relative;
+  z-index: 10;
 }
 .shk-body {
   width: 100%;
