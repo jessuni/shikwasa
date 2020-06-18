@@ -102,8 +102,8 @@ ul {
 .logo {
   flex: 0 0 auto;
   margin: 0 20px 10px 0;
-  width: calc(60px + 10vw);
-  height: calc(60px + 10vw);
+  width: calc(60px + 20vh);
+  height: calc(60px + 20vh);
   fill: currentcolor;
 }
 .hero-text {
@@ -257,9 +257,17 @@ footer {
   fill: currentColor;
 }
 @media (max-width: 1000px) {
+  .hero {
+    height: 100vh;
+    padding: 15vh 0 0;
+  }
   .inner {
     max-width: initial;
     padding: 0;
+  }
+  .logo,
+  .hero-text {
+    margin: 0;
   }
   .hero-player {
     display: none;
