@@ -4,7 +4,6 @@
   --color-contrast: #f6b0a6;
   --color-pink: #f9bcbccc;
   --color-white: #f7c4f8;
-
   --rgb-text: 255, 255, 255;
   --color-title: var(--color-white);
   --color-text: var(--color-contrast);
@@ -12,12 +11,13 @@
   --color-bg-dark: var(--color-blue);
   --color-code: var(--color-darkblue);
 }
-html, body {
+body,
+html {
   margin: 0;
   padding: 0;
 }
 body {
-  font: 18px/1.42 -apple-system,BlinkMacSystemFont, "Open Sans", "Helvetica Neue","PingFang SC","Hiragino Sans GB","Droid Sans Fallback","Microsoft YaHei",sans-serif;
+  font: 18px/1.42 Rubik, Open Sans, Helvetica Neue, PingFang SC, Hiragino Sans GB, Droid Sans Fallback, Microsoft YaHei, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-size: 18px;
@@ -42,17 +42,16 @@ a:hover {
 }
 ::selection {
   background-color: var(--color-bg-light);
-  color:var(--color-bg-dark);
+  color: var(--color-bg-dark);
 }
 ul {
   margin: 0;
   padding-left: 1em;
 }
-
 .inner {
-  margin: 0px auto;
+  margin: 0 auto;
   max-width: 960px;
-  padding: 0px 4em;
+  padding: 0 4em;
 }
 .hero {
   min-height: 60vw;
@@ -106,17 +105,18 @@ ul {
   height: calc(60px + 20vh);
   fill: currentcolor;
 }
-.hero-text {
-  text-align:center;
+.hero-text,
+.logo {
   margin: 0 20px 10px 0;
 }
-
+.hero-text {
+  text-align: center;
+}
 .hero-player {
   padding-top: 2em;
   width: 100%;
   max-width: 700px;
 }
-
 @supports (mix-blend-mode: difference) {
   .hero-text,
   .logo {
@@ -124,19 +124,18 @@ ul {
     mix-blend-mode: difference;
   }
 }
-@supports not(mix-blend-mode: difference) {
+@supports not (mix-blend-mode: difference) {
   .hero-text,
   .logo {
     color: #c59806;
   }
 }
-
 .main {
   display: flex;
   flex-flow: row nowrap;
 }
 .feature-item {
-  margin: 5em 0;
+  margin: 8em 0;
 }
 div.feature-item:first-of-type {
   margin-top: 0;
@@ -150,18 +149,28 @@ div.feature-item:first-of-type {
   box-sizing: border-box;
 }
 .feature kbd {
-    display: inline-block;
-    color: var(--color-bg-dark);
-    padding: 3px 5px;
-    font-size: .7em;
-    line-height: 1;
-    vertical-align: middle;
-    background-color: #fafbfc;
-    border: 1px solid #c6cbd1;
-    border-bottom-color: #959da5;
-    border-radius: 3px;
-    -webkit-box-shadow: inset 0 -1px 0 #959da5;
-    box-shadow: inset 0 -1px 0 #959da5;
+  display: inline-block;
+  color: var(--color-bg-dark);
+  padding: 3px 5px;
+  font-size: 0.7em;
+  line-height: 1;
+  vertical-align: middle;
+  background-color: #fafbfc;
+  border: 1px solid #c6cbd1;
+  border-bottom-color: #959da5;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #959da5;
+}
+.feature-item h2 {
+  font-size: 2.1em;
+  text-transform: uppercase;
+  margin: 1.6em 0;
+}
+.feature-item h3 {
+  font-size: 1.4em;
+}
+.feature-main h3 > p {
+  margin-top: 2em;
 }
 .feature-main {
   margin-bottom: 2em;
@@ -180,8 +189,8 @@ div.feature-item:first-of-type {
   cursor: pointer;
   outline: none;
 }
-.button:hover:not(.Round),
-.button.Active {
+.button.Active,
+.button:hover:not(.Round) {
   color: var(--color-bg-dark);
   background-color: var(--color-bg-light);
 }
@@ -198,16 +207,16 @@ div.feature-item:first-of-type {
   background-color: rgb(attr(data-color));
 }
 .button.Round.Blue {
-  background: rgb(85,185,243);
+  background: #55b9f3;
 }
 .button.Turquoise {
-  background: rgb(132, 191, 207);
+  background: #84bfcf;
 }
 .button.Graphite {
-  background: rgb(49,51,53);
+  background: #313335;
 }
 .button.Beige {
-  background: rgb(213,169, 118);
+  background: #d5a976;
 }
 .code {
   margin: 1em 0;
@@ -261,12 +270,18 @@ footer {
     height: 100vh;
     padding: 15vh 0 0;
   }
+  .hero-bg svg {
+    display: none;
+  }
+  .hero-bg:after {
+    content: none;
+  }
   .inner {
-    max-width: initial;
+    max-width: none;
     padding: 0;
   }
-  .logo,
-  .hero-text {
+  .hero-text,
+  .logo {
     margin: 0;
   }
   .hero-player {
