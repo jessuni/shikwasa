@@ -55,15 +55,18 @@ ul {
 }
 .hero {
   min-height: 60vw;
-  padding: 15vw 0 0;
+  padding: 10vw 0 0;
   color: var(--color-title);
   box-sizing: border-box;
   position: relative;
 }
 .hero h2 {
   font-weight: 300;
-  font-size: 1.5em;
+  font-size: 2em;
+  letter-spacing: 3px;
   color: currentColor;
+  text-transform: uppercase;
+  
 }
 .hero strong {
   font-weight: 700;
@@ -135,7 +138,7 @@ ul {
   flex-flow: row nowrap;
 }
 .feature-item {
-  margin: 8em 0;
+  margin: 12em 0;
 }
 div.feature-item:first-of-type {
   margin-top: 0;
@@ -162,23 +165,24 @@ div.feature-item:first-of-type {
   box-shadow: inset 0 -1px 0 #959da5;
 }
 .feature-item h2 {
-  font-size: 2.1em;
+  font-size: 2.5em;
   text-transform: uppercase;
-  margin: 1.6em 0;
+  letter-spacing: 1.5px;
+  margin: 2em 0 1em 0;
 }
 .feature-item h3 {
   font-size: 1.4em;
+  margin: 0.5em 0;
 }
-.feature-main h3 > p {
-  margin-top: 2em;
+.feature-main p {
+  margin-top: 0.5em;
 }
 .feature-main {
-  margin-bottom: 2em;
+  margin-bottom: 3.5em;
+  line-height: 1.8;
 }
 .feature-action {
-  margin-left: 1em;
-  font-size: 0.87em;
-  line-height: 1.7;
+  font-size: 0.78em;
 }
 .button {
   font-size: inherit;
@@ -220,6 +224,9 @@ div.feature-item:first-of-type {
 }
 .code {
   margin: 1em 0;
+}
+.language-js > *::selection{
+  color: var(--color-bg-light);
 }
 .demo {
   width: 60%;
@@ -268,7 +275,7 @@ footer {
 @media (max-width: 1000px) {
   .hero {
     height: 100vh;
-    padding: 15vh 0 0;
+    padding: 10vh 0 0;
   }
   .hero-bg svg {
     display: none;
@@ -287,12 +294,23 @@ footer {
   .hero-player {
     display: none;
   }
+  .hero h2{
+    font-size: 1.4em;
+    letter-spacing: 2px;
+    padding: 0 1em;
+  }
   .main {
     display: block;
   }
   .feature {
     width: 100%;
     padding: 1em 20px;
+  }
+  .feature-item{
+    margin: 8em 0;
+  }
+  .feature-item h2{
+    font-size: 2.2em;
   }
   .demo {
     width: 0;
