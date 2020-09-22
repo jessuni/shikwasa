@@ -63,10 +63,7 @@ ul {
 .hero h2 {
   font-weight: 300;
   font-size: 2em;
-  letter-spacing: 3px;
   color: currentColor;
-  text-transform: uppercase;
-  
 }
 .hero strong {
   font-weight: 700;
