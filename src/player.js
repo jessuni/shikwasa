@@ -259,27 +259,28 @@ class Player {
     const self = this
     if ('mediaSession' in navigator) {
       this._hasMediaSession = true
-      this.setMediaMetadata(this.options.audio)
+      this.setMediaMetadata(this._audio)
       const controls = {
         play: this.play.bind(self),
         pause: this.pause.bind(self),
         seekforward: this.seekBySpan.bind(self),
-        seekbackward: () => this.seekBySpan({ forward: false }).bind(self),
+        seekbackward: () => this.seekBySpan({ forward: false }),
+        seekto: this.seek.bind(self),
       }
       Object.keys(controls).forEach(key => {
-        navigator.mediaSession.setActionHandler(key, () => {
-          controls[key]()
-        })
+        navigator.mediaSession.setActionHandler(key, controls[key]
+        )
       })
     }
   }
 
   setMediaMetadata(audio) {
     /* global MediaMetadata */
-    const artwork = audio.cover ? [{ src: audio.cover}] : undefined
+    const artwork = audio.cover ? [{ src: audio.cover, sizes: '150x150'}] : undefined
     navigator.mediaSession.metadata = new MediaMetadata({
       title: audio.title,
       artist: audio.artist,
+      album: audio.album,
       artwork,
     })
   }
