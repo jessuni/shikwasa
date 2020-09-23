@@ -192,6 +192,7 @@ The current playbackRate of the player. Similar to the native [`HTMLMediaElement
     cover: String,
     src: String,
     duration: Number,  // optional
+    album: String,  // optional, album text will only display in Mediametadata, not visible in player UI.
   }
 ```
 
