@@ -6,7 +6,7 @@ const allFiles = fs.readdirSync('pages')
 const pages = allFiles.filter(name => {
   return /\.html$/.test(name)
 })
-const entry = { main: './src/main.js' }
+const entry = { main: './src/main.ts' }
 
 const plugins = pages.map(filename => {
   const name = filename.replace(/\.html$/, '')
@@ -43,6 +43,11 @@ module.exports = {
         loader: 'html-loader',
       },
       {
+        test: /\.tsx?$/,
+        use: ['ts-loader'],
+        exclude: /node_modules/,
+      },
+      {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
@@ -63,6 +68,9 @@ module.exports = {
         ],
       },
     ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
   },
   plugins,
 }

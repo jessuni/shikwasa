@@ -1,26 +1,26 @@
+import { Options, IAudio, Type, audioEvents, EventName, ICallback } from './types'
 import UI from './ui'
 import Events from './events'
 import { toggleAttribute, handleOptions, handleAudio, parseAudio } from './utils'
 
-const playerArr = []
-const REGISTERED_COMPS = []
+const REGISTERED_COMPS: Array<object> = []
 const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.userAgent) : false
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
 const dragEnd = isMobile ? 'touchend' : 'mouseup'
 
 // detecting addEventListener option support
-let supportsPassive = false
+let supportsPassive: boolean = false
 if (typeof window !== 'undefined') {
   try {
     const opts = Object.defineProperty({}, 'passive', {
       get: function () {
-        supportsPassive = true
         return false
       },
     })
-    window.addEventListener('testPassvie', null, opts)
-    window.removeEventListener('testPassvie', null, opts)
+    window.addEventListener('testPassvie'!, null!, opts)
+    window.removeEventListener('testPassvie'!, null!, opts)
+    supportsPassive = true
   } catch (e) {
     supportsPassive = false
   }
@@ -28,11 +28,26 @@ if (typeof window !== 'undefined') {
 const addPassive = supportsPassive && isMobile
 
 class Player {
-  constructor(options) {
-    this.id = playerArr.length
-    playerArr.push(this)
-    this.comps = {}
-    this._audio = {}
+  private id: number
+  protected _hasMediaSession: boolean
+  protected _initSeek: number
+  protected _canplay: boolean
+  protected _dragging: boolean
+  protected _audio: IAudio
+  static playerArr: Array<Player> = []
+  // TODO: not sure about comps' type
+  static comps: Record<string, Type<any>>
+  options: Options
+  audio: HTMLAudioElement
+  events: Events
+  el: HTMLElement
+  container: HTMLElement
+
+
+  constructor(options: Options) {
+    Player.playerArr.push(this)
+    this.id = Player.playerArr.length
+    this._audio = {} as IAudio
     this._hasMediaSession = false
     this._initSeek = 0
     this._canplay = false
@@ -40,70 +55,68 @@ class Player {
     this.events = new Events()
     this.options = handleOptions(options)
     this.renderComponents()
-    this.initUI(this.options)
+    this.initUI()
     this.initAudio()
-    this.ui.mount(this.options.container, supportsPassive)
+    this.ui.mount(this.container, supportsPassive)
   }
 
 
 
-  get duration() {
-    if (!this.audio || !this.audio.duration) {
-      return this._audio.duration
-    }
-    return this.audio.duration
+  get duration(): number | undefined {
+    return this.audio && this.audio.duration || this._audio.duration
   }
 
   get seekable() {
     return Boolean(this.duration)
   }
 
-  set seekable(v) {
+  set seekable(v: boolean) {
     if (v) {
-      this.ui.seekControls.forEach(el => {
+      this.ui.seekControls.forEach((el: HTMLElement) => {
         el.removeAttribute('disabled')
       })
     } else {
-      this.ui.seekControls.forEach(el => {
+      this.ui.seekControls.forEach((el: HTMLElement) => {
         el.setAttribute('disabled', '')
       })
     }
   }
 
-  get currentTime() {
-    return this.audio ? this.audio.currentTime : undefined
+  get currentTime(): number {
+    return this.audio ? this.audio.currentTime : 0
   }
 
-  get playbackRate() {
-    return this.audio ? this.audio.playbackRate : undefined
+  get playbackRate(): number {
+    return this.audio ? this.audio.playbackRate : 1
   }
 
-  set playbackRate(v) {
+  set playbackRate(v: number) {
     if (this.audio) {
       this.audio.playbackRate = v
       this.audio.defaultPlaybackRate = v
     }
   }
 
-  get muted() {
-    return this.audio ? this.audio.muted : undefined
+  get muted(): boolean {
+    return this.audio ? this.audio.muted : false
   }
 
-  set muted(v) {
+  set muted(v: boolean) {
     if (this.audio) {
       this.audio.muted = v
       this.audio.defaultMuted = v
     }
   }
 
-  initUI() {
+  initUI(): void {
     this.ui = new UI(this.options)
     this.el = this.ui.el
+    this.container = this.options._container
     this.initControlEvents()
     this.initBarEvents()
   }
 
-  initControlEvents() {
+  initControlEvents(): void {
     this.ui.playBtn.addEventListener('click', () => {
       this.toggle()
     })
@@ -125,9 +138,9 @@ class Player {
     })
   }
 
-  initBarEvents() {
+  initBarEvents(): void {
     let targetTime = 0
-    const dragStartHandler = (e) => {
+    const dragStartHandler = (e: MouseEvent) => {
       if (!this.seekable) return
       e.preventDefault()
       this.el.setAttribute('data-seeking', '')
@@ -135,14 +148,14 @@ class Player {
       document.addEventListener(dragMove, dragMoveHandler, addPassive ? { passive: true } : false)
       document.addEventListener(dragEnd, dragEndHandler)
     }
-    const dragMoveHandler = (e) => {
+    const dragMoveHandler = (e: MouseEvent) => {
       this.ui.setProgress(null, this.ui.getPercentByPos(e), this.duration)
     }
     const dragEndHandler = (e) => {
       e.preventDefault()
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
-      targetTime = this.ui.getPercentByPos(e) * this.duration
+      targetTime = this.ui.getPercentByPos(e) * (this.duration || 0)
       this.seek(targetTime)
       this._dragging = false
 
@@ -151,7 +164,7 @@ class Player {
     }
 
     // seeking with keyboard
-    const keydownHandler = (e) => {
+    const keydownHandler = (e: KeyboardEvent) => {
       if (!this.seekable) return
 
       // for early browser compatibility
@@ -175,23 +188,23 @@ class Player {
         return
       }
       if (isEnd) {
-        this.seek(this.duration)
+        this.seek(this.duration || 0)
         return
       }
       const step = (isWayFwd || isWayBack ? 0.1 : 0.01) * (isFwd || isWayFwd ? 1 : -1)
       const currentTime = this._canplay ? this.currentTime : this._initSeek
-      const time = step * this.duration + currentTime
+      const time = step * (this.duration || 0) + currentTime
       this.seek(time)
     }
     this.ui.barWrap.addEventListener(dragStart, dragStartHandler)
     this.ui.handle.addEventListener('keydown', keydownHandler)
   }
 
-  initAudio() {
+  initAudio(): void {
     if (this.options.audio.src) {
       this.audio = new Audio()
       this.initAudioEvents()
-      this.events.audioEvents.forEach(name => {
+      audioEvents.forEach(name => {
         this.audio.addEventListener(name, (e) => {
           this.events.trigger(name, e)
         })
@@ -202,10 +215,10 @@ class Player {
     }
   }
 
-  initAudioEvents() {
+  initAudioEvents(): void {
     this.on('play', () => {
       this.ui.setPlaying()
-      playerArr.forEach(player => {
+      Player.playerArr.forEach(player => {
         if (player.id !== this.id && player.audio && !player.audio.paused) {
           player.pause()
         }
@@ -241,7 +254,7 @@ class Player {
     })
     this.on('progress', () => {
       if (this.audio.buffered.length) {
-        const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
+        const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / (this.duration || 1) : 0
         this.ui.setBar('loaded', percentage)
       }
     })
@@ -255,7 +268,7 @@ class Player {
     })
   }
 
-  initMediaSession() {
+  initMediaSession(): void {
     const self = this
     if ('mediaSession' in navigator) {
       this._hasMediaSession = true
@@ -274,7 +287,7 @@ class Player {
     }
   }
 
-  setMediaMetadata(audio) {
+  setMediaMetadata(audio: IAudio): void {
     /* global MediaMetadata */
     const artwork = audio.cover ? [{ src: audio.cover, sizes: '150x150'}] : undefined
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -285,11 +298,11 @@ class Player {
     })
   }
 
-  on(name, callback) {
+  on(name: EventName, callback: ICallback): void {
     this.events.on(name, callback)
   }
 
-  play() {
+  play(): void {
     if (!this.audio.paused) return
     const promise = this.audio.play()
     if (promise instanceof Promise) {
@@ -306,22 +319,22 @@ class Player {
     }
   }
 
-  pause() {
+  pause(): void {
     if (this.audio.paused) return
     this.audio.pause()
   }
 
-  toggle() {
+  toggle(): void {
     this.audio.paused ? this.play() : this.pause()
   }
 
-  seek(time) {
+  seek(time: number | string): void {
     if (!this.seekable) return
-    time = parseInt(time)
+    time = +time
     if (isNaN(time)) {
       console.error('Shikwasa: seeking time is NaN')
     }
-    time = Math.min(time, this.duration)
+    time = Math.min(time, this.duration || 0)
     time = Math.max(time, 0)
     this.ui.setProgress(time, null, this.duration)
     if (!this._canplay) {
@@ -331,13 +344,13 @@ class Player {
     }
   }
 
-  seekBySpan({ time = 10, forward = true } = {}) {
+  seekBySpan({ time: number = 10, forward: boolean = true } = {}): void {
     const currentTime = this._canplay ? this.audio.currentTime : this._initSeek
     const targetTime = currentTime + time * (forward ? 1 : -1)
     this.seek(targetTime)
   }
 
-  update(audio) {
+  update(audio: Partial<IAudio>): void | Error {
     if (audio && audio.src) {
       this._audio = handleAudio(audio)
       this._canplay = false
@@ -362,39 +375,38 @@ class Player {
     }
   }
 
-  updateAudioData(audio) {
+  updateAudioData(audio: IAudio): void {
     this.audio.title = audio.title
     this.ui.setAudioInfo(audio)
-    this.seekable = audio.duration
+    this.seekable = Boolean(audio.duration)
     if (this._hasMediaSession) {
       this.setMediaMetadata(audio)
     }
   }
 
-  destroyAudio() {
+  destroyAudio(): void {
     this.audio.pause()
     this.audio.src = ''
     this.audio.load()
-    this.audio = null
   }
 
-  destroy() {
+  destroy(): void {
     this.destroyAudio()
     this.ui.destroy()
-    Object.keys(this.comps).forEach(k => {
-      if (this.comps[k].destroy &&
-        typeof this.comps[k].destroy === 'function') {
-        this.comps[k].destroy()
+    Object.keys(Player.comps).forEach(k => {
+      if (Player.comps[k].destroy &&
+        typeof Player.comps[k].destroy === 'function') {
+        Player.comps[k].destroy()
       }
     })
-    this.comps = null
-    this.options.container.innerHTML = ''
+    Player.comps = {}
+    this.container.innerHTML = ''
   }
 
-  renderComponents() {
+  renderComponents(): void {
     if (!REGISTERED_COMPS.length) return
     REGISTERED_COMPS.forEach(comp => {
-      this.comps[comp._name] = new comp(this)
+      Player.comps[comp._name] = new comp(this)
     })
   }
 }
