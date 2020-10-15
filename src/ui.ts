@@ -1,12 +1,18 @@
+import { Options, IAudio } from './types'
 import PlayerComp from './templates/Player'
 import IconComp from './templates/Icon'
 import { secondToTime, numToString, marquee, createElement, toggleAttribute } from './utils'
 import applyFocusVisible from './focus-visible'
 
-let resize, coverUrl = null, cooldown = true
+let resize: boolean
+let coverUrl: string | undefined
+let cooldown: boolean = true
 
 export default class UI {
-  constructor(options) {
+  mounted: boolean
+  el: HTMLElement
+  icons: HTMLOrSVGElement
+  constructor(options: Options) {
     this.mounted = false
     if (!document.querySelector('.shk-icons')) {
       this.icons = createElement({
@@ -54,7 +60,7 @@ export default class UI {
     ]
   }
 
-  initOptions(options) {
+  initOptions(options: Options): void {
 
     // dark mode
     this.el.style = `--color-primary: ${options.themeColor}`
@@ -98,7 +104,7 @@ export default class UI {
     }
   }
 
-  initEvents(supportsPassive) {
+  initEvents(supportsPassive: boolean): void {
     this.moreBtn.addEventListener('click', () => {
       toggleAttribute(this.el, 'data-extra')
     })
@@ -118,10 +124,10 @@ export default class UI {
     window.addEventListener('resize', resize)
   }
 
-  setAudioInfo(audio = {}) {
+  setAudioInfo(audio: IAudio = {}) {
     if (coverUrl) {
       URL.revokeObjectURL(coverUrl)
-      coverUrl = null
+      coverUrl = undefined
     }
     if (/blob/.test(audio.cover)) {
       coverUrl = audio.cover

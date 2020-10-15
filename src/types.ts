@@ -45,7 +45,7 @@ export interface IChapter {
 }
 
 export interface IElementOptions {
-  tag: string,
+  tag?: keyof HTMLElementTagNameMap
   className?: string | string[],
   attrs?: Record<string, any>,
   innerHTML?: string,
