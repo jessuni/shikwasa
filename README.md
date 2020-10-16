@@ -68,7 +68,7 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
     </body>
    ```
 
-2. Specify a container for the player to be injected into. For example:
+2. Specify a container to inject the player component.
 
    ```html
     <div class="element-of-your-choice">
@@ -82,7 +82,7 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
     // an example with basic init options
 
     const player = new Shikwasa({
-      container: () => document.querySelector('.elementOfYourChoice'),
+      container: () => document.querySelector('.element-of-your-choice'),
       audio: {
         title: 'Hello World!',
         artist: 'Shikwasa FM',
@@ -313,7 +313,7 @@ Player events:
 
 ## Chapters
 
-Shikwasa will support chapter display and seeking with the chapter plugin. To use:
+Shikwasa supports chapters display and playback control with the help of its external chapter plugin. To use this feature:
 
 1. Register the chapter plugin before creating a Shikwasa instance.
 
@@ -329,7 +329,7 @@ Shikwasa will support chapter display and seeking with the chapter plugin. To us
 
    If you don't have direct access to the chapter data, Shikwasa has built-in support to work with [jsmediatags](https://github.com/aadsm/jsmediatags) to read and extract the data from the audio file;
 
-  - (1) To manually provide chapters, add the `chapters` property when passing `audio` in [options](#options) or [`.update(audio)`](#methods).
+   - (1) To manually provide chapters, add the `chapters` property when passing `audio` into [options](#options) or [`.update(audio)`](#methods).
     ```javascript
       audio: {
         ...
@@ -351,9 +351,9 @@ Shikwasa will support chapter display and seeking with the chapter plugin. To us
     ⚠️Note: `endTime` should be the same as `startTime` of the next chapter.
 
 
-  - (2) To use an external parser, pass `jsmediatags` in the `parser` options. [How to use a parser?](#parser)
+   - (2) To use an external parser, pass `jsmediatags` in the `parser` options. [How to use a parser?](#parser)
 
-**(1) will take higher priority.**
+**(1) will take the higher priority.**
 
 ### Registering Chapter plugin will empower Shikwasa instance with the following API:
 
@@ -383,16 +383,14 @@ Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
 
 ## Roadmap
 
+- [ ] rewrittern with Typescript – currently working on this one
+
 Under v2.0.0:
-- [x] supporting audio id3 metadata --currently working on this one
+- [x] supporting audio id3 metadata
 - [x] cleaner & sleeker interface
 - [x] dark mode
 - [x] a complete rewrite
 - [x] keyboard support
-
-Others:
-- [ ] rewrittern with Typescript
-- [ ] podcast playlist
 
 ## What about the weird name of this project?
 
@@ -415,4 +413,4 @@ Love it, name after it.
 [dependency]: https://img.shields.io/badge/dependencies-none-lightgrey.svg?style=flat-square
 [dependency-url]: https://david-dm.org/jessuni/shikwasa
 [CI]: https://github.com/jessuni/shikwasa/actions
-[CI-url]: https://github.com/jessuni/shikwasa/workflows/Node.js%20CI/badge.svg?branch=next
+[CI-url]: https://github.com/jessuni/shikwasa/workflows/Node.js%20CI/badge.svg?branch=master
