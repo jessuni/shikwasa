@@ -2,16 +2,18 @@ export const audioEvents = ['abort', 'canplay', 'canplaythrough', 'complete', 'd
 
 const playerEvents = ['audioupdate', 'audioparse'] as const
 
-export type EventName = typeof audioEvents[number] | typeof playerEvents[number]
+export type TEventName = typeof audioEvents[number] | typeof playerEvents[number]
 
-// TODO: does here really need event?
-export interface ICallback { (this: void, data: Event | object): void }
+export type TEventsArray = Record<TEventName, IEventHandler[]>
+
+export type TEvent = MouseEvent | TouchEvent
+
+export interface IEventHandler { (this: void, data: Event | Record<string, any>): void }
 
 export interface Options {
   container: HTMLElement | ((...args: any) => HTMLElement)
   _container: HTMLElement
-  // TODO: object type should be 'jsmediatag' type
-  parser: object | null
+  parser: any
   fixed: {
     type: 'auto' | 'fixed' | 'static',
     position?: 'top' | 'bottom',
@@ -38,20 +40,20 @@ export interface ITag {
 }
 
 export interface IChapter {
-  id: number,
-  startTime: number,
-  endTime: number,
-  title: string,
+  id: number
+  startTime: number
+  endTime: number
+  title: string
 }
 
-export interface IElementOptions {
-  tag?: keyof HTMLElementTagNameMap
-  className?: string | string[],
-  attrs?: Record<string, any>,
-  innerHTML?: string,
+export interface IElementOptions<K> {
+  tag?: K
+  className?: string | string[]
+  attrs?: Record<string, any>
+  innerHTML?: string
 }
 
-export interface TComponents {
+export interface IComponents {
   _name: string
 }
 
@@ -59,7 +61,6 @@ export interface Type<T> extends Function {
   new (...args: any[]): T
 }
 
-// differentiate HTMLAudioElement(this.audio) and AudioOptions(this._audio, options.audio)
 export interface IAudio {
   src: string
   cover: string
@@ -71,4 +72,21 @@ export interface IAudio {
   [key: string]: any
 }
 
+export type TComponents = HTMLElement | null
+
+export type TButtonComponents = HTMLButtonElement | null
+
+export enum Bar {
+  played = 'audioPlayed',
+  loaded = 'audioLoaded',
+}
+
+export declare class IPlugin<T> {
+  constructor(ctx: T, ...args: any)
+}
+
+export interface IPluginClass<T> {
+  new(ctx: T): IPlugin<T>
+  _name: string
+}
 

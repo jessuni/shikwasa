@@ -1,9 +1,9 @@
-import { Options, IAudio, Type, audioEvents, EventName, ICallback } from './types'
+import { Options, IAudio, IPluginClass, audioEvents, TEventName, TEvent, IEventHandler } from './types'
 import UI from './ui'
 import Events from './events'
 import { toggleAttribute, handleOptions, handleAudio, parseAudio } from './utils'
 
-const REGISTERED_COMPS: Array<object> = []
+const REGISTERED_COMPS: Array<IPluginClass<Player>> = []
 const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator.userAgent) : false
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
@@ -29,20 +29,25 @@ const addPassive = supportsPassive && isMobile
 
 class Player {
   private id: number
+
   protected _hasMediaSession: boolean
   protected _initSeek: number
   protected _canplay: boolean
   protected _dragging: boolean
   protected _audio: IAudio
-  static playerArr: Array<Player> = []
-  // TODO: not sure about comps' type
-  static comps: Record<string, Type<any>>
-  options: Options
-  audio: HTMLAudioElement
-  events: Events
-  el: HTMLElement
-  container: HTMLElement
+  protected el: HTMLElement
+  protected container: HTMLElement
 
+  static playerArr: Array<Player> = []
+  static comps: Record<string, any>
+  static use = function (comp: IPluginClass<Player>) {
+    REGISTERED_COMPS.push(comp)
+  }
+
+  public options: Options
+  public audio: HTMLAudioElement
+  public events: Events
+  public ui: UI
 
   constructor(options: Options) {
     Player.playerArr.push(this)
@@ -59,8 +64,6 @@ class Player {
     this.initAudio()
     this.ui.mount(this.container, supportsPassive)
   }
-
-
 
   get duration(): number | undefined {
     return this.audio && this.audio.duration || this._audio.duration
@@ -117,20 +120,20 @@ class Player {
   }
 
   initControlEvents(): void {
-    this.ui.playBtn.addEventListener('click', () => {
+    this.ui.playBtn?.addEventListener('click', () => {
       this.toggle()
     })
-    this.ui.muteBtn.addEventListener('click', () => {
+    this.ui.muteBtn?.addEventListener('click', () => {
       this.muted = !this.muted
       toggleAttribute(this.el, 'data-mute')
     })
-    this.ui.fwdBtn.addEventListener('click', () => {
+    this.ui.fwdBtn?.addEventListener('click', () => {
       this.seekBySpan()
     })
-    this.ui.bwdBtn.addEventListener('click', () => {
+    this.ui.bwdBtn?.addEventListener('click', () => {
       this.seekBySpan({ forward: false })
     })
-    this.ui.speedBtn.addEventListener('click', () => {
+    this.ui.speedBtn?.addEventListener('click', () => {
       const index = this.options.speedOptions.indexOf(this.playbackRate)
       const speedRange = this.options.speedOptions
       this.playbackRate = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
@@ -140,7 +143,7 @@ class Player {
 
   initBarEvents(): void {
     let targetTime = 0
-    const dragStartHandler = (e: MouseEvent) => {
+    const dragStartHandler = (e: TEvent) => {
       if (!this.seekable) return
       e.preventDefault()
       this.el.setAttribute('data-seeking', '')
@@ -148,10 +151,10 @@ class Player {
       document.addEventListener(dragMove, dragMoveHandler, addPassive ? { passive: true } : false)
       document.addEventListener(dragEnd, dragEndHandler)
     }
-    const dragMoveHandler = (e: MouseEvent) => {
-      this.ui.setProgress(null, this.ui.getPercentByPos(e), this.duration)
+    const dragMoveHandler = (e: TEvent) => {
+      this.ui.setProgress(undefined, this.ui.getPercentByPos(e), this.duration)
     }
-    const dragEndHandler = (e) => {
+    const dragEndHandler = (e: TEvent) => {
       e.preventDefault()
       document.removeEventListener(dragMove, dragMoveHandler)
       document.removeEventListener(dragEnd, dragEndHandler)
@@ -196,8 +199,8 @@ class Player {
       const time = step * (this.duration || 0) + currentTime
       this.seek(time)
     }
-    this.ui.barWrap.addEventListener(dragStart, dragStartHandler)
-    this.ui.handle.addEventListener('keydown', keydownHandler)
+    this.ui.barWrap?.addEventListener(dragStart, dragStartHandler)
+    this.ui.handle?.addEventListener('keydown', keydownHandler)
   }
 
   initAudio(): void {
@@ -260,7 +263,7 @@ class Player {
     })
     this.on('timeupdate', () => {
       if (!this._dragging) {
-        this.ui.setProgress(this.audio.currentTime, null, this.duration)
+        this.ui.setProgress(this.audio.currentTime, undefined, this.duration)
       }
     })
     this.on('abort', () => {
@@ -270,19 +273,18 @@ class Player {
 
   initMediaSession(): void {
     const self = this
-    if ('mediaSession' in navigator) {
+    if (navigator.mediaSession) {
       this._hasMediaSession = true
       this.setMediaMetadata(this._audio)
-      const controls = {
+      const controls: { [key in MediaSessionAction]?: any } = {
         play: this.play.bind(self),
         pause: this.pause.bind(self),
         seekforward: this.seekBySpan.bind(self),
         seekbackward: () => this.seekBySpan({ forward: false }),
-        seekto: this.seek.bind(self),
+        seekto: this.seek.bind(self)
       }
-      Object.keys(controls).forEach(key => {
-        navigator.mediaSession.setActionHandler(key, controls[key]
-        )
+      Object.keys(controls).forEach((key: MediaSessionAction) => {
+        navigator.mediaSession?.setActionHandler(key,controls[key])
       })
     }
   }
@@ -290,7 +292,7 @@ class Player {
   setMediaMetadata(audio: IAudio): void {
     /* global MediaMetadata */
     const artwork = audio.cover ? [{ src: audio.cover, sizes: '150x150'}] : undefined
-    navigator.mediaSession.metadata = new MediaMetadata({
+    navigator.mediaSession!.metadata = new MediaMetadata({
       title: audio.title,
       artist: audio.artist,
       album: audio.album,
@@ -298,7 +300,7 @@ class Player {
     })
   }
 
-  on(name: EventName, callback: ICallback): void {
+  on(name: TEventName, callback: IEventHandler): void {
     this.events.on(name, callback)
   }
 
@@ -336,7 +338,7 @@ class Player {
     }
     time = Math.min(time, this.duration || 0)
     time = Math.max(time, 0)
-    this.ui.setProgress(time, null, this.duration)
+    this.ui.setProgress(time, undefined, this.duration)
     if (!this._canplay) {
       this._initSeek = time
     } else {
@@ -344,7 +346,7 @@ class Player {
     }
   }
 
-  seekBySpan({ time: number = 10, forward: boolean = true } = {}): void {
+  seekBySpan({ time = 10, forward = true }: { time?: number, forward?: boolean } = { time: 10, forward: true }): void {
     const currentTime = this._canplay ? this.audio.currentTime : this._initSeek
     const targetTime = currentTime + time * (forward ? 1 : -1)
     this.seek(targetTime)
@@ -409,10 +411,6 @@ class Player {
       Player.comps[comp._name] = new comp(this)
     })
   }
-}
-
-Player.use = function (comp) {
-  REGISTERED_COMPS.push(comp)
 }
 
 export default Player

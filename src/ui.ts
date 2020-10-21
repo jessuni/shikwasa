@@ -1,17 +1,41 @@
-import { Options, IAudio } from './types'
+import { Options, IAudio, TComponents, TButtonComponents, Bar } from './types'
 import PlayerComp from './templates/Player'
 import IconComp from './templates/Icon'
 import { secondToTime, numToString, marquee, createElement, toggleAttribute } from './utils'
 import applyFocusVisible from './focus-visible'
 
-let resize: boolean
+let resize: () => void
 let coverUrl: string | undefined
 let cooldown: boolean = true
 
 export default class UI {
   mounted: boolean
   el: HTMLElement
-  icons: HTMLOrSVGElement
+  icons: HTMLElement
+  playBtn: TButtonComponents
+  fwdBtn: TButtonComponents
+  bwdBtn: TButtonComponents
+  speedBtn: TButtonComponents
+  moreBtn: TButtonComponents
+  muteBtn: TButtonComponents
+  extraControls: TComponents
+  texts: TComponents
+  artist: TComponents
+  artistWrap: TComponents
+  titleWrap: TComponents
+  titleInner: TComponents
+  title: TComponents
+  currentTime: TComponents
+  duration: TComponents
+  bar: TComponents
+  barWrap: TComponents
+  audioPlayed: TComponents
+  audioLoaded: TComponents
+  handle: TButtonComponents
+  cover: TComponents
+  downloadBtn: HTMLAnchorElement
+  seekControls: Array<TComponents>
+
   constructor(options: Options) {
     this.mounted = false
     if (!document.querySelector('.shk-icons')) {
@@ -63,7 +87,7 @@ export default class UI {
   initOptions(options: Options): void {
 
     // dark mode
-    this.el.style = `--color-primary: ${options.themeColor}`
+    this.el.style.setProperty('--color-primary', options.themeColor)
     this.el.setAttribute('data-theme', options.theme)
 
     // download
@@ -85,7 +109,7 @@ export default class UI {
           </svg>
         `,
       })
-      this.extraControls.append(this.downloadBtn)
+      this.extraControls?.append(this.downloadBtn)
     }
 
     // player position
@@ -105,17 +129,19 @@ export default class UI {
   }
 
   initEvents(supportsPassive: boolean): void {
-    this.moreBtn.addEventListener('click', () => {
+    this.moreBtn?.addEventListener('click', () => {
       toggleAttribute(this.el, 'data-extra')
     })
-    Array.from(this.extraControls.children).forEach(el => {
-      this.hideExtraControl(el)
-    })
+    if (this.extraControls?.children.length) {
+      Array.from(this.extraControls.children).forEach((el: HTMLElement) => {
+        this.hideExtraControl(el)
+      })
+    }
 
     // add keyboard focus style
     applyFocusVisible(this.el, supportsPassive)
 
-    resize = () => {
+    resize = (): void => {
       if (!cooldown) return
       cooldown = false
       setTimeout(() => cooldown = true, 100)
@@ -124,7 +150,7 @@ export default class UI {
     window.addEventListener('resize', resize)
   }
 
-  setAudioInfo(audio: IAudio = {}) {
+  setAudioInfo(audio: IAudio): void {
     if (coverUrl) {
       URL.revokeObjectURL(coverUrl)
       coverUrl = undefined
@@ -132,15 +158,18 @@ export default class UI {
     if (/blob/.test(audio.cover)) {
       coverUrl = audio.cover
     }
-    if (audio.cover) {
-      this.cover.style.backgroundImage = `url(${audio.cover})`
-    } else {
-      this.cover.style.backgroundImage = 'none'
+
+    const bgString = audio.cover ? 'url(${audio.cover})' : 'none'
+    this.cover?.style.setProperty('backgroundImage', bgString)
+
+    if (this.title) {
+      this.title.innerHTML = audio.title
     }
-    this.title.innerHTML = audio.title
-    this.titleInner.setAttribute('data-title', audio.title)
-    this.artist.innerHTML = audio.artist
-    if (audio.duration) {
+    this.titleInner?.setAttribute('data-title', audio.title)
+    if (this.artist) {
+      this.artist.innerHTML = audio.artist
+    }
+    if (audio.duration && this.duration) {
       this.duration.innerHTML = secondToTime(audio.duration)
     }
     if (this.downloadBtn) {
@@ -149,30 +178,33 @@ export default class UI {
     this.setBar('loaded', 0)
   }
 
-  setPlaying() {
+  setPlaying(): void {
     this.el.setAttribute('data-play', 'playing')
   }
 
-  setPaused() {
+  setPaused(): void {
     this.el.setAttribute('data-play', 'paused')
     this.el.removeAttribute('data-loading')
   }
 
-  setTime(type, time) {
-    this[type].innerHTML = secondToTime(time)
+  setTime(type: 'duration' | 'currentTime', time: number): void {
+    if (this[type]) {
+      (this[type] as HTMLElement).innerHTML = secondToTime(time)
+    }
   }
 
-  setBar(type, percentage) {
-    const typeName = 'audio' + type.charAt(0).toUpperCase() + type.substr(1)
+  setBar(type: 'played' | 'loaded', percentage: number): void {
     percentage = Math.min(percentage, 1)
     percentage = Math.max(percentage, 0)
-    this[typeName].style.width = percentage * 100 + '%'
     const ariaNow = percentage.toFixed(2)
-    this[typeName].setAttribute('aria-valuenow', ariaNow)
-    this.handle.setAttribute('aria-valuenow', ariaNow)
+    this.handle?.setAttribute('aria-valuenow', ariaNow)
+    if (this[Bar[type]]) {
+      this[Bar[type]]!.style.width = percentage * 100 + '%'
+      this[Bar[type]]!.setAttribute('aria-valuenow', ariaNow)
+    }
   }
 
-  setProgress(time = 0, percentage = 0, duration = 0) {
+  setProgress(time = 0, percentage = 0, duration = 0): void {
     if (time && !percentage) {
       percentage = duration ? time / duration : 0
     } else {
@@ -182,21 +214,28 @@ export default class UI {
     this.setBar('played', percentage)
   }
 
-  setSpeed(speed) {
-    this.speedBtn.innerHTML = numToString(speed) + 'x'
+  setSpeed(speed: number): void {
+    if (this.speedBtn) {
+      this.speedBtn.innerHTML = numToString(speed) + 'x'
+    }
   }
 
-  getPercentByPos(e) {
-    const handlePos = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0
-    const initPos = this.barWrap.getBoundingClientRect().left
-    const barLength = this.barWrap.clientWidth
+  getPercentByPos(e: MouseEvent | TouchEvent): number {
+    let handlePos: number = 0
+    if (e instanceof TouchEvent) {
+      handlePos = e.changedTouches[0]?.clientX
+    } else {
+      handlePos = e.clientX
+    }
+    const initPos = this.barWrap?.getBoundingClientRect().left || 0
+    const barLength = this.barWrap?.clientWidth || 0
     let percentage = (handlePos - initPos) / barLength
     percentage = Math.min(percentage, 1)
     percentage = Math.max(0, percentage)
     return percentage
   }
 
-  hideExtraControl(el) {
+  hideExtraControl(el: HTMLElement): void {
     el.addEventListener('click', () => {
       setTimeout(() => {
         this.el.removeAttribute('data-extra')
@@ -204,7 +243,7 @@ export default class UI {
     })
   }
 
-  mount(container, supportsPassive) {
+  mount(container: HTMLElement, supportsPassive: boolean): void {
     container.innerHTML = ''
     container.append(this.el)
     if (this.icons) {
@@ -212,10 +251,12 @@ export default class UI {
     }
     this.mounted = true
     this.initEvents(supportsPassive)
-    marquee(this.titleWrap, this.title)
+    if (this.titleWrap && this.title) {
+      marquee(this.titleWrap, this.title)
+    }
   }
 
-  destroy() {
+  destroy(): void {
     window.removeEventListener('resize', resize)
     if (coverUrl) {
       URL.revokeObjectURL(coverUrl)

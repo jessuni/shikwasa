@@ -3,13 +3,13 @@ import { Options, IAudio } from './types'
 export const CONFIG_AUDIO: IAudio = {
   title: 'Unknown Title',
   artist: 'Unknown Artist',
-  duration: undefined,
+  duration: NaN,
   cover: '',
   chapters: [],
   src: '',
 }
 
-export const CONFIG: Options = {
+export const CONFIG = {
   container: document.querySelector('body') as HTMLElement,
   parser: null,
   fixed: {
@@ -24,6 +24,6 @@ export const CONFIG: Options = {
   preload: 'metadata',
   speedOptions: [0.5, 0.75, 1, 1.25, 1.5],
   audio: CONFIG_AUDIO
-}
+} as Options
 
 

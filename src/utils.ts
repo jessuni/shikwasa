@@ -1,8 +1,6 @@
 import { CONFIG ,CONFIG_AUDIO } from './config'
 import { Options, IAudio, ITag, IChapter, IElementOptions } from './types'
 
-
-
 export function secondToTime(time: string | number): string {
   time = Math.round(+time)
   const hour: number = Math.floor(time / 3600)
@@ -18,7 +16,6 @@ export function secondToTime(time: string | number): string {
 }
 
 export function numToString(num: number): string {
-  // const float = parseFloat(num).toFixed(2)
   const float: string = num.toFixed(2)
   return float.slice(-1) === '0' ? float.slice(0, -1) :float
 }
@@ -33,7 +30,6 @@ export function marquee(textWrap: HTMLElement, textEl: HTMLElement, speed = 60):
     textWrap.removeAttribute('data-overflow')
   }
 }
-
 
 export function handleOptions(options: Partial<Options>): Options {
   let _options = CONFIG
@@ -60,7 +56,6 @@ export function handleAudio(
 }
 
 export async function parseAudio(audio: Partial<IAudio> = {}, parser = {}) {
-  // TODO: should define parser type
   if (audio.src) {
     const { tags } = await parserWrap(audio.src, parser)
     const tagData = handleParsedTags(tags)
@@ -110,26 +105,19 @@ function handleParsedTags(tags: ITag): Partial<IAudio> {
   return { title, artist, cover, duration, chapters }
 }
 
-export function createElement(options: IElementOptions): HTMLElement {
-  options.tag = options.tag || 'div'
-  const el = document.createElement(options.tag)
-  if (options.className) {
-    if (typeof options.className === 'string') {
-      el.classList.add(options.className)
-    } else {
-      options.className.forEach(className => {
-        el.classList.add(className)
-      })
-    }
+export function createElement<
+  K extends keyof HTMLElementTagNameMap = 'div'
+>({ tag = 'div' as K, className, attrs, innerHTML }: IElementOptions<K> = { tag: 'div' as K }): HTMLElementTagNameMap[K] {
+  const el = document.createElement(tag)
+  if (typeof className === 'string') {
+    el.classList.add(className)
+  } else if (Array.isArray(className)) {
+    el.className = className.join(' ')
   }
-  if (options.attrs) {
-    for(let key in options.attrs) {
-      el.setAttribute(key, options.attrs[key])
-    }
+  for(let key in attrs) {
+    el.setAttribute(key, attrs[key])
   }
-  if (options.innerHTML) {
-    el.innerHTML = options.innerHTML
-  }
+  el.innerHTML = innerHTML || ''
   return el
 }
 
