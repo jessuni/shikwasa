@@ -5,8 +5,8 @@ name: Node.js CI
 
 on:
   push:
-    branches-ignore:
-      - 'wip-*'
+    branches:
+      - master
     paths-ignore:
       - 'pages/**'
   pull_request:
