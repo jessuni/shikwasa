@@ -1,4 +1,4 @@
-const PlayerTemplate = /* template */`
+const PlayerTemplate = /* template */ `
   <div class="shk-player">
     <div class="shk-bar_wrap">
       <div class="shk-bar" aria-label="progress bar">
@@ -98,6 +98,7 @@ const PlayerTemplate = /* template */`
           <span class="shk-time">
             <span class="shk-time_now">00:00</span><span class="shk-time_duration">00:00</span>
           </span>
+          <div class="shk-live">live</div>
         </div>
       </div>
     </div>

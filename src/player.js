@@ -35,6 +35,7 @@ class Player {
     this._audio = {}
     this._hasMediaSession = false
     this._initSeek = 0
+    this._live = false
     this._canplay = false
     this._dragging = false
     this.events = new Events()
@@ -45,8 +46,6 @@ class Player {
     this.ui.mount(this.options.container, supportsPassive)
   }
 
-
-
   get duration() {
     if (!this.audio || !this.audio.duration) {
       return this._audio.duration
@@ -55,16 +54,16 @@ class Player {
   }
 
   get seekable() {
-    return Boolean(this.duration)
+    return !this._live && Boolean(this.duration)
   }
 
   set seekable(v) {
     if (v) {
-      this.ui.seekControls.forEach(el => {
+      this.ui.seekControls.forEach((el) => {
         el.removeAttribute('disabled')
       })
     } else {
-      this.ui.seekControls.forEach(el => {
+      this.ui.seekControls.forEach((el) => {
         el.setAttribute('disabled', '')
       })
     }
@@ -120,7 +119,7 @@ class Player {
     this.ui.speedBtn.addEventListener('click', () => {
       const index = this.options.speedOptions.indexOf(this.playbackRate)
       const speedRange = this.options.speedOptions
-      this.playbackRate = (index + 1 >= speedRange.length) ? speedRange[0] : speedRange[index + 1]
+      this.playbackRate = index + 1 >= speedRange.length ? speedRange[0] : speedRange[index + 1]
       this.ui.setSpeed(this.playbackRate)
     })
   }
@@ -191,7 +190,7 @@ class Player {
     if (this.options.audio.src) {
       this.audio = new Audio()
       this.initAudioEvents()
-      this.events.audioEvents.forEach(name => {
+      this.events.audioEvents.forEach((name) => {
         this.audio.addEventListener(name, (e) => {
           this.events.trigger(name, e)
         })
@@ -205,7 +204,7 @@ class Player {
   initAudioEvents() {
     this.on('play', () => {
       this.ui.setPlaying()
-      playerArr.forEach(player => {
+      playerArr.forEach((player) => {
         if (player.id !== this.id && player.audio && !player.audio.paused) {
           player.pause()
         }
@@ -222,7 +221,17 @@ class Player {
       this.el.setAttribute('data-loading', '')
     })
     this.on('durationchange', () => {
-      if (this.duration && this.duration !== 1) {
+      const isLiveStream = this.duration === Infinity
+      // update live state if it doesn't match current duration state
+      if (isLiveStream !== this._live) {
+        this._live = !this._live
+        this.ui.setLive(this._live)
+      }
+      if (isLiveStream && !this._live) {
+        this._live = !this.live
+      }
+
+      if (this.duration && this.duration !== 1 && !this._live) {
         this.seekable = true
         this.ui.setTime('duration', this.duration)
       }
@@ -241,7 +250,9 @@ class Player {
     })
     this.on('progress', () => {
       if (this.audio.buffered.length) {
-        const percentage = this.audio.buffered.length ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration : 0
+        const percentage = this.audio.buffered.length
+          ? this.audio.buffered.end(this.audio.buffered.length - 1) / this.duration
+          : 0
         this.ui.setBar('loaded', percentage)
       }
     })
@@ -267,16 +278,15 @@ class Player {
         seekbackward: () => this.seekBySpan({ forward: false }),
         seekto: this.seek.bind(self),
       }
-      Object.keys(controls).forEach(key => {
-        navigator.mediaSession.setActionHandler(key, controls[key]
-        )
+      Object.keys(controls).forEach((key) => {
+        navigator.mediaSession.setActionHandler(key, controls[key])
       })
     }
   }
 
   setMediaMetadata(audio) {
     /* global MediaMetadata */
-    const artwork = audio.cover ? [{ src: audio.cover, sizes: '150x150'}] : undefined
+    const artwork = audio.cover ? [{ src: audio.cover, sizes: '150x150' }] : undefined
     navigator.mediaSession.metadata = new MediaMetadata({
       title: audio.title,
       artist: audio.artist,
@@ -340,18 +350,15 @@ class Player {
   update(audio) {
     if (audio && audio.src) {
       this._audio = handleAudio(audio)
+      this._live = this._audio.live
       this._canplay = false
 
       this.audio.src = this._audio.src
       this.updateAudioData(this._audio)
       this.events.trigger('audioupdate', this._audio)
-      if (this.options.parser &&
-        (!audio.title ||
-        !audio.artist ||
-        !audio.cover ||
-        !audio.chapters)
-      ) {
-        parseAudio(Object.assign({}, audio), this.options.parser).then(audioData => {
+      const metaIncomplete = !audio.title || !audio.artist || !audio.cover || !audio.chapters
+      if (!this._live && this.options.parser && metaIncomplete) {
+        parseAudio(Object.assign({}, audio), this.options.parser).then((audioData) => {
           this._audio = audioData || this._audio
           this.updateAudioData(this._audio)
           this.events.trigger('audioparse', this._audio)
@@ -365,7 +372,7 @@ class Player {
   updateAudioData(audio) {
     this.audio.title = audio.title
     this.ui.setAudioInfo(audio)
-    this.seekable = audio.duration
+    this.seekable = audio.duration && audio.duration !== Infinity
     if (this._hasMediaSession) {
       this.setMediaMetadata(audio)
     }
@@ -381,9 +388,8 @@ class Player {
   destroy() {
     this.destroyAudio()
     this.ui.destroy()
-    Object.keys(this.comps).forEach(k => {
-      if (this.comps[k].destroy &&
-        typeof this.comps[k].destroy === 'function') {
+    Object.keys(this.comps).forEach((k) => {
+      if (this.comps[k].destroy && typeof this.comps[k].destroy === 'function') {
         this.comps[k].destroy()
       }
     })
@@ -393,7 +399,7 @@ class Player {
 
   renderComponents() {
     if (!REGISTERED_COMPS.length) return
-    REGISTERED_COMPS.forEach(comp => {
+    REGISTERED_COMPS.forEach((comp) => {
       this.comps[comp._name] = new comp(this)
     })
   }

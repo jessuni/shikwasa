@@ -3,7 +3,9 @@ import IconComp from './templates/Icon'
 import { secondToTime, numToString, marquee, createElement, toggleAttribute } from './utils'
 import applyFocusVisible from './focus-visible'
 
-let resize, coverUrl = null, cooldown = true
+let resize,
+  coverUrl = null
+let cooldown = true
 
 export default class UI {
   constructor(options) {
@@ -47,15 +49,10 @@ export default class UI {
     this.audioLoaded = this.el.querySelector('.shk-bar_loaded')
     this.handle = this.el.querySelector('.shk-bar-handle')
     this.cover = this.el.querySelector('.shk-cover')
-    this.seekControls = [
-      this.fwdBtn,
-      this.bwdBtn,
-      this.handle,
-    ]
+    this.seekControls = [this.fwdBtn, this.bwdBtn, this.handle]
   }
 
   initOptions(options) {
-
     // dark mode
     this.el.style = `--color-primary: ${options.themeColor}`
     this.el.setAttribute('data-theme', options.theme)
@@ -73,7 +70,7 @@ export default class UI {
           target: '_blank',
           rel: 'noopener noreferrer',
         },
-        innerHTML: /* html */`
+        innerHTML: /* html */ `
           <svg aria-hidden="true">
             <use xlink:href="#shk-icon_download" />
           </svg>
@@ -102,7 +99,7 @@ export default class UI {
     this.moreBtn.addEventListener('click', () => {
       toggleAttribute(this.el, 'data-extra')
     })
-    Array.from(this.extraControls.children).forEach(el => {
+    Array.from(this.extraControls.children).forEach((el) => {
       this.hideExtraControl(el)
     })
 
@@ -112,7 +109,7 @@ export default class UI {
     resize = () => {
       if (!cooldown) return
       cooldown = false
-      setTimeout(() => cooldown = true, 100)
+      setTimeout(() => (cooldown = true), 100)
       marquee.call(this, this.titleWrap, this.title)
     }
     window.addEventListener('resize', resize)
@@ -138,9 +135,10 @@ export default class UI {
       this.duration.innerHTML = secondToTime(audio.duration)
     }
     if (this.downloadBtn) {
-      this.downloadBtn.href= audio.src
+      this.downloadBtn.href = audio.src
     }
     this.setBar('loaded', 0)
+    this.setLive(audio.live)
   }
 
   setPlaying() {
@@ -178,6 +176,10 @@ export default class UI {
 
   setSpeed(speed) {
     this.speedBtn.innerHTML = numToString(speed) + 'x'
+  }
+
+  setLive(live = false) {
+    live ? this.el.setAttribute('data-live', '') : this.el.removeAttribute('data-live')
   }
 
   getPercentByPos(e) {

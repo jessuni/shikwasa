@@ -25,5 +25,6 @@ export const CONFIG = {
     chapters: [],
     src: null,
     album: '',
+    live: false,
   },
 }
