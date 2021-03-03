@@ -264,6 +264,10 @@ class Player {
     this.on('abort', () => {
       this.ui.setPaused()
     })
+    this.on('audioupdate', (audio) => {
+      this.seekable = audio.duration && audio.duration !== Infinity
+      this.updateMetadata(audio)
+    })
   }
 
   initMediaSession() {
@@ -354,13 +358,12 @@ class Player {
       this._canplay = false
 
       this.audio.src = this._audio.src
-      this.updateAudioData(this._audio)
       this.events.trigger('audioupdate', this._audio)
       const metaIncomplete = !audio.title || !audio.artist || !audio.cover || !audio.chapters
       if (!this._live && this.options.parser && metaIncomplete) {
         parseAudio(Object.assign({}, audio), this.options.parser).then((audioData) => {
           this._audio = audioData || this._audio
-          this.updateAudioData(this._audio)
+          this.updateMetadata(this._audio)
           this.events.trigger('audioparse', this._audio)
         })
       }
@@ -369,10 +372,9 @@ class Player {
     }
   }
 
-  updateAudioData(audio) {
+  updateMetadata(audio) {
     this.audio.title = audio.title
     this.ui.setAudioInfo(audio)
-    this.seekable = audio.duration && audio.duration !== Infinity
     if (this._hasMediaSession) {
       this.setMediaMetadata(audio)
     }
