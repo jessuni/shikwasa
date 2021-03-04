@@ -38,6 +38,7 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
     * [container](#container)
     * [fixed](#fixed)
     * [themeColor](#themecolor)
+    * [theme](#theme)
     * [autoplay](#autoplay)
     * [muted](#muted)
     * [preload](#preload)
@@ -68,6 +69,13 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
     </body>
    ```
 
+    If you use module system, import like this instead:
+
+    ```javascript
+      import 'shikwasa/dist/shikwasa.min.css'
+      import Shikwasa from 'shikwasa'
+    ```
+
 2. Specify a container to inject the player component.
 
    ```html
@@ -94,40 +102,41 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
 
    Any child nodes inside `container` will be cleared upon the time Shiwkasa mounts.
 
-4. If you use module system, import like this:
-
-   ```javascript
-    import 'shikwasa/dist/shikwasa.min.css'
-    import Shikwasa from 'shikwasa'
-
-    const player = new Shikwasa(options)
-   ```
-
-To use the Chapter feature, you need to import the chapter script and stylesheets as well. [View details](#chapters)
+Here's a [fiddle](https://jsfiddle.net/jessuni/netgvbwy/8/) to kickstart. To use the chapter feature, you need to import the chapter script and stylesheets as well. [View details](#chapters)
 
 ## API
 
 ### Methods
 
-**.play()**
+**play**
 
-Start playing the current audio. Updating audio via this method is deprecated, please use `update(audio)` instead.
+`play(): Promise`
 
-**.pause()**
+Start playing the current audio. [Promise details](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play). Updating audio via this method is deprecated, use `update` instead.
+
+**pause**
+
+`pause(): void`
 
 Pause the current audio.
 
-**.toggle()**
+**toggle**
 
-Toggle audio play state between play and pause.
+`toggle(): Promise | void`
 
-**.seek(time)**
+Toggle audio play state between play and pause. [Promise details](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play).
+
+**seek**
+
+`seek(time: number): void`
 
 Seek the audio to the new time. `time` is a **number** that specifies target playback time in seconds.
 
-**.update(audio)**
+**update**
 
-Passing an [`audio` object](#audio) in will replace the current audio source.
+`update(audio: TAudio): void`
+
+Passing [`TAudio`](#audio) in will replace the current audio source.
 
 ```javascript
   player.update({
@@ -138,84 +147,94 @@ Passing an [`audio` object](#audio) in will replace the current audio source.
 })
 ```
 
-**.destroy()**
+**destroy**
+
+`destroy(): void`
 
 Destroy the player instance.
 
-**.on(event, callback)**
+**on**
 
-Register an event listener. Supported events see: [Events](#events)
+`on(event: string, callback: () => void): void`
+
+Register an event listener. Supported event names see: [Events](#events)
 
 ### Properties
 
-**.currentTime**
+**currentTime**
 - Read-only
-- type: `Number`
+- type: `number`
 - default: `0`
 
-The current playback time. Similar to the native [`HTMLMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
+The current playback time. Inherits the native [`HTMLMediaElement.currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime).
 
-**.muted**
+**muted**
 
-- type: `Boolean`
-- default: `options.muted`
+- type: `boolean`
+- default: [`options.muted`](#muted)
 
 The current mute state of the player. Similar to the native [`HTMLMediaElement.muted`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted), except that`muted`'s value will not be affected when audio source is updated.
 
-**.playbackRate**
+**playbackRate**
 
-- type: `Number`
+- type: `number`
 - default: `1`
 
-The current playbackRate of the player. Similar to the native [`HTMLMediaElement.playbackRate`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate), except that`playbackRate`'s value will not be affected when audio source is updated.
+The current playbackRate of the player. Inherits the native [`HTMLMediaElement.playbackRate`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate), except that`playbackRate`'s value will not be affected when audio source is updated.
 
-**.duration**
+**duration**
 
-- type: `Number|NaN`
-- default: `audio.duration || options.audio.duration`
+- type: `number`
+- default: `audio.duration` `||` [`options.audio.duration`](#audio)
 
 ## Options
 
 ### audio
 
-(Required) The target audio to be played. If `duration` is passed in, players with `preload` option set to `none` will have a audio duration time display before the audio metadata is fetched. However, after the audio metadata is loaded, this prop will be ignored.
-
 - **required**
-- type: `Object`
+- type: `TAudio | null`
 - default: `null`
-- properties:
 
 ```javascript
-  audio: {
-    title: String,
-    artist: String,
-    cover: String,
-    src: String,
-    duration: Number,  // optional
-    album: String,  // optional, album text will only display in Mediametadata, not visible in player UI.
+  TAudio {
+    src: string,
+    title?: string,
+    artist?: string,
+    cover?: string,
+    duration?: number,
+    album?: string,
   }
 ```
+
+The target audio to be played. If `duration` is passed along, players with `preload` option set to `none` will be able to display the custom duration in UI before the audio metadata is fetched. However, after the audio metadata is loaded, this prop will be ignored.
+
+`album` is not visible in the UI. It will only display in the Chrome mini player and any other browsers/devices/operating systems that support `MediaSession`.
 
 ### container
 
 (Optional) The container element for the player. If `document` is not available in the env, pass a function that will return the container element.
 
-- type: `HTMLElement`
-- default: `() => document.querySelector('body')`
+- type: `HTMLElement | () => HTMLElement`
+- default: `document.querySelector('body')`
 
 ### fixed
 
 (Optional) Whether player should be fixed to viewport.
 
-- type: `Object`
+- type: `TFixed`
+  ```javascript
+  TFixed {
+    type: 'auto' | 'fixed' | 'static',
+    position: 'bottom' | 'top',
+  }
+  ```
 - default:
-
-```javascript
-fixed: {
-  type: 'auto',
-  position: 'bottom',
-}
-```
+  ```javascript
+  {
+    type: 'auto',
+    position: 'bottom',
+  }
+  ```
 - details:
 
 | Property      | Type     |  Description                             |
@@ -227,21 +246,28 @@ fixed: {
 
 (Optional) Theme color of the player.
 
-- type: `String`
-- default: `#00869B`
+- type: `string`
+- default: `'#00869B'`
+
+### theme
+
+(Optional)
+
+- type: `'auto' | 'dark' | 'light'`
+- default: `'auto'`
 
 ### autoplay
 
 (Optional) If audio should autoplay on load. ⚠️Note: Chrome and Safari disable audio autoplay unless `muted` is set to `true` by default. To comply with this policy, see details in [Chrome Developers](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) and [Webkit Announcement](https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/).
 
-- type: `Boolean`
+- type: `boolean`
 - default: `false`
 
 ### muted
 
 Whether audio should be muted by default. Similar to HTMLMediaElement's `defaultMuted`.
 
-- type: `Boolean`
+- type: `boolean`
 - default: `false`
 
 ### preload
@@ -250,26 +276,27 @@ Whether audio should be muted by default. Similar to HTMLMediaElement's `default
 
 If a [`parser`](#parser) is used, the audio will be requested immediately on page load for the parser to work properly, even if `preload` is set to `none`.
 
-- type: `String`
-- default: `metadata`
+- type: `'auto' | 'metadata' | 'none'`
+- default: `'metadata'`
 
 ### speedOptions
 
 (Optional) The playback speed range. Each value of the array should be between the range of 0.25 to 5.0, or will likely be ignored by certain browsers.
-- type: `Array`
+- type: `Array<number>`
 - default: `[0.5, 0.75, 1.25, 1.5]`
 
 ### download
 
 (Optional) Whether the current audio source is download-able. When set to `true`, the player will provide an anchor with `downlaod` attribute and `href` set to `audio.src`. Cross-origin `href` will not prompt download due to anchor's nature, but you can offer an alternative `blob:`, `data:` url or a same-origin direct download link(DDL).
 
-- type: `Boolean|String`
+- type: `string | boolean`
 - default: `false`
 - alternatives:
 
 ```javascript
+// direct user to the source url
 download: true
-// or with a url
+// direct user to a custom url, preferrably one configured to generate download
 download: 'data:audio/mp3;base64,...'
 ```
 
@@ -279,7 +306,7 @@ download: 'data:audio/mp3;base64,...'
 
 It will read the audio's `title`, `artist`, `duration` and `chapters`, meaning you don't have to provide these four properties into `audio` manually unless you preferred your own. **Priority: property values passed to `audio` > parsed data.**
 
-- type: `Null|Object`
+- type: `null | JSMediatags`
 - default: `null`
 - usage:
 
@@ -305,7 +332,7 @@ Due to `jsmediatags` limitation, relative urls are not supported. Please use abs
 
 Support all [HTMLMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) native events.
 
-Player events:
+Plus player events:
 
 `audioupdate`: fired when audio source is updated.
 
@@ -330,25 +357,26 @@ Shikwasa supports chapters display and playback control with the help of its ext
    If you don't have direct access to the chapter data, Shikwasa has built-in support to work with [jsmediatags](https://github.com/aadsm/jsmediatags) to read and extract the data from the audio file;
 
    - (1) To manually provide chapters, add the `chapters` property when passing `audio` into [options](#options) or [`.update(audio)`](#methods).
-    ```javascript
-      audio: {
-        ...
-        chapters: [  // Array, optional
-          { title, startTime, endTime }, // the first chapter
-          { title, startTime, endTime }, // the second chatper
-        ],
-      }
-    ```
+      ```javascript
+        audio: {
+          ...
+          // manually provide chapters
+          chapters: [
+            { title, startTime, endTime }, // the first chapter
+            { title, startTime, endTime }, // the second chatper
+          ],
+        }
+      ```
 
-    The structure of a single chapter object:
+      The structure of a single chapter object:
 
-    | Property      | Type     |  Description                             |
-    |---------------|----------|------------------------------------------|
-    | title         | String   | chapter title                            |
-    | startTime     | Number   | chapter start time in seconds            |
-    | endTime       | Number   | chapter end time in seconds              |
+      | Property      | Type     |  Description                             |
+      |---------------|----------|------------------------------------------|
+      | title         | string   | chapter title                            |
+      | startTime     | number   | chapter start time in seconds            |
+      | endTime       | number   | chapter end time in seconds              |
 
-    ⚠️Note: `endTime` should be the same as `startTime` of the next chapter.
+      ⚠️Note: `endTime` should be the same as `startTime` of the next chapter.
 
 
    - (2) To use an external parser, pass `jsmediatags` in the `parser` options. [How to use a parser?](#parser)
@@ -357,22 +385,37 @@ Shikwasa supports chapters display and playback control with the help of its ext
 
 ### Registering Chapter plugin will empower Shikwasa instance with the following API:
 
-**.updateChapter(index)**
+#### Methods:
+
+**updateChapter**
+
+`updateChapter(index: number): void`
 
 Seek the audio to the target chapter. `index` is the index of of `chapters` array.
 
-**.chapters**
+#### Properties:
 
+**chapters**
+
+`<property>`
 - Read-only
-- type: `Array`
+- type: `Array<TChapter> | []`
 - default: `[]`
+
+```javascript
+  TChapter {
+    title: string,
+    startTime: number,
+    endTime: number,
+  }
+```
 
 Chapter metadata of the current audio, if any. See [Chapter](#Chapters).
 
-**.currentChapter**
+**currentChapter**
 
 - Read-only
-- type: `Null|Object`
+- type: `Null | TChapter`
 - default: `null`
 
 Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
@@ -383,9 +426,15 @@ Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
 
 ## Roadmap
 
-- [ ] rewrittern with Typescript – currently working on this one
+🟡v2.2.0:
+- [x] rewritten in Typescript 👉 finished but not tested, contribution welcomed
 
-Under v2.0.0:
+🟡v2.1.0:
+- [x] live mode 👉 finished but not tested, contribution welcomed
+- [x] safely update audio metadata
+- [ ] offer more UI customization options 👉 currently working on this
+
+✅v2.0.0:
 - [x] supporting audio id3 metadata
 - [x] cleaner & sleeker interface
 - [x] dark mode
