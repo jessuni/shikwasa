@@ -268,6 +268,10 @@ class Player {
       this.seekable = audio.duration && audio.duration !== Infinity
       this.updateMetadata(audio)
     })
+    this.on('audioparse', (audio) => {
+      this.seekable = audio.duration && audio.duration !== Infinity
+      this.updateMetadata(audio)
+    })
   }
 
   initMediaSession() {
@@ -363,7 +367,6 @@ class Player {
       if (!this._live && this.options.parser && metaIncomplete) {
         parseAudio(Object.assign({}, audio), this.options.parser).then((audioData) => {
           this._audio = audioData || this._audio
-          this.updateMetadata(this._audio)
           this.events.trigger('audioparse', this._audio)
         })
       }
