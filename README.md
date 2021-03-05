@@ -110,9 +110,11 @@ Here's a [fiddle](https://jsfiddle.net/jessuni/netgvbwy/8/) to kickstart. To use
 
 **play**
 
-`play(): Promise`
+`play(): Promise | void`
 
-Start playing the current audio. [Promise details](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play). Updating audio via this method is deprecated, use `update` instead.
+Start playing the current audio. In modern browsers and IE9+ it will return a [promise](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play#browser_compatibility) while pre IE9 it will return nothing.
+
+Updating audio via this method is deprecated, use `update` instead.
 
 **pause**
 
@@ -124,7 +126,7 @@ Pause the current audio.
 
 `toggle(): Promise | void`
 
-Toggle audio play state between play and pause. [Promise details](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play).
+Toggle audio play state between play and pause. [Promise details](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play#browser_compatibility).
 
 **seek**
 
