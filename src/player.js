@@ -322,6 +322,7 @@ class Player {
     } else {
       this.initMediaSession()
     }
+    return promise
   }
 
   pause() {
@@ -330,7 +331,7 @@ class Player {
   }
 
   toggle() {
-    this.audio.paused ? this.play() : this.pause()
+    return this.audio.paused ? this.play() : this.pause()
   }
 
   seek(time) {
