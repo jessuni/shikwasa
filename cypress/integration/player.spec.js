@@ -475,3 +475,35 @@ describe('Time display', () => {
     cy.get('.shk-live').should('be.visible')
   })
 })
+
+describe('Audio update behavior', () => {
+  const src = 'https://shikwasa.js.org/assets/STS-133_FD11_Mission_Status_Briefing.mp3'
+  const title = 'hello baby'
+  it('updates audio when `update` is called', () => {
+    shk = new Shikwasa({ audio: { src: data.src } })
+    expect(shk.audio.src).equal(location.origin + '/' + data.src)
+    cy.get('.shk-title')
+      .contains(CONFIG.audioOptions.title)
+      .then(() => {
+        shk.update({ src, title })
+        expect(shk.audio.src).equal(src)
+        cy.get('.shk-title').contains(title)
+      })
+  })
+
+  it('updates audio metadata without blocking playback when `updateMetadata` is called', () => {
+    shk = new Shikwasa({ audio: { src: data.src } })
+    const promise = shk.play()
+    if (promise instanceof Promise) {
+      promise.then(() => {
+        shk.updateMetadata({ title })
+        cy.get('.shk-title').contains(title)
+        expect(shk.audio.paused).to.be.false
+      })
+    } else {
+      shk.updateMetadata({ title })
+      cy.get('.shk-title').contains(title)
+      expect(shk.audio.paused).to.be.false
+    }
+  })
+})
