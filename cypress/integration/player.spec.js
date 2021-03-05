@@ -164,6 +164,26 @@ describe('Player initiation', () => {
         })
       })
     })
+
+    describe('live stream seek controls', () => {
+      it('disables seek controls if audio is live stream', () => {
+        shk = new Shikwasa({ audio: { src: data.src, live: true } })
+        expect(shk.ui.seekControls.every((el) => el.disabled)).to.be.true
+      })
+    })
+  })
+
+  describe('live stream ignores parser', () => {
+    it('does not parse live stream when a parser is available', () => {
+      shk = new Shikwasa({
+        parser: Setup.Parser,
+        // to simulate live stream
+        preload: 'none',
+        audio: { src: data.src, live: true, duration: Infinity },
+      })
+      cy.get('.shk-title').contains(CONFIG.audioOptions.title)
+      cy.get('.shk-artist').contains(CONFIG.audioOptions.artist)
+    })
   })
 })
 
@@ -443,5 +463,15 @@ describe('Time display', () => {
     cy.get('.shk-time_duration').contains('16:40')
     cy.get('.shk-btn_toggle').click()
     cy.get('.shk-time_duration').contains('11:07')
+  })
+  it('display live style for livestream', () => {
+    shk = new Shikwasa({
+      parser: Setup.Parser,
+      // to simulate live stream
+      preload: 'none',
+      audio: { src: data.src, live: true, duration: Infinity },
+    })
+    cy.get('.shk-time').should('not.be.visible')
+    cy.get('.shk-live').should('be.visible')
   })
 })
