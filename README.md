@@ -20,7 +20,8 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 - 🎮 Skip forward/backward
 - 👓 Accessibility-aware
 - 🌙 Dark Mode
-- SSR compatible
+- 📻 Audio stream support
+- 💻 SSR compatible
 - [ ] Playlist
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
@@ -205,12 +206,15 @@ The current playbackRate of the player. Inherits the native [`HTMLMediaElement.p
     cover?: string,
     duration?: number,
     album?: string,
+    live?: boolean,
   }
 ```
 
 The target audio to be played. If `duration` is passed along, players with `preload` option set to `none` will be able to display the custom duration in UI before the audio metadata is fetched. However, after the audio metadata is loaded, this prop will be ignored.
 
 `album` is not visible in the UI. It will only display in the Chrome mini player and any other browsers/devices/operating systems that support `MediaSession`.
+
+`live` is for audio stream.
 
 ### container
 
@@ -432,7 +436,7 @@ Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
 - [x] rewritten in Typescript 👉 finished but not tested, contribution welcomed
 
 🟡v2.1.0:
-- [x] live mode 👉 finished but not tested, contribution welcomed
+- [x] live mode
 - [x] safely update audio metadata
 - [ ] offer more UI customization options 👉 currently working on this
 
