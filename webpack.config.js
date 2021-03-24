@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
 
 const allFiles = fs.readdirSync('pages')
 const pages = allFiles.filter(name => {
@@ -21,6 +22,7 @@ const plugins = pages.map(filename => {
     chunks: jsfile ? [name] : [],
   })
 })
+plugins.push(new ESLintPlugin())
 
 module.exports = {
   entry,
@@ -48,11 +50,6 @@ module.exports = {
         use: {
           loader: 'babel-loader',
         },
-      },
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
