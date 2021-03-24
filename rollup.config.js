@@ -19,6 +19,7 @@ const sharedPlugins = [
     include: './src/main.js',
     delimiters: ['/** ', ' */'],
     'CONSOLE_MSG': CONSOLE_CODE,
+    preventAssignment: true,
   }),
   babel(),
   cleanup({
