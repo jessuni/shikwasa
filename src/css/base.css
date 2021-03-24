@@ -371,7 +371,7 @@ svg.shk-btn_mute,
 .shk-icons {
   display: none;
 }
-.shk[data-live] .shk-bar_wrap,
+.shk[data-live] .shk-bar,
 .shk[data-live] .shk-time {
   display: none;
 }
@@ -445,6 +445,9 @@ svg.shk-btn_mute,
     top: 0;
     bottom: auto;
   }
+  .shk[data-live] .shk-bar_wrap {
+    height: 4px;
+  }
   .shk-cover {
     display: none;
   }
@@ -516,6 +519,6 @@ svg.shk-btn_mute,
   .shk-live {
     position: absolute;
     right: 0;
-    top: 16px;
+    top: 0;
   }
 }
