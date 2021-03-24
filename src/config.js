@@ -6,7 +6,7 @@ export const DEFAULT = {
     position: 'bottom',
   },
   download: false,
-  themeColor: '#00869B',
+  themeColor: '#0d6efd',
   theme: 'auto',
   autoPlay: false,
   muted: false,

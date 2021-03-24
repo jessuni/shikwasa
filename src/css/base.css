@@ -7,7 +7,7 @@
   --color-shadow: #b9b6b680;
   --color-handle-shadow-mobile: #b9b6b6;
 
-  --color-body: var(--color-theme);
+  --background-body: var(--color-theme);
   --color-title: var(--color-text);
   --color-artist: var(--color-secondary);
   --color-button: var(--color-primary);
@@ -90,7 +90,7 @@
   height: 120px;
   box-sizing: border-box;
   border-radius: 2px;
-  background-color: var(--color-theme);
+  background: var(--background-body);
   position: relative;
   z-index: 10;
 }
@@ -293,7 +293,7 @@ svg.shk-btn_mute,
   height: 4px;
   width: 100%;
   box-sizing: border-box;
-  background-color: var(--color-theme);
+  background: var(--background-body);
 }
 .shk-bar_loaded,
 .shk-bar_played {
@@ -379,7 +379,7 @@ svg.shk-btn_mute,
 }
 .shk .shk-live::before {
   content: '';
-  background-color: var(--color-live-symbol);
+  background: var(--color-live-symbol);
   border-radius: 50%;
   width: 0.5em;
   height: 0.5em;
