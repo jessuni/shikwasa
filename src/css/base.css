@@ -1,13 +1,30 @@
 .shk {
-  --color-primary: #00CCB8;
+  --color-primary: #0d6efd;
   --color-opac: #b9b9b94d;
-  --color-handle-disabled: #b9b9b9;
-
   --color-theme: #ffffff;
   --color-secondary: #767676;
   --color-text: #333;
-  --color-handle-shadow-mobile: #b9b6b6;
   --color-shadow: #b9b6b680;
+  --color-handle-shadow-mobile: #b9b6b6;
+
+  --color-body: var(--color-theme);
+  --color-title: var(--color-text);
+  --color-artist: var(--color-secondary);
+  --color-button: var(--color-primary);
+  --color-button-disabled: var(--color-opac);
+  --color-button-active-background: var(--color-opac);
+  --color-handle: var(--color-primary);
+  --color-handle-disabled: #b9b9b9;
+  --color-bar-loaded: var(--color-opac);
+  --color-bar-played: var(--color-primary);
+  --color-time: var(--color-secondary);
+  --color-spinner: var(--color-primary);
+  --color-live-symbol: var(--color-primary);
+  --color-live-text: var(--color-primary);
+  --shadow-body: 2px 2px 8px -2px var(--color-shadow);
+  --shadow-body-mobile: 0 -2px 6px -2px var(--color-shadow);
+  --shadow-handle: 0px 2px 10px 2px var(--color-shadow);
+  --shadow-handle-mobile: 2px 2px 8px -2px var(--color-handle-shadow-mobile);
 }
 .shk[data-theme="dark"] {
   --color-theme: #333;
@@ -111,7 +128,7 @@
 .shk-artist {
   text-overflow: clip;
   font-weight: 500;
-  color: var(--color-secondary);
+  color: var(--color-artist);
 }
 .shk-title_wrap[data-overflow] {
   mask-image: linear-gradient(to right,transparent,#202124 5%,#202124 95%,transparent);
@@ -134,7 +151,7 @@
 .shk-title {
   font-weight: 300;
   font-size: 1.33em;
-  color: var(--color-text);
+  color: var(--color-title);
 }
 .shk-title_wrap[data-overflow] .shk-title_inner::after,
 .shk-title_wrap[data-overflow] .shk-title {
@@ -147,7 +164,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--color-primary);
+  color: var(--color-button);
   fill: currentColor;
   box-sizing: content-box;
   padding: 10px;
@@ -156,7 +173,7 @@
   line-height: normal;
 }
 .shk-btn:disabled {
-  color: var(--color-opac);
+  color: var(--color-button-disabled);
   cursor: not-allowed;
 }
 .shk-btn::after {
@@ -168,7 +185,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: var(--color-opac);
+  background: var(--color-button-active-background);
   z-index: -1;
   pointer-events: none;
   opacity: 0;
@@ -180,7 +197,7 @@
   visibility: visible;
 }
 a.shk-btn:visited {
-  color: var(--color-primary);
+  color: var(--color-button);
 }
 .shk-btn svg {
   width: 24px;
@@ -288,16 +305,16 @@ svg.shk-btn_mute,
   transition: width ease-in .1s;
 }
 .shk-bar_loaded {
-  background: var(--color-opac);
+  background: var(--color-bar-loaded);
 }
 .shk-bar_played {
-  background: var(--color-primary);
+  background: var(--color-bar-played);
 }
 .shk[data-seeking] .shk-bar_played {
   transition: none;
 }
 .shk-bar-handle {
-  background: var(--color-primary);
+  background: var(--color-handle);
   position: absolute;
   right: -10px;
   width: 20px;
@@ -322,7 +339,7 @@ svg.shk-btn_mute,
 .shk-loader {
   display: none;
   vertical-align: middle;
-  color: var(--color-primary);
+  color: var(--color-spinner);
 }
 .shk[data-loading] .shk-loader {
   display: inline-block;
@@ -350,7 +367,7 @@ svg.shk-btn_mute,
   vertical-align: middle;
   font-size: 0.8em;
   font-weight: 300;
-  color: var(--color-secondary);
+  color: var(--color-time);
 }
 .shk .shk-live {
   display: none;
@@ -358,11 +375,11 @@ svg.shk-btn_mute,
   text-transform: uppercase;
   font-size: 0.8em;
   font-family: sans-serif;
-  color: var(--color-primary);
+  color: var(--color-live-text);
 }
 .shk .shk-live::before {
   content: '';
-  background-color: var(--color-primary);
+  background-color: var(--color-live-symbol);
   border-radius: 50%;
   width: 0.5em;
   height: 0.5em;
@@ -382,7 +399,7 @@ svg.shk-btn_mute,
   .shk-player {
     margin-top: 4px;
     padding: 20px 16px;
-    box-shadow: 2px 2px 8px -2px var(--color-shadow);
+    box-shadow: var(--shadow-body);
   }
   .shk-main {
     align-items: flex-end;
@@ -409,7 +426,7 @@ svg.shk-btn_mute,
   .shk-bar-handle {
     top: -9.5px;
     border: 4px solid transparent;
-    box-shadow: 0px 2px 10px 2px var(--color-shadow);
+    box-shadow: var(--shadow-handle);
     transform: scale(.0001);
     transition: all .1s ease-in;
   }
@@ -433,7 +450,7 @@ svg.shk-btn_mute,
 @media (max-width: 640px) {
   .shk-player {
     padding: 5px 16px;
-    box-shadow: 0 -2px 6px -2px var(--color-shadow);
+    box-shadow: var(--shadow-body-mobile);
   }
   .shk[data-fixed-type="auto"] {
     position: fixed;
@@ -484,7 +501,7 @@ svg.shk-btn_mute,
   .shk-bar-handle {
     display: inline-block;
     top: -8px;
-    box-shadow: 2px 2px 8px -2px var(--color-handle-shadow-mobile);
+    box-shadow: var(--shadow-handle-mobile);
   }
   .shk-bar {
     background: var(--color-opac);
