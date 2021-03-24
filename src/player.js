@@ -35,7 +35,7 @@ class Player {
     this._audio = {}
     this._hasMediaSession = false
     this._initSeek = 0
-    this._live = false
+    this.live = false
     this._canplay = false
     this._dragging = false
     this.events = new Events()
@@ -54,7 +54,7 @@ class Player {
   }
 
   get seekable() {
-    return !this._live && Boolean(this.duration)
+    return !this.live && Boolean(this.duration)
   }
 
   set seekable(v) {
@@ -221,17 +221,12 @@ class Player {
       this.el.setAttribute('data-loading', '')
     })
     this.on('durationchange', () => {
-      const isLiveStream = this.duration === Infinity
-      // update live state if it doesn't match current duration state
-      if (isLiveStream !== this._live) {
-        this._live = !this._live
-        this.ui.setLive(this._live)
+      // Inifinity indicates audio stream or Safari's quirky behavior
+      // update live state single way if it doesn't match current duration state
+      if (this.duration !== Infinity && this.live) {
+        this.live = false
       }
-      if (isLiveStream && !this._live) {
-        this._live = !this.live
-      }
-
-      if (this.duration && this.duration !== 1 && !this._live) {
+      if (this.duration && this.duration !== 1 && this.duration !== Infinity) {
         this.seekable = true
         this.ui.setTime('duration', this.duration)
       }
@@ -243,6 +238,11 @@ class Player {
           this.seek(this._initSeek)
           this._initSeek = 0
         }
+      }
+      // update live state single way to determine it is live stream and not Safari's quirky behavior
+      if (this.duration === Infinity && !this.live) {
+        this.live = true
+        this.ui.setLive(this.live)
       }
     })
     this.on('canplaythrough', () => {
@@ -359,13 +359,13 @@ class Player {
   update(audio) {
     if (audio && audio.src) {
       this._audio = handleAudio(audio)
-      this._live = this._audio.live
+      this.live = this._audio.live
       this._canplay = false
 
       this.audio.src = this._audio.src
       this.events.trigger('audioupdate', this._audio)
       const metaIncomplete = !audio.title || !audio.artist || !audio.cover || !audio.chapters
-      if (!this._live && this.options.parser && metaIncomplete) {
+      if (!this.live && this.options.parser && metaIncomplete) {
         parseAudio(Object.assign({}, audio), this.options.parser).then((audioData) => {
           this._audio = audioData || this._audio
           this.events.trigger('audioparse', this._audio)

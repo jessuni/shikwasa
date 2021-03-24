@@ -510,4 +510,9 @@ svg.shk-btn_mute,
     width: 40px;
     text-align: left;
   }
+  .shk-live {
+    position: absolute;
+    right: 0;
+    top: 16px;
+  }
 }
