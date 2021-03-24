@@ -23,11 +23,14 @@ describe('Player initiation', () => {
 
     cy.get('body')
       .children('.shk')
+      .as('shk')
       .should('have.attr', 'data-fixed-type', DEFAULT.fixed.type)
       .and('have.attr', 'data-theme', DEFAULT.theme)
       .and('have.attr', 'data-play', 'paused')
-      .and('not.contain.attr', 'data-mute')
-      .and('not.contain.attr', 'data-has-chapter')
+    cy.get('@shk')
+      .should('not.have.attr', 'data-has-chapter')
+    cy.get('@shk')
+      .should('not.have.attr', 'data-mute')
     cy.get('.shk-title').contains(CONFIG.audioOptions.title)
     cy.get('.shk-artist').contains(CONFIG.audioOptions.artist)
     cy.get('.shk-cover').should('have.css', 'background-image', 'none')
@@ -75,15 +78,17 @@ describe('Player initiation', () => {
     })
 
     Object.keys(parser).forEach((k) => {
-      it(`renders custom data ${k}'s presence`, () => {
+      it.only(`renders custom data ${k}'s presence`, () => {
         options.parser = parser[k]
         shk = new Shikwasa(options)
         cy.get('.shk-container')
           .find('.shk')
+          .as('shk')
           .should('have.attr', 'data-fixed-type', 'fixed')
           .and('have.attr', 'data-theme', 'dark')
           .and('have.attr', 'data-mute')
-          .and('not.contain.attr', 'data-has-chapter')
+        cy.get('@shk')
+          .should('not.have.attr', 'data-has-chapter')
         cy.get('.shk-title').contains(data.customAudio.title)
         cy.get('.shk-artist').contains(data.customAudio.artist)
         cy.get('.shk-cover').should(
