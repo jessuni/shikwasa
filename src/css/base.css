@@ -179,6 +179,9 @@
   opacity: 1;
   visibility: visible;
 }
+a.shk-btn:visited {
+  color: var(--color-primary);
+}
 .shk-btn svg {
   width: 24px;
   height: 24px;
