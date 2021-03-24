@@ -35,7 +35,7 @@ module.exports = {
     port: '8080',
     disableHostCheck: true,
   },
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'cheap-module-source-map',
   module: {
     rules: [
       {
