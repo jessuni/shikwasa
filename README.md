@@ -22,6 +22,7 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 - 🌙 Dark Mode
 - 📻 Audio stream support
 - 💻 SSR compatible
+- [ ] Direct audience to subscription pages
 - [ ] Playlist
 
 [**➡️DEMO here⬅️**](https://jessuni.github.io/shikwasa/)
@@ -46,6 +47,7 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
     * [speedOptions](#speedoptions)
     * [download](#download)
   * [Events](#events)
+  * [Style](#style)
   * [Chapter Plugin](#chapters)
   * [Roadmap](#roadmap)
   * [What about the weird name of this project?](#what-about-the-weird-name-of-this-project)
@@ -344,6 +346,38 @@ Plus player events:
 
 `audioparse`: fired when audio file data is parsed.
 
+## Style
+
+Although Shikwasa have not yet provided a full customization support of its styles, some CSS variables are available and should cover basic needs.
+
+```css
+  --background-body                           /* background of the player body */
+  --color-title                               /* color of the title text */
+  --color-artist                              /* color of the artist text */
+  --color-button: var(--color-primary);       /* color of the buttons, defaults to `themeColor` */
+  --color-button-disabled                     /* color of button:disabled */
+  --color-button-active-background            /* color of the background of button:active` */
+  --color-handle: var(--color-primary);       /* color of the playback progress handle, defaults to `themeColor` */
+  --color-handle-disabled                     /* color of the handle:disabled */
+  --color-bar-loaded                          /* color of the loaded playback progress, defaults to `themeColor` */
+  --color-bar-played: var(--color-primary);   /* color of the loaded playback progress, defaults to `themeColor` */
+  --color-time                                /* color of the playback time */
+  --color-spinner: var(--color-primary);      /* color of the playback loading indicator, defaults to `themeColor` */
+  --color-live-symbol: var(--color-primary);  /* color of the live indicator symbol, defaults to `themeColor` */
+  --color-live-text: var(--color-primary);    /* color of the live indicator text, defaults to `themeColor` */
+  --shadow-body                               /* box shadow of the player body */
+  --shadow-body-mobile                        /* box shadow of the player body in small screens */
+  --shadow-handle                             /* box shadow of the playback progress handle */
+  --shadow-handle-mobile                      /* box shadow of the playback progress handle in small screens */
+```
+
+Usage: overwrite the style property in your player container:
+```css
+  .container .shk {
+    --background-body: linear-gradient(-45deg, #84ccff, #b8e8ff);
+  }
+```
+
 ## Chapters
 
 Shikwasa supports chapters display and playback control with the help of its external chapter plugin. To use this feature:
@@ -431,16 +465,18 @@ Indicate which chapter is currently on play, if any. See [Chapter](#Chapters).
 `chapterchange`: fired when `currentChapter` changes.
 
 ## Roadmap
+🟡 v2.3.0:
+- [ ] In-player subscription feature that direct the audience to your subsciption pages in major podcasting platforms
 
-🟡v2.2.0:
+🟡 v2.2.0:
 - [x] rewritten in Typescript 👉 finished but not tested, contribution welcomed
 
-🟡v2.1.0:
+✅ v2.1.0:
 - [x] live mode
 - [x] safely update audio metadata
-- [ ] offer more UI customization options 👉 currently working on this
+- [x] offer more UI customization options
 
-✅v2.0.0:
+✅ v2.0.0:
 - [x] supporting audio id3 metadata
 - [x] cleaner & sleeker interface
 - [x] dark mode
