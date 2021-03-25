@@ -8,6 +8,7 @@ const keyboardTitle = document.querySelector('#keyboard-control')
 const clickChapter = document.querySelector('.demo-chapter')
 const themeButtons = document.querySelectorAll('.demo-theme')
 const themeColorButtons = document.querySelectorAll('.demo-theme-color')
+const diyButtons = document.querySelectorAll('.demo-diy')
 
 const audio = {
   title: 'STS-133 FD11 Mission Status Briefing',
@@ -69,7 +70,7 @@ const audioWithChapter = Object.assign(audio, {
   ],
 })
 
-new window.Shikwasa({
+const heroPlayer = new window.Shikwasa({
   audio,
   themeColor: '#022188',
   theme: 'light',
@@ -79,6 +80,10 @@ new window.Shikwasa({
     type: 'static',
   },
 })
+
+if (heroPlayer) {
+  heroPlayer.el.setAttribute('data-style', 0)
+}
 
 window.Shikwasa.use(window.Chapter)
 demoPlayer = new window.Shikwasa({
@@ -107,13 +112,14 @@ window.onhashchange = () => {
 window.onscroll = () => {
   if (throttled) return
   throttled = true
-  setTimeout(() => {
+  window.requestAnimationFrame(() => {
+    if (window.innerWidth > 1000) {
+      showChapter()
+    }
     throttled = false
-  }, 100)
+  })
   focus()
-  if (window.innerWidth > 1000) {
-    showChapter()
-  }
+
 }
 
 if (clickChapter) {
@@ -124,24 +130,32 @@ demoPlayer.comps.chapter.ui.closeBtn.addEventListener('click', () => {
   autoShowChapter = false
 })
 
-for (let i = 0; i < themeButtons.length; i++) {
-  const theme = themeButtons[i].getAttribute('data-value')
-  themeButtons[i].addEventListener('click', (e) => {
-    switchTheme(theme)
-    for (let j = 0; j < themeButtons.length; j++) {
-      e.currentTarget === themeButtons[j] ?
-        themeButtons[j].classList.add('Active') :
-        themeButtons[j].classList.remove('Active')
+
+themeButtons.forEach(el => {
+  const theme = el.getAttribute('data-value')
+  el.addEventListener('click', (e) => {
+    if (demoPlayer) {
+      switchTheme(e, theme)
     }
   })
-}
+})
 
-for (let i = 0; i < themeColorButtons.length; i++) {
-  const color = themeColorButtons[i].getAttribute('data-color')
-  themeColorButtons[i].addEventListener('click', () => {
-    switchColor(color)
+themeColorButtons.forEach(el => {
+  const color = el.getAttribute('data-color')
+  el.addEventListener('click', () => {
+    if (demoPlayer) {
+      switchColor(color)
+    }
   })
-}
+})
+
+diyButtons.forEach((el, index) => {
+  el.addEventListener('click', () => {
+    if (demoPlayer) {
+      switchStyle(index)
+    }
+  })
+})
 
 function seekTime(shk) {
   const hms = window.location.hash.match(/#t=(\d?\d)?:?(\d\d):(\d\d)/)
@@ -191,16 +205,23 @@ function focus() {
   }
 }
 
-function switchTheme(theme) {
-  if (demoPlayer) {
-    demoPlayer.el.setAttribute('data-theme', theme)
-  }
+function switchTheme(e, theme) {
+  demoPlayer.el.removeAttribute('data-style')
+  demoPlayer.el.setAttribute('data-theme', theme)
+  themeButtons.forEach(el => {
+    e.currentTarget === el ? el.classList.add('Active') : el.classList.remove('Active')
+  })
 }
 
 function switchColor(color) {
-  if (demoPlayer) {
-    demoPlayer.el.style = `--color-primary: rgb(${color})`
-  }
+  demoPlayer.el.removeAttribute('data-style')
+  demoPlayer.el.style = `--color-primary: rgb(${color})`
+}
+
+function switchStyle(index) {
+  demoPlayer.el.style = ''
+  demoPlayer.el.setAttribute('data-theme', 'light')
+  demoPlayer.el.setAttribute('data-style', index)
 }
 
 

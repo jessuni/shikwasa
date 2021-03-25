@@ -9,7 +9,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png">
-  <link rel="preload" href="https://unpkg.com/dracula-prism/css/dracula-prism.css" as="style" crossorigin>
+  <link rel="preload" href="https://unpkg.com/dracula-prism@2.1.1/src/css/dracula-prism.css" as="style" crossorigin>
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/components/prism-core.min.js" as="script" crossorigin>
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js" as="script" crossorigin>
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.min.js" as="script" crossorigin>
@@ -17,17 +17,17 @@
   <meta name="description" content="A web player born for podcast">
   <meta property="og:title" content="Shikwasa | A web player born for podcast">
   <meta property="og:description" content="A web player born for podcast">
-  <meta property="og:image" content="./assets/logo.png">
+  <meta property="og:image" content="https://shikwasa.js.org/assets/logo.png">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://shikwasa.js.org">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:creator" content="@jessieste">
-  <meta name="twitter:title" content="Home">
+  <meta name="twitter:title" content="Shikwasa">
   <meta name="twitter:description" content="A web player born for podcast">
   <link rel="stylesheet" href="./index.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.min.css" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.chapter.min.css" crossorigin>
-  <link rel="stylesheet" href="https://unpkg.com/dracula-prism/css/dracula-prism.css" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/dracula-prism@2.1.1/src/css/dracula-prism.css" crossorigin>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137724348-2"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -63,26 +63,28 @@
   <div class="feature">
     <div class="feature-item">
       <h2 id="listening-made-easy">Listening made easy</h2>
-      <div class="feature-main">
-        <p>Seek to any timestamp listed in your shownotes.</p>
+      <div class="feature-item_main">
+        <h3 id="seek-control">Seek control</h3>
+        <p>Seek to any timestamp listed in your show notes.</p>
         <div class="feature-action">
           <div><a href="#t=03:05">03:05</a> Some info</div>
           <div><a href="#t=04:05">04:05</a> Some other info</div>
           <div class="code">
-            <pre><code>anchor.onClick = () => {
+            <pre><code>anchor.addEventListener('click', () => {
     const href = anchor.getAttribute('href')
-    const time = formatTime(time)
+    const time = formatTime(href)
     instance.seek(time)
     instance.play()
-  }</code></pre>
+  })</code></pre>
           </div>
         </div>
       </div>
-      <div class="feature-main">
+      <div class="feature-item_main">
+        <h3 id="seek-control">Synced timestamp</h3>
         <p>Share audio progress with query string url.</p></p>
         <div class="feature-action">
-          copy <code>shikwasa.js.org/#t=06:05</code>
-          to the address bar of a new browser tab
+          Copy <code>shikwasa.js.org/#t=06:05</code>
+          to the address bar of a new browser tab to witness the magic.
           <div class="code">
             <pre><code>window.onload = () => {
     const hash = window.location.hash
@@ -95,8 +97,11 @@
     </div>
     <div class="feature-item">
       <h2 id="chapters">Chapters</h2>
-      <div class="feature-main">
-        <p>Better than shownotes! Always let users know where they are by the highlighted chapter.</p>
+      <div class="feature-item_main">
+        <h3 id="interactive-chapters">
+          Interactive chapters
+        </h3>
+        <p>Better than show notes! Always let the audience know where they are by the highlighted chapter.</p>
         <div class="feature-action">
           <pre><code>const instance = new Shikwasa({
   audio: {
@@ -117,7 +122,18 @@
           to a random chapter
         </div>
       </div>
-      <div class="feature-main">
+      <div class="feature-item_main">
+        <h3 id="track-content-popularity">
+          Track content popularity
+        </h3>
+        <p>Know what your audience cares about.</p>
+        <div class="feature-action">
+          <pre><code>instance.on('chapterchange', (newChapter, oldChapter) => {
+  recordAudienceBehavior(newChapter, oldChapter)
+})</code></pre>
+        </div>
+      </div>
+      <div class="feature-item_main">
         <p>
           If the chapter data is unknown to you, but the audio file has id3tagv2-chapters data, we support reading and organizing chapter data with a little help of an external library.
           <a href="https://github.com/jessuni/shikwasa/blob/next/README.md#parser" target="_blank" rel="noreferrer">Learn more</a>
@@ -126,7 +142,7 @@
     </div>
     <div class="feature-item">
       <h2 id="accessibility-aware">Accessibility aware</h2>
-      <div class="feature-main">
+      <div class="feature-item_main">
         <h3 id="keyboard-control">Keyboard control</h3>
         <p>
           Seek to audio position with
@@ -143,17 +159,17 @@
           .
         </p>
       </div>
-      <div class="feature-main">
+      <div class="feature-item_main">
         <p>Bonus: The focus outline is visible only when you navigates with a keyboard.</p>
       </div>
-      <div class="feature-main">
+      <div class="feature-item_main">
         <h3 id="aria-support">ARIA support</h3>
         <p>Visually impaired people deserve an accessible listening experience. ARIA markup, check.</p>
       </div>
     </div>
     <div class="feature-item">
       <h2 id="theme">Theme</h2>
-      <div class="feature-main">
+      <div class="feature-item_main">
         <h3 id="dark mode">Dark mode</h3>
         <p>
           Choose among
@@ -163,7 +179,7 @@
           .
         </p>
       </div>
-      <div class="feature-main">
+      <div class="feature-item_main">
         <h3 id="theme-color">Theme color</h3>
         <p>Blend it in with your site. Any color.</p>
         <div class="feature-action">
@@ -173,12 +189,22 @@
           <button class="button Round Graphite demo-theme-color" aria-label="graphite" title="graphite" data-color="49,51,53"></button>
         </div>
       </div>
+      <div class="feature-item_main">
+        <h3 id="theme-color">Customization</h3>
+        <p>Although we'd like to keep things simple for you, feel free to get your hands dirty.</p>
+        <div class="feature-action">
+          <button class="button Round demo-diy" aria-label="first style" title="first style" data-style="0"></button>
+          <button class="button Round demo-diy" aria-label="second style" title="second style" data-style="1"></button>
+          <button class="button Round demo-diy" aria-label="no style" title="no style" data-style="2"></button>
+        </div>
+      </div>
       <div class="feature-item">
         <h2 id="more">More...</h2>
-        <div class="feature-main">
+        <div class="feature-item_main">
           <ul>
             <li>No dependencies</li>
             <li>Audio element not existing in DOM</li>
+            <li>Live audio stream support</li>
             <li>Notice how the other player automatically paused when a new player starts playing? Shikwasa has full of these delightful
             details.</li>
           </ul>
@@ -199,7 +225,7 @@
     </svg>
   </a>
   <span>
-    made with <span aria-label="love" role="img">💙</span> by <a href="https://jessieji.com">Jessie Ji</a>
+    made with <span aria-label="love" role="img">💛</span> by <a href="https://jessieji.com/?utm_source=shikwasa">Jessie Ji</a>
   </span>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/components/prism-core.min.js" crossorigin></script>
