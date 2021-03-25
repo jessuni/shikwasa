@@ -235,7 +235,7 @@ a.shk-btn:visited {
   overflow: hidden;
   z-index: 10;
   justify-content: flex-end;
-  background: var(--color-theme);
+  background: var(--background-body);
   transition: width .2s ease-in-out, opacity .1s .1s linear, visibility .2s;
 }
 .shk[data-extra] .shk-controls_extra {
