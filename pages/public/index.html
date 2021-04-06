@@ -70,8 +70,8 @@
           <div><a href="#t=03:05">03:05</a> Some info</div>
           <div><a href="#t=04:05">04:05</a> Some other info</div>
           <div class="code">
-            <pre><code>anchor.addEventListener('click', () => {
-    const href = anchor.getAttribute('href')
+            <pre><code>anchor.addEventListener('click', (e) => {
+    const href = e.target.getAttribute('href')
     const time = formatTime(href)
     instance.seek(time)
     instance.play()
