@@ -6,11 +6,11 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
     paths-ignore:
       - 'pages/**'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
 
