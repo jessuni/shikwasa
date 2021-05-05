@@ -139,6 +139,7 @@ export default class UI {
     }
     this.setBar('loaded', 0)
     this.setLive(audio.live)
+    marquee(this.titleWrap, this.title)
   }
 
   setPlaying() {
