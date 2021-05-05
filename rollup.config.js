@@ -45,7 +45,7 @@ function bundle(target, format) {
       file: `dist/shikwasa.${target === 'main' ? '' : target + '.' }${text}.js`,
       format,
       compact: true,
-      sourcemap: format === 'umd',
+      sourcemap: false,
     },
     plugins,
     treeshake: {
