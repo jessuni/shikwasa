@@ -78,7 +78,7 @@ describe('Player initiation', () => {
     })
 
     Object.keys(parser).forEach((k) => {
-      it.only(`renders custom data ${k}'s presence`, () => {
+      it(`renders custom data ${k}'s presence`, () => {
         options.parser = parser[k]
         shk = new Shikwasa(options)
         cy.get('.shk-container')
