@@ -46,6 +46,7 @@ function bundle(target, format) {
       format,
       compact: true,
       sourcemap: false,
+      exports: 'default',
     },
     plugins,
     treeshake: {
