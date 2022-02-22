@@ -10,12 +10,10 @@ let cooldown = true
 export default class UI {
   constructor(options) {
     this.mounted = false
-    if (!document.querySelector('.shk-icons')) {
-      this.icons = createElement({
-        className: 'shk-icons',
-        innerHTML: IconComp,
-      })
-    }
+    this.icons = createElement({
+      className: 'shk-icons',
+      innerHTML: IconComp,
+    })
     this.initEl()
     this.initOptions(options)
   }
