@@ -31,11 +31,9 @@ module.exports = {
     pathinfo: false,
   },
   devServer: {
-    contentBase: path.join(__dirname, 'pages'),
-    hot: true,
+    static: [path.join(__dirname, 'pages')],
     host: 'localhost',
     port: '8080',
-    disableHostCheck: true,
   },
   devtool: 'cheap-module-source-map',
   module: {
