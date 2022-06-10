@@ -29,4 +29,8 @@ export default class Events {
     console.error(`Shikwasa: unknown event name: ${name}`)
     return null
   }
+
+  destroy() {
+    this.events = {}
+  }
 }

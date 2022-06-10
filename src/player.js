@@ -39,7 +39,6 @@ class Player {
     this._canplay = false
     this._dragging = false
     this.events = new Events()
-    this._eventListeners = {}
     this.options = handleOptions(options)
     this.renderComponents()
     this.initUI(this.options)
@@ -192,14 +191,9 @@ class Player {
       this.audio = new Audio()
       this.initAudioEvents()
       this.events.audioEvents.forEach((name) => {
-        const listener = (e) => {
+        this.audio.addEventListener(name, (e) => {
           this.events.trigger(name, e)
-        }
-        this.audio.addEventListener(name, listener)
-        if (!this._eventListeners[name]) {
-          this._eventListeners[name] = []
-        }
-        this._eventListeners[name].push(listener)
+        })
       })
       this.audio.preload = this.options.preload
       this.muted = this.options.muted
@@ -391,12 +385,6 @@ class Player {
   }
 
   destroyAudio() {
-    this.events.audioEvents.forEach((name) => {
-      if (this._eventListeners[name] && this._eventListeners[name].length) {
-        this._eventListeners[name].forEach(listener => this.audio.removeEventListener(name, listener))
-      }
-    })
-    this._eventListeners = {}
     this.audio.pause()
     this.audio.src = ''
     this.audio.load()
@@ -404,6 +392,7 @@ class Player {
   }
 
   destroy() {
+    this.events.destroy()
     this.destroyAudio()
     this.ui.destroy()
     Object.keys(this.comps).forEach((k) => {
