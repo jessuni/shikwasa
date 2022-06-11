@@ -392,6 +392,7 @@ class Player {
   }
 
   destroy() {
+    this.events.destroy()
     this.destroyAudio()
     this.ui.destroy()
     Object.keys(this.comps).forEach((k) => {
