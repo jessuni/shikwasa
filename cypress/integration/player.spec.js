@@ -512,3 +512,23 @@ describe('Audio update behavior', () => {
     }
   })
 })
+
+describe('Audio destruction', () => {
+  it('destroys player instance on destruction', () => {
+    shk = new Shikwasa({ audio: { src: data.src } })
+    shk.destroy()
+    expect(document.querySelector('.shk')).to.be.null
+  })
+
+  it('unregisters event listeners from the player', () => {
+    let listenerCalled = false
+    shk = new Shikwasa({ audio: { src: data.src } })
+    // `timeupdate` will be triggered when we follow w3c's best practice
+    // on audio destruction and not unregister event listeners beforehand.
+    shk.on('timeupdate', () => {
+      listenerCalled = true
+    })
+    shk.destroy()
+    expect(listenerCalled).to.be.false
+  })
+})
