@@ -294,12 +294,14 @@ class Player {
 
   setMediaMetadata(audio) {
     const artwork = audio.cover ? [{ src: audio.cover, sizes: '150x150' }] : undefined
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: audio.title,
-      artist: audio.artist,
-      album: audio.album,
-      artwork,
-    })
+    if ('MediaMetadata' in window) {
+      navigator.mediaSession.metadata = new window.MediaMetadata({
+        title: audio.title,
+        artist: audio.artist,
+        album: audio.album,
+        artwork,
+      })
+    }
   }
 
   on(name, callback) {
