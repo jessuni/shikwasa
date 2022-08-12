@@ -81,6 +81,7 @@ class Player {
     if (this.audio) {
       this.audio.playbackRate = v
       this.audio.defaultPlaybackRate = v
+      this.ui.setSpeed(v)
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "shikwasa",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "A web audio player born for podcasts. With chapters, playback speed and forward/backward controls, it is best paired with your podcasting website.",
   "main": "dist/shikwasa.cjs.js",
   "devDependencies": {
@@ -11,6 +11,7 @@
     "@rollup/plugin-replace": "^3.1.0",
     "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.3",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.6.0",
     "cssnano": "^5.0.17",
     "cypress": "^9.5.0",
@@ -37,8 +38,8 @@
     "start:ci": "webpack serve --no-client",
     "dev": "webpack serve",
     "build": "npm run build:main && npm run build:chapter",
-    "build:main": "TARGET=main rollup -c",
-    "build:chapter": "TARGET=chapter rollup -c",
+    "build:main": "cross-env TARGET=main rollup -c",
+    "build:chapter": "cross-env TARGET=chapter rollup -c",
     "build:demo": "rollup -c",
     "deploy": "gh-pages -d dist",
     "lint": "eslint --fix src",
