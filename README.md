@@ -1,3 +1,10 @@
+
+Due to the delay of [PR](https://github.com/jessuni/shikwasa/pull/65), I decided to reissue the software package according to MIT LICENSE.
+
+---
+
+<br>
+
 ![shikwasa branding image](https://i.typlog.com/jessuni/8407706855_086142.png)
 
 <br>
