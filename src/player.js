@@ -114,8 +114,9 @@ class Player {
       this.toggle()
     })
     this.ui.muteBtn.addEventListener('click', () => {
-      this.muted = !this.muted
-      toggleAttribute(this.el, 'data-mute')
+      const newMute = !this.muted
+      this.muted = newMute
+      this.ui.setMute(newMute)
     })
     this.ui.fwdBtn.addEventListener('click', () => {
       this.seekBySpan()
