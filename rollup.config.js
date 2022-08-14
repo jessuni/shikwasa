@@ -8,7 +8,7 @@ import { minify } from 'html-minifier'
 import fs from 'fs'
 import pkg from './package.json'
 
-const CONSOLE_CODE = `console.log(\`%c🍊%c Shikwasa Podcast Player v${pkg.version} %c https://shikwasa.js.org\`,'background-color:#00869B40;padding:4px;','background:#00869B80;color:#fff;padding:4px 0','padding: 2px 0;')`
+const CONSOLE_CODE = `console.log(\`%c🍊%c Shikwasa2 Podcast Player v${pkg.version} %c https://github.com/yenche123/shikwasa\`,'background-color:#00869B40;padding:4px;','background:#00869B80;color:#fff;padding:4px 0','padding: 2px 0;')`
 
 const sharedPlugins = [
   postcss({
