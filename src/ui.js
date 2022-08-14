@@ -177,6 +177,10 @@ export default class UI {
     this.speedBtn.innerHTML = numToString(speed) + 'x'
   }
 
+  setMute(mute) {
+    mute ? this.el.setAttribute("data-mute", "") : this.el.removeAttribute("data-mute")
+  }
+
   setLive(live = false) {
     live ? this.el.setAttribute('data-live', '') : this.el.removeAttribute('data-live')
   }

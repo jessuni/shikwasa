@@ -93,6 +93,7 @@ class Player {
     if (this.audio) {
       this.audio.muted = v
       this.audio.defaultMuted = v
+      this.ui.setMute(v)
     }
   }
 
