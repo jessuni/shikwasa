@@ -171,6 +171,12 @@ Destroy the player instance.
 
 Register an event listener. Supported event names see: [Events](#events)
 
+**preloadForIOS**
+
+`preloadForIOS(): void`
+
+Even though `preload` is set as `metadata` or `auto`, meta data will not be loaded in iOS devices. You can lead your user to interact (tap / click) with GUI, and then call this function to load meta data.
+
 ### Properties
 
 **currentTime**

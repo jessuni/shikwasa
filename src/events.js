@@ -5,18 +5,25 @@ export default class Events {
     this.events = {}
   }
 
-  on(name, callback) {
+  on(name, callback, inner = false) {
     if (this.type(name) && typeof callback == 'function') {
       if (!this.events[name]) {
         this.events[name] = []
       }
-      this.events[name].push(callback)
+      this.events[name].push({ callback, inner })
     }
   }
 
-  trigger(name, data = {}) {
+  trigger(name, data = {}, onlyInner = false) {
     if (this.events[name] && this.events[name].length) {
-      this.events[name].forEach(fn => fn(data))
+      this.events[name].forEach(v => {
+        if(onlyInner) {
+          if(v.inner) v.callback(data)
+        }
+        else {
+          v.callback(data)
+        }
+      })
     }
   }
 

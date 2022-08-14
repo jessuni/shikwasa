@@ -1,6 +1,6 @@
 import UI from './ui'
 import Events from './events'
-import { toggleAttribute, handleOptions, handleAudio, parseAudio } from './utils'
+import { toggleAttribute, handleOptions, handleAudio, parseAudio, getOnlyInner } from './utils'
 
 const playerArr = []
 const REGISTERED_COMPS = []
@@ -8,6 +8,11 @@ const isMobile = typeof window !== 'undefined' ? /mobile/i.test(window.navigator
 const dragStart = isMobile ? 'touchstart' : 'mousedown'
 const dragMove = isMobile ? 'touchmove' : 'mousemove'
 const dragEnd = isMobile ? 'touchend' : 'mouseup'
+
+// preload for ios
+let isPreLoading = false
+let latestMute = false
+let preloadedStamp = 0     // 结束 preload 的时间戳
 
 // detecting addEventListener option support
 let supportsPassive = false
@@ -194,7 +199,8 @@ class Player {
       this.initAudioEvents()
       this.events.audioEvents.forEach((name) => {
         this.audio.addEventListener(name, (e) => {
-          this.events.trigger(name, e)
+          const onlyInner = getOnlyInner(name, isPreLoading, preloadedStamp)
+          this.events.trigger(name, e, onlyInner)
         })
       })
       this.audio.preload = this.options.preload
@@ -211,17 +217,32 @@ class Player {
           player.pause()
         }
       })
-    })
+    }, true)
+    this.on("playing", () => {
+      if(isPreLoading) {
+        this.pause()
+      }
+    }, true)
     this.on('pause', () => {
       this.ui.setPaused()
-    })
+      if(isPreLoading) {
+        this.seek(0)
+      }
+    }, true)
+    this.on("seeked", () => {
+      if(isPreLoading) {
+        this.muted = Boolean(latestMute)
+        isPreLoading = false
+        preloadedStamp = Date.now()
+      }
+    }, true)
     this.on('ended', () => {
       this.ui.setPaused()
       this.seek(0)
-    })
+    }, true)
     this.on('waiting', () => {
       this.el.setAttribute('data-loading', '')
-    })
+    }, true)
     this.on('durationchange', () => {
       // Inifinity indicates audio stream or Safari's quirky behavior
       // update live state single way if it doesn't match current duration state
@@ -232,7 +253,7 @@ class Player {
         this.seekable = true
         this.ui.setTime('duration', this.duration)
       }
-    })
+    }, true)
     this.on('canplay', () => {
       if (!this._canplay) {
         this._canplay = true
@@ -246,10 +267,10 @@ class Player {
         this.live = true
         this.ui.setLive(this.live)
       }
-    })
+    }, true)
     this.on('canplaythrough', () => {
       this.el.removeAttribute('data-loading')
-    })
+    }, true)
     this.on('progress', () => {
       if (this.audio.buffered.length) {
         const percentage = this.audio.buffered.length
@@ -257,23 +278,23 @@ class Player {
           : 0
         this.ui.setBar('loaded', percentage)
       }
-    })
+    }, true)
     this.on('timeupdate', () => {
       if (!this._dragging) {
         this.ui.setProgress(this.audio.currentTime, null, this.duration)
       }
-    })
+    }, true)
     this.on('abort', () => {
       this.ui.setPaused()
-    })
+    }, true)
     this.on('audioupdate', (audio) => {
       this.seekable = audio.duration && audio.duration !== Infinity
       this.updateMetadata(audio)
-    })
+    }, true)
     this.on('audioparse', (audio) => {
       this.seekable = audio.duration && audio.duration !== Infinity
       this.updateMetadata(audio)
-    })
+    }, true)
   }
 
   initMediaSession() {
@@ -306,8 +327,8 @@ class Player {
     }
   }
 
-  on(name, callback) {
-    this.events.on(name, callback)
+  on(name, callback, inner = false) {
+    this.events.on(name, callback, inner)
   }
 
   play() {
@@ -413,6 +434,19 @@ class Player {
       this.comps[comp._name] = new comp(this)
     })
   }
+
+  // it is required that the user taps/clicks the interface first
+  preloadForIOS() {
+    if (this.audio && this.audio.duration) return
+    if(isPreLoading) return
+    
+    isPreLoading = true
+    latestMute = this.muted
+
+    this.muted = true
+    this.play()
+  }
+
 }
 
 Player.use = function (comp) {

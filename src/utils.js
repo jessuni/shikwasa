@@ -167,3 +167,18 @@ export function animateScroll(
     })
   }
 }
+
+
+export function getOnlyInner(name, isPreLoading, preloadedStamp) {
+  const limits = ["pause", "play", "playing", "seeked", "seeking", "timeupdate"]
+
+  let isIn = limits.includes(name)
+  if(!isIn) return false
+  if(isPreLoading) return true
+
+  const now = Date.now()
+  const diff = now - preloadedStamp
+  // 仅在刚刚 500ms 内完成 Preload 时，要求 onlyInner
+  if(diff < 500) return true
+  return false
+}
