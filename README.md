@@ -63,7 +63,12 @@ Shikwasa is an web audio player born for podcast. If you're tired of using music
 </details>
 
 ## Installation
-`npm install shikwasa`
+
+```
+npm i shikwasa2
+# or
+pnpm i shikwasa2
+```
 
 Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
 
