@@ -81,6 +81,7 @@ class Player {
     if (this.audio) {
       this.audio.playbackRate = v
       this.audio.defaultPlaybackRate = v
+      this.ui.setSpeed(v)
     }
   }
 
@@ -120,7 +121,6 @@ class Player {
       const index = this.options.speedOptions.indexOf(this.playbackRate)
       const speedRange = this.options.speedOptions
       this.playbackRate = index + 1 >= speedRange.length ? speedRange[0] : speedRange[index + 1]
-      this.ui.setSpeed(this.playbackRate)
     })
   }
 
