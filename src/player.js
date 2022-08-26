@@ -92,6 +92,7 @@ class Player {
     if (this.audio) {
       this.audio.muted = v
       this.audio.defaultMuted = v
+      this.ui.setMute(v)
     }
   }
 
@@ -108,7 +109,6 @@ class Player {
     })
     this.ui.muteBtn.addEventListener('click', () => {
       this.muted = !this.muted
-      toggleAttribute(this.el, 'data-mute')
     })
     this.ui.fwdBtn.addEventListener('click', () => {
       this.seekBySpan()
