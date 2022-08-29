@@ -12,8 +12,7 @@
   <link rel="preload" href="https://unpkg.com/dracula-prism@2.1.1/src/css/dracula-prism.css" as="style" crossorigin>
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/components/prism-core.min.js" as="script" crossorigin>
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js" as="script" crossorigin>
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.min.js" as="script" crossorigin>
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.chapter.min.js" as="script" crossorigin>
+  <%- prependScript %>
   <meta name="description" content="A web player born for podcast">
   <meta property="og:title" content="Shikwasa | A web player born for podcast">
   <meta property="og:description" content="A web player born for podcast">
@@ -24,17 +23,15 @@
   <meta name="twitter:creator" content="@jessieste">
   <meta name="twitter:title" content="Shikwasa">
   <meta name="twitter:description" content="A web player born for podcast">
-  <link rel="stylesheet" href="./index.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.min.css" crossorigin>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.chapter.min.css" crossorigin>
+
   <link rel="stylesheet" href="https://unpkg.com/dracula-prism@2.1.1/src/css/dracula-prism.css" crossorigin>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137724348-2"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%- APP_GA %>"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
-    gtag('config', 'UA-137724348-2');
+    gtag('config', '<%- APP_GA %>');
   </script>
 </head>
 <body class="lang-js">
@@ -230,5 +227,7 @@
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/components/prism-core.min.js" crossorigin></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js" crossorigin></script>
-<script src="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.min.js" crossorigin></script><script src="https://cdn.jsdelivr.net/npm/shikwasa@latest/dist/shikwasa.chapter.min.js" crossorigin></script><script src="./index.js"></script></body>
+<script type="module" src="./index.js"></script>
+<%- appendScript %>
+</body>
 </html>

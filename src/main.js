@@ -1,6 +1,9 @@
 import './css/base.css'
-import Shikwasa from './player'
+import './css/chapter.css'
+import Player from './player'
+import Chapter from './Chapter'
 
-export default Shikwasa
-/** CONSOLE_MSG */
+CONSOLE_MSG
+
+export { Player, Chapter }
 

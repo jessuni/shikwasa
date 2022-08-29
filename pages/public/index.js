@@ -1,5 +1,6 @@
 import './index.css'
-const baseUrl = `${window.location.origin}/assets`
+
+let __BASE_URL__ = '.'
 let demoPlayer
 let throttled = false
 let autoShowChapter = true
@@ -13,7 +14,7 @@ const diyButtons = document.querySelectorAll('.demo-diy')
 const audio = {
   title: 'STS-133 FD11 Mission Status Briefing',
   artist: 'NASA',
-  src: `${baseUrl}/STS-133_FD11_Mission_Status_Briefing.mp3`,
+  src: `${__BASE_URL__}/assets/STS-133_FD11_Mission_Status_Briefing.mp3`,
   cover: 'https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg',
 }
 
@@ -70,7 +71,7 @@ const audioWithChapter = Object.assign(audio, {
   ],
 })
 
-const heroPlayer = new window.Shikwasa({
+const heroPlayer = new Shikwasa.Player({
   audio,
   themeColor: '#022188',
   theme: 'light',
@@ -85,8 +86,8 @@ if (heroPlayer) {
   heroPlayer.el.setAttribute('data-style', 0)
 }
 
-window.Shikwasa.use(window.Chapter)
-demoPlayer = new window.Shikwasa({
+Shikwasa.Player.use(Shikwasa.Chapter)
+demoPlayer = new Shikwasa.Player({
   audio: audioWithChapter,
   themeColor: '#396ada',
   theme: 'auto',

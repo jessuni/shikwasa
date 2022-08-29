@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="./src/css/base.css">
+  <link rel="stylesheet" type="text/css" href="./src/css/chapter.css">
+  <style>
+    .container {
+      margin-top: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container"></div>
+  <script type="module">
+    import { Player, Chapter } from './src/main.js'
+
+    const audio = {
+      title: 'STS-133 FD11 Mission Status Briefing',
+      artist: 'NASA',
+      src: `./pages/public/assets/STS-133_FD11_Mission_Status_Briefing.mp3`,
+      cover: 'https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg',
+    }
+
+    const chapters = [
+      {
+        'id': 'chp0',
+        'startTime': 0,
+        'endTime': 16,
+        'title': 'Introduction',
+      },
+      {
+        'id': 'chp1',
+        'startTime': 16,
+        'endTime': 285,
+        'title': 'Mission Status Briefing by Bryan Lunney',
+      },
+      {
+        'id': 'chp2',
+        'startTime': 285,
+        'endTime': 348,
+        'title': 'Elaboration on the Shuttle\'s Status',
+      },
+      {
+        'id': 'chp3',
+        'startTime': 348,
+        'endTime': 444,
+        'title': 'Explaining the Crew\'s Schedule',
+      },
+      {
+        'id': 'chp4',
+        'startTime': 444,
+        'endTime': 503,
+        'title': 'What the Atmosphere Is Like at ISS and Discovery',
+      },
+      {
+        'id': 'chp5',
+        'startTime': 503,
+        'endTime': 556,
+        'title': 'Explaining Cryo Margins',
+      },
+      {
+        'id': 'chp6',
+        'startTime': 556,
+        'endTime': 637,
+        'title': 'Final Q&A',
+      },
+      {
+        'id': 'chp7',
+        'startTime': 637,
+        'endTime': 666,
+        'title': 'Wrap Up',
+      },
+    ]
+
+    Player.use(Chapter)
+    const player = new Player({
+      container: document.querySelector('.container'),
+      audio: {
+        ...audio,
+        chapters,
+      },
+    })
+  </script>
+</body>
+</html>
