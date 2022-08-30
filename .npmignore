@@ -1,8 +1,5 @@
 *
 !dist/*
-dist/assets/*
-dist/CNAME
-dist/index.html
 !README.md
 !package.json
 !LICESNE.md

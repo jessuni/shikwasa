@@ -25,10 +25,7 @@ function replaceHTMLPlugin(replaceStrings) {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'APP')
   let config = {
-    define: {
-      '__BASE_URL__': JSON.stringify(process.cwd()),
-      'CONSOLE_MSG': CONSOLE_CODE,
-    },
+    define: { 'CONSOLE_MSG': CONSOLE_CODE },
     plugins: [{
       ...legacy({ targets: ['>0.2%', 'not ie <= 8'] }),
       apply: 'build',
@@ -46,6 +43,8 @@ export default defineConfig(({ mode }) => {
         },
       },
     }
+    // prevent accidentally copying demo build from public to dist
+    config.publicDir = false
   } else {
     config.build = { outDir: 'public' }
     if (process.env.TARGET === 'ci') {
@@ -68,7 +67,7 @@ export default defineConfig(({ mode }) => {
       const name = 'index'
       config = {
         ...config,
-        root: mode === 'production' ? 'pages/public' : process.cwd(),
+        root: mode === 'production' ? 'pages' : process.cwd(),
         pages: {
           [name]: {
             fileName: `${name}.html`,
@@ -78,12 +77,14 @@ export default defineConfig(({ mode }) => {
           },
         },
         server: {
-          open: '/pages/public/index.html',
+          open: mode === 'production' ? true : '/pages/index.html',
         },
+        publicDir: path.resolve(__dirname, 'pages/public'),
         build: {
-          outDir: '../../public',
+          outDir: '../public',
+          emptyOutDir: true,
           rollupOptions: {
-            input: path.resolve(__dirname, 'pages/public/index.html'),
+            input: path.resolve(__dirname, 'pages/index.html'),
           },
         },
       }
