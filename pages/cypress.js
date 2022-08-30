@@ -1,6 +1,4 @@
 import { Player, Chapter } from '../src/main'
 
-const Shikwasa = Player
-
-window.Shikwasa = Shikwasa
+window.Shikwasa = Player
 window.Chapter = Chapter

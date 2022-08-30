@@ -94,7 +94,7 @@ describe('Player initiation', () => {
         cy.get('.shk-cover').should(
           'have.css',
           'background-image',
-          `url("${Cypress.config().baseUrl + data.customAudio.cover}")`
+          `url("${Cypress.config().baseUrl + '/' + data.customAudio.cover}")`
         )
         cy.get('.shk-time_duration').contains(data.customAudio.duration_display)
         cy.get('.shk-controls').within(() => {
@@ -486,7 +486,7 @@ describe('Audio update behavior', () => {
   const title = 'hello baby'
   it('updates audio when `update` is called', () => {
     shk = new Shikwasa({ audio: { src: data.src } })
-    expect(shk.audio.src).equal(location.origin + '/' + data.src)
+    expect(shk.audio.src).equal(Cypress.config().baseUrl + '/' + data.src)
     cy.get('.shk-title')
       .contains(CONFIG.audioOptions.title)
       .then(() => {

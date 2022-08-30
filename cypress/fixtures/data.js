@@ -1,5 +1,4 @@
 import tags from './tags.json'
-
 const src = 'public/assets/STS-133_FD11_Mission_Status_Briefing.mp3'
 
 const parsedAudio = {
@@ -74,7 +73,7 @@ const customAudio = {
   src: src,
   duration: 1000,
   duration_display: '16:40',
-  cover: '/assets/logo.svg',
+  cover: 'public/assets/logo.png',
   chapters: [
     { title: 'First Title', startTime: 0, endTime: 500, time_display: '00:00' },
     { title: 'Second Title', startTime: 500, endTime: 1000, time_display: '08:20' },

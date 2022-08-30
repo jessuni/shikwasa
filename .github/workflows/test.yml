@@ -39,7 +39,7 @@ jobs:
         uses: cypress-io/github-action@v2.7.0
         with:
           start: npm run start:ci
-          wait-on: 'http://localhost:8080'
+          wait-on: 'http://localhost:3000'
           browser: ${{ matrix. browser }}
 
       - name: Upload failed test screenshots
