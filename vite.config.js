@@ -48,14 +48,14 @@ export default defineConfig(({ mode }) => {
     }
   } else {
     config.build = { outDir: 'public' }
-    const pageDir = 'pages/'
     if (process.env.TARGET === 'ci') {
+      const name = 'cypress'
       config.pages = {
-        cypress: {
-          fileName: pageDir + 'cypress.html',
-          template: pageDir + 'cypress.html',
-          chunks: 'cypress',
-          entry: pageDir + 'cypress.js',
+        [name]: {
+          fileName: `pages/${name}.html`,
+          template: `pages/${name}.html`,
+          chunks: name,
+          entry: `pages/${name}.js`,
         }
       }
     }
@@ -65,12 +65,26 @@ export default defineConfig(({ mode }) => {
         prependScript: mode === 'production' ? env.APP_PROD_HEAD : env.APP_DEV_HEAD,
         appendScript: mode === 'production' ? env.APP_PROD_SCRIPT : env.APP_DEV_SCRIPT,
       }
-      config.pages = {
-        index: {
-          fileName: pageDir + 'public/index.html',
-          template: pageDir + 'public/index.html',
-          chunks: 'index',
-          entry: pageDir + 'public/index.js',
+      const name = 'index'
+      config = {
+        ...config,
+        root: mode === 'production' ? 'pages/public' : process.cwd(),
+        pages: {
+          [name]: {
+            fileName: `${name}.html`,
+            template: `${name}.html`,
+            chunks: name,
+            entry: `${name}.js`,
+          },
+        },
+        server: {
+          open: '/pages/public/index.html',
+        },
+        build: {
+          outDir: '../../public',
+          rollupOptions: {
+            input: path.resolve(__dirname, 'pages/public/index.html'),
+          },
         },
       }
       config.plugins.push(replaceHTMLPlugin(REPLACED_STRINGS))

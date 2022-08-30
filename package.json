@@ -22,11 +22,7 @@
     "eslint-plugin-cypress": "^2.12.1",
     "gh-pages": "^3.2.3",
     "postcss": "^8.4.6",
-    "vite": "^2.9.8",
-    "vite-plugin-html": "^3.2.0",
-    "vite-plugin-html-template": "^1.1.5",
-    "vite-plugin-html-template-mpa": "^0.0.19",
-    "vite-plugin-mpa": "^1.1.4"
+    "vite": "^2.9.8"
   },
   "scripts": {
     "start": "vite",

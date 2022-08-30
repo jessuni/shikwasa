@@ -6,6 +6,7 @@ pages/*
 !pages/cypress.html
 !pages/cypress.js
 dist
+public
 
 cypress/screenshots
 cypress/videos
