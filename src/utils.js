@@ -137,15 +137,15 @@ export function createElement(options) {
   return el
 }
 
-export function toggleAttribute(el, name) {
-  if (typeof el.toggleAttribute === 'function') {
-    el.toggleAttribute(name)
+export function toggleAttribute(el, name, val) {
+  if (typeof val === 'boolean') {
+    val ? el.setAttribute(name, '') : el.removeAttribute(name)
     return
   }
-  if (el.hasAttribute(name)) {
-    el.removeAttribute(name)
+  if (typeof el.toggleAttribute === 'function') {
+    el.toggleAttribute(name)
   } else {
-    el.setAttribute(name, '')
+    el.hasAttribute(name) ? el.removeAttribute(name) : el.setAttribute(name, '')
   }
 }
 

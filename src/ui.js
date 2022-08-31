@@ -3,8 +3,7 @@ import IconComp from './templates/Icon'
 import { secondToTime, numToString, marquee, createElement, toggleAttribute } from './utils'
 import applyFocusVisible from './focus-visible'
 
-let resize,
-  coverUrl = null
+let resize, coverUrl = null
 let cooldown = true
 
 export default class UI {
@@ -84,12 +83,11 @@ export default class UI {
     }
 
     // player status display
-    const playStatus = options.autoPlay ? 'playing' : 'paused'
-    this.el.setAttribute('data-play', playStatus)
+    options.autoPlay ? this.setPlaying() : this.setPaused()
 
     // mute status display
     if (options.muted) {
-      this.el.setAttribute('data-mute', '')
+      this.setMute(options.muted)
     }
   }
 
@@ -146,7 +144,7 @@ export default class UI {
 
   setPaused() {
     this.el.setAttribute('data-play', 'paused')
-    this.el.removeAttribute('data-loading')
+    this.setLoading(false)
   }
 
   setTime(type, time) {
@@ -177,8 +175,26 @@ export default class UI {
     this.speedBtn.innerHTML = numToString(speed) + 'x'
   }
 
+  setMute(mute) {
+    toggleAttribute(this.el, 'data-mute', mute)
+  }
+
   setLive(live = false) {
-    live ? this.el.setAttribute('data-live', '') : this.el.removeAttribute('data-live')
+    toggleAttribute(this.el, 'data-live', live)
+  }
+
+  setLoading(loading) {
+    toggleAttribute(this.el, 'data-loading', loading)
+  }
+
+  setSeeking(seeking) {
+    toggleAttribute(this.el, 'data-seeking', seeking)
+  }
+
+  setControls(allowControl) {
+    this.seekControls.forEach((el) => {
+      toggleAttribute(el, 'disabled', !allowControl)
+    })
   }
 
   getPercentByPos(e) {

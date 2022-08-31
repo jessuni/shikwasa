@@ -1,6 +1,6 @@
 import UI from './ui'
 import Events from './events'
-import { toggleAttribute, handleOptions, handleAudio, parseAudio } from './utils'
+import { handleOptions, handleAudio, parseAudio } from './utils'
 
 const playerArr = []
 const REGISTERED_COMPS = []
@@ -58,15 +58,7 @@ class Player {
   }
 
   set seekable(v) {
-    if (v) {
-      this.ui.seekControls.forEach((el) => {
-        el.removeAttribute('disabled')
-      })
-    } else {
-      this.ui.seekControls.forEach((el) => {
-        el.setAttribute('disabled', '')
-      })
-    }
+    this.ui.setControls(v)
   }
 
   get currentTime() {
@@ -81,6 +73,7 @@ class Player {
     if (this.audio) {
       this.audio.playbackRate = v
       this.audio.defaultPlaybackRate = v
+      this.ui.setSpeed(v)
     }
   }
 
@@ -92,6 +85,7 @@ class Player {
     if (this.audio) {
       this.audio.muted = v
       this.audio.defaultMuted = v
+      this.ui.setMute(v)
     }
   }
 
@@ -108,7 +102,6 @@ class Player {
     })
     this.ui.muteBtn.addEventListener('click', () => {
       this.muted = !this.muted
-      toggleAttribute(this.el, 'data-mute')
     })
     this.ui.fwdBtn.addEventListener('click', () => {
       this.seekBySpan()
@@ -120,7 +113,6 @@ class Player {
       const index = this.options.speedOptions.indexOf(this.playbackRate)
       const speedRange = this.options.speedOptions
       this.playbackRate = index + 1 >= speedRange.length ? speedRange[0] : speedRange[index + 1]
-      this.ui.setSpeed(this.playbackRate)
     })
   }
 
@@ -129,7 +121,7 @@ class Player {
     const dragStartHandler = (e) => {
       if (!this.seekable) return
       e.preventDefault()
-      this.el.setAttribute('data-seeking', '')
+      this.ui.setSeeking(true)
       this._dragging = true
       document.addEventListener(dragMove, dragMoveHandler, addPassive ? { passive: true } : false)
       document.addEventListener(dragEnd, dragEndHandler)
@@ -146,7 +138,7 @@ class Player {
       this._dragging = false
 
       // disable barPlayed transition on drag
-      setTimeout(() => this.el.removeAttribute('data-seeking'), 50)
+      setTimeout(() => this.ui.setSeeking(false), 50)
     }
 
     // seeking with keyboard
@@ -218,7 +210,7 @@ class Player {
       this.seek(0)
     })
     this.on('waiting', () => {
-      this.el.setAttribute('data-loading', '')
+      this.ui.setLoading(true)
     })
     this.on('durationchange', () => {
       // Inifinity indicates audio stream or Safari's quirky behavior
@@ -246,7 +238,7 @@ class Player {
       }
     })
     this.on('canplaythrough', () => {
-      this.el.removeAttribute('data-loading')
+      this.ui.setLoading(false)
     })
     this.on('progress', () => {
       if (this.audio.buffered.length) {
