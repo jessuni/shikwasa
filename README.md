@@ -63,20 +63,9 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
 ## Usage
 1. include stylesheet and script
 
-   ```html
-    <head>
-      <link rel="stylesheet" href="shikwasa.min.css">
-    </head>
-    <body>
-      <script src="shikwasa.min.js"></script>
-    </body>
-   ```
-
-    If you use module system, import like this instead:
-
     ```javascript
-      import 'shikwasa/dist/shikwasa.min.css'
-      import Shikwasa from 'shikwasa'
+      import 'shikwasa/dist/style.css'
+      import { Player } from 'shikwasa'
     ```
 
 2. Specify a container to inject the player component.
@@ -92,7 +81,7 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
    ```javascript
     // an example with basic init options
 
-    const player = new Shikwasa({
+    const player = new Player({
       container: () => document.querySelector('.element-of-your-choice'),
       audio: {
         title: 'Hello World!',
@@ -101,6 +90,11 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
         src: 'audio.mp3',
       },
     })
+
+    // The library has also exposed a global variable `Shikwasa` in the UMD and IIFE build.
+    // Then the usage would be:
+    const { Player } = window.Shikwasa
+    const player = new Player({ ... })
    ```
 
    Any child nodes inside `container` will be cleared upon the time Shiwkasa mounts.
@@ -323,9 +317,10 @@ It will read the audio's `title`, `artist`, `duration` and `chapters`, meaning y
 ```
 
 ```javascript
+  import { Player } from 'shikwasa'
   import jsmediatags from 'jsmediatags'
 
-  new Shikwasa({
+  new Player({
     ...
   parser: jsmediatags,
   audio: { src: ... },
@@ -385,11 +380,10 @@ Shikwasa supports chapters display and playback control with the help of its ext
 1. Register the chapter plugin before creating a Shikwasa instance.
 
    ```javascript
-    import Chapter as 'shikwasa/dist/shikwasa.chapter.cjs'
-    import 'shikwasa/dist/shikwasa.chapter.min.css'
+    import { Chapter } from 'shikwasa'
 
-    Shikwasa.use(Chapter)
-    new Shikwasa({...})
+    Player.use(Chapter)
+    new Player({...})
    ```
 
 2. This does not guarantee that the audio will display chapters. To display chapters, you need to provide chapter data to the player.
