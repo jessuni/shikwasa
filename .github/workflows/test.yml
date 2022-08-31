@@ -40,7 +40,7 @@ jobs:
         with:
           start: npm run start:ci
           wait-on: 'http://localhost:3000/'
-          browser: ${{ matrix. browser }}
+          browser: ${{ matrix.browser }}
 
       - name: Create artifact folder
         if: failure()
