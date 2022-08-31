@@ -1,5 +1,9 @@
 name: Deploy demo website
 
+on:
+  release:
+    types: [created]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
