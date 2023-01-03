@@ -99,7 +99,7 @@ Also available on CDN: https://www.jsdelivr.com/package/npm/shikwasa
 
    Any child nodes inside `container` will be cleared upon the time Shiwkasa mounts.
 
-Here's a [fiddle](https://jsfiddle.net/jessuni/netgvbwy/8/) to kickstart. To use the chapter feature, you need to import the chapter script and stylesheets as well. [View details](#chapters)
+Here's a [fiddle](https://jsfiddle.net/jessuni/netgvbwy/) to kickstart. To use the chapter feature, you need to import the chapter script and stylesheets as well. [View details](#chapters)
 
 ## API
 
@@ -322,8 +322,8 @@ It will read the audio's `title`, `artist`, `duration` and `chapters`, meaning y
 
   new Player({
     ...
-  parser: jsmediatags,
-  audio: { src: ... },
+    parser: jsmediatags,
+    audio: { src: ... },
   })
 ```
 
@@ -383,7 +383,7 @@ Shikwasa supports chapters display and playback control with the help of its ext
     import { Chapter } from 'shikwasa'
 
     Player.use(Chapter)
-    new Player({...})
+    const player = new Player({...})
    ```
 
 2. This does not guarantee that the audio will display chapters. To display chapters, you need to provide chapter data to the player.
