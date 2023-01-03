@@ -99,7 +99,10 @@
         </h3>
         <p>Better than show notes! Always let the audience know where they are by the highlighted chapter.</p>
         <div class="feature-action">
-          <pre><code>const instance = new Shikwasa.Player({
+          <pre><code>import { Player, Chapter } from 'shikwasa'
+
+Shikwasa.use(Chapter)
+const player = new Player({
   audio: {
     src: '...',
     chapters: [
