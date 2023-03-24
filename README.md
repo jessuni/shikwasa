@@ -289,7 +289,7 @@ If a [`parser`](#parser) is used, the audio will be requested immediately on pag
 
 ### download
 
-(Optional) Whether the current audio source is download-able. When set to `true`, the player will provide an anchor with `downlaod` attribute and `href` set to `audio.src`. Cross-origin `href` will not prompt download due to anchor's nature, but you can offer an alternative `blob:`, `data:` url or a same-origin direct download link(DDL).
+(Optional) Whether the current audio source is download-able. When set to `true`, the player will provide an anchor with `download` attribute and `href` set to `audio.src`. Cross-origin `href` will not prompt download due to anchor's nature, but you can offer an alternative `blob:`, `data:` url or a same-origin direct download link(DDL).
 
 - type: `string | boolean`
 - default: `false`
