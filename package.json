@@ -20,7 +20,7 @@
   "devDependencies": {
     "@vitejs/plugin-legacy": "^1.8.2",
     "autoprefixer": "^10.4.2",
-    "cssnano": "^5.0.17",
+    "cssnano": "^6.0.0",
     "cypress": "^10.7.0",
     "eslint": "^8.18.0",
     "eslint-plugin-cypress": "^2.12.1",
