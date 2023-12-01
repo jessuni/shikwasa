@@ -1,4 +1,4 @@
-import chapterTemplate from './templates/Chapter'
+import TemplateChapter from './templates/Chapter'
 import { createElement, secondToTime, marquee, toggleAttribute, animateScroll } from './utils'
 
 let resize
@@ -166,7 +166,7 @@ class ChapterUI {
   initEl(player) {
     this.el = createElement({
       className: 'shk-chapter',
-      innerHTML: chapterTemplate,
+      innerHTML: player.options.tplChapter || TemplateChapter,
     })
     const attrs = {
       title: 'view chapters',
