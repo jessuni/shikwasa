@@ -1,5 +1,5 @@
-import PlayerComp from './templates/Player'
-import IconComp from './templates/Icon'
+import TemplatePlayer from './templates/Player'
+import TemplateIcon from './templates/Icon'
 import { secondToTime, numToString, marquee, createElement, toggleAttribute } from './utils'
 import applyFocusVisible from './focus-visible'
 
@@ -11,19 +11,19 @@ export default class UI {
     this.mounted = false
     this.icons = createElement({
       className: 'shk-icons',
-      innerHTML: IconComp,
+      innerHTML: options.tplIcon || TemplateIcon,
     })
-    this.initEl()
+    this.initEl(options.tplPlayer || TemplatePlayer)
     this.initOptions(options)
   }
 
-  async initEl() {
+  async initEl(template) {
     this.el = createElement({
       className: ['shk', 'shikwasa'],
       attrs: {
         'data-name': 'shikwasa',
       },
-      innerHTML: PlayerComp,
+      innerHTML: template,
     })
     this.playBtn = this.el.querySelector('.shk-btn_toggle')
     this.fwdBtn = this.el.querySelector('.shk-btn_forward')
