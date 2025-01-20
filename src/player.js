@@ -188,6 +188,7 @@ class Player {
         })
       })
       this.audio.preload = this.options.preload
+      this.audio.playbackRate = this.options.initSpeed
       this.muted = this.options.muted
       this.update(this.options.audio)
     }
@@ -329,7 +330,7 @@ class Player {
 
   seek(time) {
     if (!this.seekable) return
-    time = parseInt(time)
+    time = parseFloat(time)
     if (isNaN(time)) {
       console.error('Shikwasa: seeking time is NaN')
     }

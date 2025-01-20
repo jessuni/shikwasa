@@ -56,6 +56,9 @@ export function handleOptions(options) {
   if (_options.speedOptions.length > 1) {
     _options.speedOptions.sort((a, b) => a - b)
   }
+  if (!_options.initSpeed || _options.speedOptions.indexOf(_options.initSpeed) === -1) {
+    _options.initSpeed = 1
+  }
   return _options
 }
 

@@ -1,6 +1,6 @@
 {
-  "name": "shikwasa",
-  "version": "2.2.1",
+  "name": "@anson0370/shikwasa",
+  "version": "2.2.3",
   "description": "A web audio player born for podcasts. With chapters, playback speed and forward/backward controls, it is best paired with your podcasting website.",
   "files": [
     "dist"
@@ -50,7 +50,9 @@
     "chapter"
   ],
   "license": "MIT",
-  "repository": "github:jessuni/shikwasa",
+  "repository": {
+    "url": "git+ssh://git@github.com/anson0370/shikwasa.git"
+  },
   "browserslist": [
     ">0.2%",
     "not ie <= 8"
